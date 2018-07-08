@@ -1,0 +1,19 @@
+{
+    "presets": [
+        "umi/babel"
+    ],
+    "plugins": [
+        [
+            "babel-plugin-module-resolver",
+            {
+                "alias": {
+                    "components": "./src/components",
+                    "utils": "./src/utils",
+                    "config": "./src/utils/config",
+                    "services": "./src/services",
+                    "models": "./src/models"
+                }
+            }
+        ]
+    ]
+}

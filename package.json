@@ -1,0 +1,31 @@
+{
+  "private": true,
+  "scripts": {
+    "start": "umi dev",
+    "build": "umi build",
+    "lint": "eslint --ext .js src test",
+    "precommit": "npm run lint"
+  },
+  "dependencies": {
+    "classnames": "^2.2.6",
+    "dva": "^2.3.1",
+    "nprogress": "^0.2.0",
+    "path-to-regexp": "^2.2.1",
+    "prop-types": "^15.6.2",
+    "react-helmet": "^5.2.0",
+    "react-intl": "^2.4.0",
+    "sotez": "^0.0.14",
+    "umi": "^1.0.0",
+    "umi-plugin-dva": "^0.7.1"
+  },
+  "devDependencies": {
+    "babel-plugin-module-resolver": "^3.1.1",
+    "eslint-config-airbnb": "^17.0.0",
+    "eslint-config-umi": "^0.1.4",
+    "eslint-plugin-flowtype": "^2.49.3",
+    "eslint-plugin-import": "^2.13.0",
+    "eslint-plugin-jsx-a11y": "^6.1.0",
+    "eslint-plugin-react": "^7.10.0",
+    "husky": "^0.12.0"
+  }
+}

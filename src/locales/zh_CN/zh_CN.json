@@ -1,0 +1,9 @@
+
+{
+  "siteName": "HashBook Tezos钱包",
+  "slogan": "你可以信任的Tezos开源钱包",
+  "tabs.createWallet" : "创建钱包",
+  "tabs.accessWallet": "使用钱包",
+  "mnemonic": "助记词"
+}
+

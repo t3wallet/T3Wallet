@@ -1,0 +1,3 @@
+export function logout () {
+  return {}
+}
