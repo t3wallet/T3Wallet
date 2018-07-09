@@ -8,6 +8,7 @@ import PropTypes from 'prop-types'
 import {
   intlShape, injectIntl, defineMessages, FormattedMessage,
 } from 'react-intl'
+import { MnemonicDisplay, MnemonicVerify } from './components'
 import styles from './index.less'
 
 const messages = defineMessages({
@@ -48,39 +49,59 @@ class CreateWallet extends React.Component {
 
   render () {
     const {
-      loading, intl, steps, curStep,
+      dispatch, loading, intl, steps, curStep, mnemonic, inputWords, leftWords,
     } = this.props
     const { formatMessage } = intl
+
+    const nnemonicVerifyProps = {
+      inputWords,
+      leftWords,
+      onInputWordClick (word) {
+        dispatch({
+          type: 'createWallet/removeInputWord',
+          payload: word,
+        })
+      },
+      onLeftWordClick (word) {
+        dispatch({
+          type: 'createWallet/removeLeftWord',
+          payload: word,
+        })
+      },
+    }
+
     return (
       <Page loading={loading} className={styles.cardContaner}>
         <Card loading={loading} bordered={false} title={formatMessage(messages.title)}>
-          {/* <Button type="primary" icon="file-add" size="large" onClick={this._createWallet}>
-            <FormattedMessage id={messages.title.id} defaultMessage={messages.title.defaultMessage} />
-          </Button> */}
-
           <div className="steps-action">
             {
               curStep === 0
               && (
-                <Button type="primary" icon="file-add" size="large" onClick={() => this._createWallet()}>
+                <Button type="primary" icon="file-add" size="large" className={styles.button} onClick={() => this._createWallet()}>
                   <FormattedMessage id={messages.title.id} defaultMessage={messages.title.defaultMessage} />
                 </Button>
               )
             }
             {
-              curStep < steps.length - 1 && curStep !== 0
+              curStep === 1
               && (
-              <Button type="primary" onClick={() => this._next()}>
-                <FormattedMessage id={messages.next.id} defaultMessage={messages.next.defaultMessage} />
-              </Button>
+                <div>
+                  <MnemonicDisplay mnemonic={mnemonic} />
+                  <Button type="primary" className={styles.button} onClick={() => this._next()}>
+                    <FormattedMessage id={messages.next.id} defaultMessage={messages.next.defaultMessage} />
+                  </Button>
+                </div>
               )
             }
             {
               curStep === steps.length - 1
               && (
-              <Button type="primary" onClick={() => message.success('Processing complete!')}>
-                <FormattedMessage id={messages.confirm.id} defaultMessage={messages.confirm.defaultMessage} />
-              </Button>
+                <div>
+                  <MnemonicVerify {...nnemonicVerifyProps} />
+                  <Button type="primary" className={styles.button} onClick={() => message.success('Processing complete!')}>
+                    <FormattedMessage id={messages.confirm.id} defaultMessage={messages.confirm.defaultMessage} />
+                  </Button>
+                </div>
               )
             }
             {
@@ -115,6 +136,9 @@ CreateWallet.propTypes = {
   steps: PropTypes.array,
   curStep: PropTypes.number,
   dispatch: PropTypes.func,
+  mnemonic: PropTypes.array,
+  inputWords: PropTypes.array,
+  leftWords: PropTypes.array,
 }
 
 const mapStateToProps = (state) => {
@@ -122,6 +146,9 @@ const mapStateToProps = (state) => {
     createWallet: state.createWallet,
     curStep: state.createWallet.curStep,
     steps: state.createWallet.steps,
+    mnemonic: state.createWallet.mnemonic,
+    inputWords: state.createWallet.inputWords,
+    leftWords: state.createWallet.leftWords,
   }
 }
 

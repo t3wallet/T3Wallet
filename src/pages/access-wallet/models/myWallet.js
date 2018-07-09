@@ -2,22 +2,14 @@ import { pull } from 'lodash'
 import sotez from 'sotez'
 
 export default {
-  namespace: 'createWallet',
+  namespace: 'myWallet',
   state: {
-    mnemonic: [],
-    steps: [{
-      title: 'Generate Mnemonic',
-      content: 'Generate Mnemonic',
-    }, {
-      title: 'Backup',
-      content: 'Write Down on a paper',
-    }, {
-      title: 'verify',
-      content: 'Verify your Mnemonic',
-    }],
-    curStep: 0,
-    inputWords: [],
-    leftWords: [],
+    privateKey: '',
+    publicKey: '',
+    balance: '',
+    k1: [], // object { address: "k1...", balance: "999,999"}
+    gasLimit: '',
+    data: '',
   },
   effects: {
     * createWallet (action, { put }) {

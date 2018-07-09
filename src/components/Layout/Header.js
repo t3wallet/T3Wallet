@@ -1,7 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import {
-  Icon, Layout, Select,
+  Layout, Select,
 } from 'antd'
 import styles from './Header.less'
 
@@ -11,7 +11,9 @@ const Header = ({
   return (
     <Layout.Header className={styles.header}>
       <div className={styles.logo}>
-        <Icon type="meh-o" spin style={{ fontSize: 40 }} />
+        <text className={styles.logoText}>
+Hashbook
+        </text>
       </div>
       <div className={styles.rightWarpper}>
         <Select defaultValue={i18n} onSelect={value => changeLang(value)} className={styles.selectBox}>
