@@ -23,6 +23,10 @@ const messages = defineMessages({
     id: 'myWallet.gasLimit',
     defaultMessage: 'Gas Limit',
   },
+  sendButton: {
+    id: 'myWallet.sendButton',
+    defaultMessage: 'Confirm Transcation',
+  },
 })
 
 
@@ -66,22 +70,22 @@ const TransferForm = Form.create({
     <Form hideRequiredMark className={styles.transferForm}>
       <FormItem label={formatMessage(messages.toAddress)}>
         {getFieldDecorator('toAddress', {
-          rules: [{ required: true, message: 'To Address is required!' }],
-        })(<Input />)}
+          rules: [{ required: true, type: 'string', message: 'Incorrect Address' }],
+        })(<Input size="large" />)}
       </FormItem>
       <FormItem label={formatMessage(messages.amountToSend)}>
         {getFieldDecorator('amountToSend', {
-          rules: [{ required: true, message: 'Amount To Send Is Required' }],
-        })(<Input />)}
+          rules: [{ required: true, type: 'string', message: 'Incorrect Amount To Send' }],
+        })(<Input size="large" addonAfter="ꜩ" />)}
       </FormItem>
       <FormItem label={formatMessage(messages.gasLimit)}>
         {getFieldDecorator('gasLimit', {
-          rules: [{ required: true, message: 'Gas Limit Is Required' }],
-        })(<Input />)}
+          rules: [{ required: true, type: 'string', message: 'Incorrect Gas Limit' }],
+        })(<Input size="large" addonAfter="ꜩ" />)}
       </FormItem>
 
       <Button type="primary" htmlType="submit" className={styles.submitButton}>
-        <FormattedMessage id="myWallet.sendButton" defaultMessage="Confirm Transcation" />
+        <FormattedMessage {...messages.sendButton} />
       </Button>
 
     </Form>

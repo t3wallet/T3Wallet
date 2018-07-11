@@ -24,7 +24,9 @@ export default {
       sendData: '',
     },
 
-
+    delegateFormFields: {
+      toAddress: '',
+    },
   },
   effects: {
     * originateAccount (action, { put }) {

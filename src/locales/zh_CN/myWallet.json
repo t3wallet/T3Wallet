@@ -13,5 +13,8 @@
     "myWallet.toAddress": "收币地址",
     "myWallet.gasLimit": "Gas 限额",
     "myWallet.amountToSend": "发送到",
-    "myWallet.sendButton": "确认发送"
+    "myWallet.sendButton": "确认发送",
+
+    "myWallet.delegateToAddress": "委托到地址",
+    "myWallet.confirmDelegationButton": "确认委托"
 }

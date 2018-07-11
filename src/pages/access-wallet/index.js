@@ -16,7 +16,7 @@ class AccessWallet extends React.Component {
 
   render () {
     const {
-      loading, walletLoaded, accounts, showNewAccountModal, transferFormFields,
+      loading, walletLoaded, accounts, showNewAccountModal, transferFormFields, delegateFormFields,
     } = this.props
     let panel
     if (walletLoaded) {
@@ -26,6 +26,7 @@ class AccessWallet extends React.Component {
           addNewAccount={this.addNewAccount}
           showNewAccountModal={showNewAccountModal}
           transferFormFields={transferFormFields}
+          delegateFormFields={delegateFormFields}
         />
       )
     } else {
@@ -72,6 +73,7 @@ AccessWallet.propTypes = {
   accounts: PropTypes.array,
   showNewAccountModal: PropTypes.bool,
   transferFormFields: PropTypes.object,
+  delegateFormFields: PropTypes.object,
 }
 
 const mapStateToProps = (state) => {
@@ -79,6 +81,7 @@ const mapStateToProps = (state) => {
     walletLoaded: state.accessWallet.walletLoaded,
     accounts: state.myWallet.accounts,
     transferFormFields: state.myWallet.transferFormFields,
+    delegateFormFields: state.myWallet.delegateFormFields,
   }
 }
 

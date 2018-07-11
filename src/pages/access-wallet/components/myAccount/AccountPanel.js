@@ -20,13 +20,13 @@ const messages = defineMessages({
 })
 
 const AccountPanel = ({
-  accounts, addNewAccount, showNewAccountModal, transferFormFields, intl,
+  accounts, addNewAccount, showNewAccountModal, transferFormFields, delegateFormFields, intl,
 }) => {
   const { formatMessage } = intl
   return (
     <Row gutter={32} style={styles.container}>
       <Col span={15}>
-        <AccountOperationPanel transferFormFields={transferFormFields} />
+        <AccountOperationPanel transferFormFields={transferFormFields} delegateFormFields={delegateFormFields} />
       </Col>
       <Col span={9}>
         <AccountCollapse accounts={accounts} showNewAccountModal={showNewAccountModal} />
@@ -54,6 +54,7 @@ AccountPanel.propTypes = {
   addNewAccount: PropTypes.func,
   showNewAccountModal: PropTypes.bool,
   transferFormFields: PropTypes.object,
+  delegateFormFields: PropTypes.object,
   intl: intlShape.isRequired,
 }
 

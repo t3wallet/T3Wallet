@@ -78,7 +78,7 @@ class CreateWallet extends React.Component {
               curStep === 0
               && (
                 <Button type="primary" icon="file-add" size="large" className={styles.button} onClick={() => this._createWallet()}>
-                  <FormattedMessage id={messages.title.id} defaultMessage={messages.title.defaultMessage} />
+                  <FormattedMessage {...messages.title} />
                 </Button>
               )
             }
@@ -88,7 +88,7 @@ class CreateWallet extends React.Component {
                 <div>
                   <MnemonicDisplay mnemonic={mnemonic} />
                   <Button type="primary" className={styles.button} onClick={() => this._next()}>
-                    <FormattedMessage id={messages.next.id} defaultMessage={messages.next.defaultMessage} />
+                    <FormattedMessage {...messages.next} />
                   </Button>
                 </div>
               )
@@ -99,7 +99,7 @@ class CreateWallet extends React.Component {
                 <div>
                   <MnemonicVerify {...nnemonicVerifyProps} />
                   <Button type="primary" className={styles.button} onClick={() => message.success('Processing complete!')}>
-                    <FormattedMessage id={messages.confirm.id} defaultMessage={messages.confirm.defaultMessage} />
+                    <FormattedMessage {...messages.confirm} />
                   </Button>
                 </div>
               )
@@ -108,12 +108,12 @@ class CreateWallet extends React.Component {
               curStep > 0 && curStep !== steps.length - 1
               && (
                 <Button style={{ marginLeft: 8 }} onClick={() => this._prev()}>
-                  <FormattedMessage id={messages.prev.id} defaultMessage={messages.prev.defaultMessage} />
+                  <FormattedMessage {...messages.prev} />
                 </Button>
               )
             }
           </div>
-          <FormattedMessage id={messages.desciption.id} defaultMessage={messages.desciption.defaultMessage} />
+          <FormattedMessage {...messages.desciption} />
           <Steps current={curStep}>
             {steps.map(item => <Steps.Step key={item.title} title={item.title} />)}
           </Steps>

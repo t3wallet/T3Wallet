@@ -5,6 +5,7 @@ import {
 import PropTypes from 'prop-types'
 import { FormattedMessage } from 'react-intl'
 import TransferForm from './TransferForm'
+import DelegateForm from './DelegateForm'
 
 const operations = [{
   key: 'transfer',
@@ -29,16 +30,14 @@ class AccountCollapse extends React.Component {
 
 
     render () {
-      const { transferFormFields } = this.props
+      const { transferFormFields, delegateFormFields } = this.props
       const { activeTabKey } = this.state
       const content = {
         transfer: (
           <TransferForm transferFormFields={transferFormFields} />
         ),
         delegate: (
-          <div>
-delegate
-          </div>
+          <DelegateForm delegateFormFields={delegateFormFields} />
         ),
       }
       return (
@@ -58,6 +57,7 @@ delegate
 
 AccountCollapse.propTypes = {
   transferFormFields: PropTypes.object,
+  delegateFormFields: PropTypes.object,
 }
 
 

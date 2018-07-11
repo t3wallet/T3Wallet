@@ -13,5 +13,8 @@
     "myWallet.toAddress": "To Address",
     "myWallet.gasLimit": "Gas Limit",
     "myWallet.amountToSend": "Amount To Send",
-    "myWallet.sendButton": "Confirm Transaction"
+    "myWallet.sendButton": "Confirm Transaction",
+
+    "myWallet.delegateToAddress": "Delegate To Address",
+    "myWallet.confirmDelegationButton": "Confirm Delegation"
 }
