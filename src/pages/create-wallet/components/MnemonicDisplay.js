@@ -10,19 +10,6 @@ import styles from './MnemonicDisplay.less'
 const MnemonicDisplay = ({ mnemonic }) => {
   return (
     <div className={styles.containerStyle}>
-      <Row>
-        <FormattedMessage
-          id="createWallet.saveMnemonic.id"
-          defaultMessage="Save your {mnemonic}"
-          values={{
-            mnemonic: (
-              <span className={styles.textHightlight}>
-                <FormattedMessage id="createWallet.mnemonicWords" defaultMessage="Mnemonic Words" />
-              </span>
-            ),
-          }}
-        />
-      </Row>
       <Row type="flex" justify="center">
         <p>
           {mnemonic.map((word, key) => {
@@ -33,10 +20,9 @@ const MnemonicDisplay = ({ mnemonic }) => {
             )
           })}
         </p>
-        {/* {mnemonic.join(' ')} */}
       </Row>
-      <Row type="flex" justify="center">
-        <FormattedMessage id="createWallet.mnemonicTip.id" defaultMessage="Write Down Your Mnemonic Words" />
+      <Row type="flex" justify="center" align="center">
+        <FormattedMessage id="createWallet.writeDownTip" defaultMessage="Write Down Your Mnemonic Words" />
       </Row>
     </div>
   )

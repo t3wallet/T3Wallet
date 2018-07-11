@@ -5,16 +5,6 @@ export default {
   namespace: 'createWallet',
   state: {
     mnemonic: [],
-    steps: [{
-      title: 'Generate Mnemonic',
-      content: 'Generate Mnemonic',
-    }, {
-      title: 'Backup',
-      content: 'Write Down on a paper',
-    }, {
-      title: 'verify',
-      content: 'Verify your Mnemonic',
-    }],
     curStep: 0,
     inputWords: [],
     leftWords: [],

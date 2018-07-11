@@ -33,7 +33,42 @@ const messages = defineMessages({
     id: 'createWallet.confirm',
     defaultMessage: 'Confirm',
   },
+  generateMnemonic: {
+    id: 'createWallet.generateMnemonic',
+    defaultMessage: 'Generate Mnemonic',
+  },
+  backup: {
+    id: 'createWallet.backup',
+    defaultMessage: 'Backup',
+  },
+  verify: {
+    id: 'createWallet.verify',
+    defaultMessage: 'Verify',
+  },
+  saveMnemonic: {
+    id: 'createWallet.saveMnemonic',
+    defaultMessage: 'Save your {mnemonic}',
+  },
+  mnemonicPhrase: {
+    id: 'createWallet.mnemonicPhrase',
+    defaultMessage: 'Mnemonic Phrase',
+  },
+  verifyMnemonic: {
+    id: 'createWallet.verifyMnemonic',
+    defaultMessage: 'Verify your {mnemonic}',
+  },
 })
+
+const steps = [{
+  title: <FormattedMessage {...messages.generateMnemonic} />,
+  content: 'Generate Mnemonic',
+}, {
+  title: <FormattedMessage {...messages.backup} />,
+  content: 'Write Down on a paper',
+}, {
+  title: <FormattedMessage {...messages.verify} />,
+  content: 'Verify your Mnemonic',
+}]
 
 class CreateWallet extends React.Component {
   _next = () => {
@@ -49,7 +84,7 @@ class CreateWallet extends React.Component {
 
   render () {
     const {
-      dispatch, loading, intl, steps, curStep, mnemonic, inputWords, leftWords,
+      dispatch, loading, intl, curStep, mnemonic, inputWords, leftWords,
     } = this.props
     const { formatMessage } = intl
 
@@ -70,52 +105,89 @@ class CreateWallet extends React.Component {
       },
     }
 
+    let prevButton = (
+      <Button className={styles.prevButton} size="large" onClick={() => this._prev()}>
+        <FormattedMessage {...messages.prev} />
+      </Button>
+    )
     return (
       <Page loading={loading} className={styles.cardContaner}>
         <Card loading={loading} bordered={false} title={formatMessage(messages.title)}>
-          <div className="steps-action">
-            {
+          {
               curStep === 0
               && (
+              <div className={styles.container}>
+                <h2 className={styles.title}>
+                  <FormattedMessage
+                    {...messages.title}
+                  />
+                </h2>
                 <Button type="primary" icon="file-add" size="large" className={styles.button} onClick={() => this._createWallet()}>
                   <FormattedMessage {...messages.title} />
                 </Button>
+                </div>
               )
             }
-            {
+          {
               curStep === 1
               && (
-                <div>
+                <div className={styles.container}>
+                  <h2 className={styles.title}>
+                    <FormattedMessage
+                      {...messages.saveMnemonic}
+                      values={{
+                        mnemonic: (
+                          <span className={styles.textHightlight}>
+                            <FormattedMessage {...messages.mnemonicPhrase} />
+                          </span>
+                        ),
+                      }}
+                    />
+                  </h2>
                   <MnemonicDisplay mnemonic={mnemonic} />
-                  <Button type="primary" className={styles.button} onClick={() => this._next()}>
+                  <br />
+                  <Button type="primary" size="large" className={styles.button} onClick={() => this._next()}>
                     <FormattedMessage {...messages.next} />
                   </Button>
+                  <br />
+                  {prevButton}
+
                 </div>
               )
             }
-            {
-              curStep === steps.length - 1
+          {
+              curStep === 2
               && (
-                <div>
+                <div className={styles.container}>
+                  <h2 className={styles.title}>
+                    <FormattedMessage
+                      {...messages.verifyMnemonic}
+                      values={{
+                        mnemonic: (
+                          <span className={styles.textHightlight}>
+                            <FormattedMessage {...messages.mnemonicPhrase} />
+                          </span>
+                        ),
+                      }}
+                    />
+                  </h2>
+
                   <MnemonicVerify {...nnemonicVerifyProps} />
-                  <Button type="primary" className={styles.button} onClick={() => message.success('Processing complete!')}>
+                  <br />
+                  <br />
+                  <Button type="primary" size="large" className={styles.button} onClick={() => message.success('Processing complete!')}>
                     <FormattedMessage {...messages.confirm} />
                   </Button>
+                  <br />
+                  {prevButton}
                 </div>
               )
             }
-            {
-              curStep > 0 && curStep !== steps.length - 1
-              && (
-                <Button style={{ marginLeft: 8 }} onClick={() => this._prev()}>
-                  <FormattedMessage {...messages.prev} />
-                </Button>
-              )
-            }
-          </div>
-          <FormattedMessage {...messages.desciption} />
+          <br />
+          <br />
+          <br />
           <Steps current={curStep}>
-            {steps.map(item => <Steps.Step key={item.title} title={item.title} />)}
+            {steps.map((item, index) => <Steps.Step key={index} title={item.title} />)}
           </Steps>
         </Card>
       </Page>
@@ -133,7 +205,6 @@ class CreateWallet extends React.Component {
 CreateWallet.propTypes = {
   loading: PropTypes.bool,
   intl: intlShape.isRequired,
-  steps: PropTypes.array,
   curStep: PropTypes.number,
   dispatch: PropTypes.func,
   mnemonic: PropTypes.array,
@@ -145,7 +216,6 @@ const mapStateToProps = (state) => {
   return {
     createWallet: state.createWallet,
     curStep: state.createWallet.curStep,
-    steps: state.createWallet.steps,
     mnemonic: state.createWallet.mnemonic,
     inputWords: state.createWallet.inputWords,
     leftWords: state.createWallet.leftWords,

@@ -1,9 +1,8 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import {
-  Row, Button,
+  Row, Button, Icon,
 } from 'antd'
-import { FormattedMessage } from 'react-intl'
 import styles from './MnemonicVerify.less'
 
 
@@ -11,29 +10,19 @@ const MnemonicVerify = ({
   inputWords, leftWords, onInputWordClick, onLeftWordClick,
 }) => {
   return (
-    <div className={styles.containerStyle}>
-      <Row>
-        <FormattedMessage
-          id="createWallet.verifyMnemonic.id"
-          defaultMessage="Verify your {mnemonic}"
-          values={{
-            mnemonic: (
-              <span className={styles.textHightlight}>
-                <FormattedMessage id="createWallet.mnemonicWords" defaultMessage="Mnemonic Words" />
-              </span>
-            ),
-          }}
-        />
-      </Row>
-      <Row type="flex" justify="center">
+    <div className={styles.container}>
+      <Row type="flex" className={styles.inputWordsContainer}>
         {inputWords.map((word) => {
           return (
             <Button size="large" className={styles.inputWordCell} key={word} onClick={() => onInputWordClick(word)}>
               {word}
+              <Icon type="close" style={{ color: 'grey' }} />
             </Button>
           )
         })}
       </Row>
+      <br />
+      <br />
       <Row type="flex" justify="center">
         {leftWords.map((word) => {
           return (

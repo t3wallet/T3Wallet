@@ -1,7 +1,26 @@
-.inputWordCell { 
-    // border-color: #adc6ff;
-}
+@import "~themes/vars.less";
 
-.leftWordCell {
-    // border-color: #adc6ff;
+.container {
+    .inputWordsContainer {
+        padding: 10px 15px 10px 15px;
+        min-height: 100px;
+        height: auto;
+        border-radius: 10px;
+        border: 1px solid @complementary-2;
+    }
+
+    .wordCess {
+        margin-right: 5px;
+        margin-bottom: 5px;
+    }
+
+    .inputWordCell {
+        .wordCess;
+        border-color: @primary-2;
+        color: @primary-3;
+    }
+
+    .leftWordCell {
+        .wordCess;
+    }
 }

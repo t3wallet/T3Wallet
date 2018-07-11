@@ -3,7 +3,7 @@ import sotez from 'sotez'
 export default {
   namespace: 'accessWallet',
   state: {
-    walletLoaded: true,
+    walletLoaded: false,
     privateKey: '',
 
     mnemonic: '',

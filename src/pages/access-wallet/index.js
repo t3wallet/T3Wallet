@@ -3,11 +3,36 @@ import { connect } from 'dva'
 import { Card, Tabs } from 'antd'
 import { Page } from 'components'
 import PropTypes from 'prop-types'
-import { FormattedMessage } from 'react-intl'
+import {
+  intlShape, injectIntl, defineMessages, FormattedMessage,
+} from 'react-intl'
 import {
   AccountPanel, ViewOnly, Mnemonic, Fundraiser, PrivateKey,
 } from './components'
 import styles from './index.less'
+
+const messages = defineMessages({
+  title: {
+    id: 'accessWallet.title',
+    defaultMessage: 'How do you want to access your wallet',
+  },
+  viewOnly: {
+    id: 'accessWallet.viewOnly',
+    defaultMessage: 'View Only',
+  },
+  mnemonic: {
+    id: 'accessWallet.mnemonic',
+    defaultMessage: 'Mnemonic Phrase',
+  },
+  fundraiser: {
+    id: 'accessWallet.fundraiser',
+    defaultMessage: 'Fundraiser Wallet',
+  },
+  privateKey: {
+    id: 'accessWallet.privateKey',
+    defaultMessage: 'Private Key',
+  },
+})
 
 class AccessWallet extends React.Component {
   addNewAccount = (e) => {
@@ -16,8 +41,10 @@ class AccessWallet extends React.Component {
 
   render () {
     const {
-      loading, walletLoaded, accounts, showNewAccountModal, transferFormFields, delegateFormFields,
+      intl, loading, walletLoaded, accounts, showNewAccountModal, transferFormFields, delegateFormFields,
     } = this.props
+    const { formatMessage } = intl
+
     let panel
     if (walletLoaded) {
       panel = (
@@ -31,23 +58,23 @@ class AccessWallet extends React.Component {
       )
     } else {
       panel = (
-        <Card loading={loading} bordered={false}>
+        <Card loading={loading} bordered={false} className={styles.container}>
           <div>
             <div style={{ marginBottom: 16 }}>
-              How do you want access your wallet?
+              <FormattedMessage {...messages.title} />
             </div>
             <div>
               <Tabs tabPosition="left" size="large" defaultActiveKey="">
-                <Tabs.TabPane tab="View Only" key="1">
+                <Tabs.TabPane tab={formatMessage(messages.viewOnly)} key="1">
                   <ViewOnly />
                 </Tabs.TabPane>
-                <Tabs.TabPane tab="Mnemonic Words" key="2">
+                <Tabs.TabPane tab={formatMessage(messages.mnemonic)} key="2">
                   <Mnemonic />
                 </Tabs.TabPane>
-                <Tabs.TabPane tab="Mnemonic Words" key="3">
+                <Tabs.TabPane tab={formatMessage(messages.fundraiser)} key="3">
                   <Fundraiser />
                 </Tabs.TabPane>
-                <Tabs.TabPane tab="Private Key" key="4">
+                <Tabs.TabPane tab={formatMessage(messages.privateKey)} key="4">
                   <PrivateKey />
                 </Tabs.TabPane>
               </Tabs>
@@ -74,6 +101,7 @@ AccessWallet.propTypes = {
   showNewAccountModal: PropTypes.bool,
   transferFormFields: PropTypes.object,
   delegateFormFields: PropTypes.object,
+  intl: intlShape.isRequired,
 }
 
 const mapStateToProps = (state) => {
@@ -85,4 +113,4 @@ const mapStateToProps = (state) => {
   }
 }
 
-export default connect(mapStateToProps)(AccessWallet)
+export default connect(mapStateToProps)(injectIntl(AccessWallet))

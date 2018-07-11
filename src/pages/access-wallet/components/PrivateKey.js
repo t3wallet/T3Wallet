@@ -1,12 +1,26 @@
 import React from 'react'
 import { Input, Button } from 'antd'
-import { FormattedMessage } from 'react-intl'
+import {
+  intlShape, injectIntl, defineMessages, FormattedMessage,
+} from 'react-intl'
+import PropTypes from 'prop-types'
 import styles from './styles.less'
 
-const PrivateKey = () => {
+const messages = defineMessages({
+  privateKey: {
+    id: 'accessWallet.privateKey',
+    defaultMessage: 'Private Key',
+  },
+})
+
+const PrivateKey = ({ pk, intl }) => {
+  const { formatMessage } = intl
+  console.log(pk)
   return (
     <div>
-      <Input.TextArea rows={4} placeholder="Private Key" />
+      <Input.TextArea rows={4} placeholder={formatMessage(messages.privateKey)} />
+      <br />
+      <br />
       <Button type="primary" size="large" className={styles.button}>
         <FormattedMessage id="accessWallet.unlockWallet" defaultMessage="Unlock Your Wallet" />
       </Button>
@@ -14,4 +28,9 @@ const PrivateKey = () => {
   )
 }
 
-export default PrivateKey
+PrivateKey.propTypes = {
+  pk: PropTypes.string,
+  intl: intlShape.isRequired,
+}
+
+export default injectIntl(PrivateKey)

@@ -7,10 +7,12 @@ import { Layout } from 'antd'
 import { Helmet } from 'react-helmet'
 import { withRouter } from 'dva/router'
 import { config } from 'utils'
-import { Header, Menu, styles } from 'components/Layout'
+import {
+  Header, Footer, Menu, styles,
+} from 'components/Layout'
 import './app.less'
 
-const { Content, Footer } = Layout
+const { Content } = Layout
 
 const App = ({
   children, dispatch, global, loading, location,
@@ -81,9 +83,7 @@ const App = ({
           <Content>
             { children }
           </Content>
-          <Footer>
-            {config.footerText}
-          </Footer>
+          <Footer />
         </Layout>
       </Layout>
     </div>
