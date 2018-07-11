@@ -1,13 +1,28 @@
 import React from 'react'
-import { Row, Col } from 'antd'
+import {
+  Row, Col, Tooltip, Icon,
+} from 'antd'
 import PropTypes from 'prop-types'
-import { FormattedMessage } from 'react-intl'
+import {
+  intlShape, FormattedMessage, injectIntl, defineMessages,
+} from 'react-intl'
 import AccountOperationPanel from './AccountOperationPanel'
 import AccountCollapse from './AccountCollapse'
+import styles from './AccountPanel.less'
+
+// originateAccountToolTip
+
+const messages = defineMessages({
+  toolTip: {
+    id: 'myWallet.originateAccountToolTip',
+    defaultMessage: 'You need to create an delegable which address starts with KT1 to delegate your baking right to a delegation service',
+  },
+})
 
 const AccountPanel = ({
-  accounts, addNewAccount, showNewAccountModal, transferFormFields,
+  accounts, addNewAccount, showNewAccountModal, transferFormFields, intl,
 }) => {
+  const { formatMessage } = intl
   return (
     <div>
       <Row gutter={32}>
@@ -15,12 +30,21 @@ const AccountPanel = ({
           <AccountOperationPanel transferFormFields={transferFormFields} />
         </Col>
         <Col span={9}>
-          <AccountCollapse accounts={accounts} />
-          <div>
+          <AccountCollapse accounts={accounts} showNewAccountModal={showNewAccountModal} />
+          <Row type="flex" align="space-between" className={styles.buttonGroup}>
+            <div>
+              <a onClick={(e) => { addNewAccount(e) }}>
+                <FormattedMessage id="myWallet.originateAccount" defaultMessage="+ New Delegable Account" />
+              </a>
+              <Tooltip placement="topLeft" title={formatMessage(messages.toolTip)} className={styles.toolTip}>
+                <Icon type="question-circle-o" />
+              </Tooltip>
+            </div>
+
             <a onClick={(e) => { addNewAccount(e) }}>
-              <FormattedMessage id="myWallet.newDelegableAccount" defaultMessage="+ New Delegable Account" />
+              <FormattedMessage id="myWallet.logout" defaultMessage="Log out" />
             </a>
-          </div>
+          </Row>
         </Col>
       </Row>
     </div>
@@ -32,6 +56,7 @@ AccountPanel.propTypes = {
   addNewAccount: PropTypes.func,
   showNewAccountModal: PropTypes.bool,
   transferFormFields: PropTypes.object,
+  intl: intlShape.isRequired,
 }
 
-export default AccountPanel
+export default injectIntl(AccountPanel)

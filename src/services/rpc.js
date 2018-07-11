@@ -1,1 +1,1 @@
-import sotez from 'sotez'
+// import sotez from 'sotez'

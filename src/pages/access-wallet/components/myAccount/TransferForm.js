@@ -1,12 +1,30 @@
 import React from 'react'
 import {
-  Form, Input, Icon, Row, Col, Button,
+  Form, Input, Button,
 } from 'antd'
 import PropTypes from 'prop-types'
-import { FormattedMessage, formatMessage } from 'react-intl'
+import {
+  intlShape, FormattedMessage, injectIntl, defineMessages,
+} from 'react-intl'
 import styles from './TransferForm.less'
 
 const FormItem = Form.Item
+
+const messages = defineMessages({
+  toAddress: {
+    id: 'myWallet.toAddress',
+    defaultMessage: 'To Address',
+  },
+  amountToSend: {
+    id: 'myWallet.amountToSend',
+    defaultMessage: 'Amount To Send',
+  },
+  gasLimit: {
+    id: 'myWallet.gasLimit',
+    defaultMessage: 'Gas Limit',
+  },
+})
+
 
 const TransferForm = Form.create({
   onFieldChange (props, changedFields) {
@@ -27,27 +45,36 @@ const TransferForm = Form.create({
         ...amountToSend,
         value: amountToSend,
       }),
+      gasLimit: Form.createFormField({
+        ...gasLimit,
+        value: gasLimit,
+      }),
+      sendData: Form.createFormField({
+        ...sendData,
+        value: sendData,
+      }),
     }
   },
   onValuesChange (_, values) {
     console.log(values)
   },
 })((props) => {
-  const { form } = props
+  const { form, intl } = props
   const { getFieldDecorator } = form
+  const { formatMessage } = intl
   return (
     <Form hideRequiredMark className={styles.transferForm}>
-      <FormItem label="To Address">
+      <FormItem label={formatMessage(messages.toAddress)}>
         {getFieldDecorator('toAddress', {
           rules: [{ required: true, message: 'To Address is required!' }],
         })(<Input />)}
       </FormItem>
-      <FormItem label="Amount To Send">
+      <FormItem label={formatMessage(messages.amountToSend)}>
         {getFieldDecorator('amountToSend', {
           rules: [{ required: true, message: 'Amount To Send Is Required' }],
         })(<Input />)}
       </FormItem>
-      <FormItem label="Gas Limit">
+      <FormItem label={formatMessage(messages.gasLimit)}>
         {getFieldDecorator('gasLimit', {
           rules: [{ required: true, message: 'Gas Limit Is Required' }],
         })(<Input />)}
@@ -63,6 +90,7 @@ const TransferForm = Form.create({
 
 TransferForm.propTypes = {
   transferFormFields: PropTypes.object,
+  intl: intlShape.isRequired,
 }
 
-export default TransferForm
+export default injectIntl(TransferForm)

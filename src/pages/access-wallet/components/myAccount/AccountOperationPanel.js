@@ -1,30 +1,18 @@
 import React from 'react'
 import {
-  Card, Form, Button, Input, Icon,
+  Card,
 } from 'antd'
 import PropTypes from 'prop-types'
+import { FormattedMessage } from 'react-intl'
 import TransferForm from './TransferForm'
 
 const operations = [{
   key: 'transfer',
-  tab: 'Transfer',
+  tab: <FormattedMessage id="myWallet.transfer" defaultMessage="Transfer" />,
 }, {
   key: 'delegate',
-  tab: 'Delegate',
+  tab: <FormattedMessage id="myWallet.delegate" defaultMessage="Delegate" />,
 }]
-
-// const content = {
-//   Transfer: <div>
-//     <Form onSubmit={this.handleSubmit}>
-//       <Form.Item>
-// hi
-//       </Form.Item>
-//     </Form>
-//   </div>,
-//   Delegate: <p>
-// Set Delegation
-//   </p>,
-// }
 
 class AccountCollapse extends React.Component {
     state = {
@@ -45,32 +33,6 @@ class AccountCollapse extends React.Component {
       const { activeTabKey } = this.state
       const content = {
         transfer: (
-          // <Form onSubmit={e => this.handleSubmit(e)} className="login-form" layout="vertical">
-          //   <FormItem>
-          //     {getFieldDecorator('To Address', {
-          //       rules: [{ required: true, message: 'Please input your username!' }],
-          //     })(
-          //       <Input prefix={<Icon type="user" style={{ color: 'rgba(0,0,0,.25)' }} />} placeholder="Username" />
-          //     )}
-          //   </FormItem>
-          //   <FormItem>
-          //     {getFieldDecorator('Amount to Send', {
-          //       rules: [{ required: true, message: 'Please input your Password!' }],
-          //     })(
-          //       <Input prefix={<Icon type="lock" style={{ color: 'rgba(0,0,0,.25)' }} />} type="password" placeholder="Password" />
-          //     )}
-          //   </FormItem>
-          //   <FormItem>
-          //     {getFieldDecorator('Amount to Send', {
-          //       rules: [{ required: true, message: 'Please input your Password!' }],
-          //     })(
-          //       <Input prefix={<Icon type="lock" style={{ color: 'rgba(0,0,0,.25)' }} />} type="password" placeholder="Password" />
-          //     )}
-          //     <Button type="primary" htmlType="submit" className="login-form-button">
-          //       Log in
-          //     </Button>
-          //   </FormItem>
-          // </Form>
           <TransferForm transferFormFields={transferFormFields} />
         ),
         delegate: (
@@ -95,7 +57,6 @@ delegate
 }
 
 AccountCollapse.propTypes = {
-  form: PropTypes.object,
   transferFormFields: PropTypes.object,
 }
 
