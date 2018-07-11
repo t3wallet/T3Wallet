@@ -4,8 +4,8 @@
     "start": "cross-env COMPILE_ON_DEMAND=none BABELRC=1 BROWSER=none HOST=0.0.0.0 umi dev",
     "build": "cross-env BABELRC=1 umi build",
     "lint": "eslint --fix --ext .js src",
-    "precommit": "npm run lint",
-    "test": "umi test"
+    "test": "umi test",
+    "precommit": "npm run lint"
   },
   "dependencies": {
     "classnames": "^2.2.6",
@@ -13,6 +13,8 @@
     "nprogress": "^0.2.0",
     "path-to-regexp": "^2.2.1",
     "prop-types": "^15.6.2",
+    "qrcode-react": "^0.1.16",
+    "react-blockies": "^1.3.0",
     "react-helmet": "^5.2.0",
     "react-intl": "^2.4.0",
     "sotez": "^0.0.14",

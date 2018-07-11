@@ -1,22 +1,38 @@
-import { pull } from 'lodash'
-import sotez from 'sotez'
+// import sotez from 'sotez'
 
 export default {
   namespace: 'myWallet',
   state: {
+    accounts: [{
+      type: 'manager',
+      balance: '101.0001',
+      address: 'tz1XMRWVwwEZSZxkKurt3gAzr8G8fKPPE7QK',
+    }],
     privateKey: '',
     publicKey: '',
     balance: '',
     k1: [], // object { address: "k1...", balance: "999,999"}
-    gasLimit: '',
-    data: '',
+
+    // Modal
+    showNewAccountModal: false,
+
+    // Transfer form
+    transferFormFields: {
+      toAddress: '',
+      amountToSend: '',
+      gasLimit: '',
+      sendData: '',
+    },
+
+
   },
   effects: {
-    * createWallet (action, { put }) {
+    * originateAccount (action, { put }) {
       try {
-        const mnemonic = yield sotez.crypto.generateMnemonic()
-        yield put({ type: 'updateMnemonic', mnemonic })
-        yield put({ type: 'updateLeftWords', mnemonic })
+        // TODO: RPC call to originate a new account
+        const address = 'kt1'
+        const balance = 0
+        yield put({ type: 'newK1Wallet', payload: { address, balance } })
       } catch (e) {
         yield put({ type: 'updateMnemonic_failed' })
       }
@@ -24,28 +40,9 @@ export default {
 
   },
   reducers: {
-    updateMnemonic (draft, { mnemonic }) {
-      draft.mnemonic = mnemonic.split(' ')
-      draft.curStep++
-    },
-    updateInputWords (draft, { words }) {
-      draft.inputWords = words
-    },
-    updateLeftWords (draft, { mnemonic }) {
-      draft.leftWords = mnemonic.split(' ')
-    },
-    updateStep (draft, { step }) {
-      draft.curStep = step
-    },
-    removeInputWord (draft, { payload: word }) {
-      console.log(word)
-      draft.inputWords = pull(draft.inputWords, word)
-      draft.leftWords = [...draft.leftWords, word]
-    },
-    removeLeftWord (draft, { payload: word }) {
-      console.log([...draft.inputWords, word])
-      draft.leftWords = pull(draft.leftWords, word)
-      draft.inputWords = [...draft.inputWords, word]
+    newK1Wallet (draft, { payload }) {
+      const { address, balance } = payload
+      draft.accounts.push({ type: 'K1', address, balance })
     },
   },
 }

@@ -1,0 +1,15 @@
+{
+    "myWallet.title": "转账和委托",
+    "myWallet.walletAddress": "钱包地址",
+    "myWallet.walletBalance": "余额",
+    "myWallet.transactionHistory": "交易记录",
+    "myWallet.managerWallet": "主管理钱包",
+    "myWallet.delegableWallet": "可委托钱包",
+    "myWallet.newDelegableAccount": "+ 新建可委托账户",
+    "myWallet.transfer": "转账",
+    "myWallet.delegate": "委托",
+    "myWallet.toAddress": "收币地址",
+    "myWallet.gasLimit": "Gas 限额",
+    "myWallet.amountToSend": "发送到",
+    "myWallet.confirmTransfer": "确认发送"
+}

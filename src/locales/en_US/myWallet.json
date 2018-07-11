@@ -1,0 +1,15 @@
+{
+    "myWallet.title": "Send Token & Delegation",
+    "myWallet.walletAddress": "Wallet Address",
+    "myWallet.walletBalance": "Wallet Balance",
+    "myWallet.transactionHistory": "Transaction History",
+    "myWallet.managerWallet": "Main Manager Wallet",
+    "myWallet.delegableWallet": "Delegable Wallet",
+    "myWallet.newDelegableAccount" : "+ New Delegable Account",
+    "myWallet.transfer": "Transfer",
+    "myWallet.delegate": "Delegate",
+    "myWallet.toAddress": "To Address",
+    "myWallet.gasLimit": "Gas Limit",
+    "myWallet.amountToSend": "Amount To Send",
+    "myWallet.sendButton": "Confirm Transaction"
+}

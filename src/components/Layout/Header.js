@@ -11,9 +11,9 @@ const Header = ({
   return (
     <Layout.Header className={styles.header}>
       <div className={styles.logo}>
-        <text className={styles.logoText}>
+        <span className={styles.logoText}>
 Hashbook
-        </text>
+        </span>
       </div>
       <div className={styles.rightWarpper}>
         <Select defaultValue={i18n} onSelect={value => changeLang(value)} className={styles.selectBox}>

@@ -3,23 +3,37 @@ import { connect } from 'dva'
 import { Card, Tabs } from 'antd'
 import { Page } from 'components'
 import PropTypes from 'prop-types'
+import { FormattedMessage } from 'react-intl'
 import {
-  ViewOnly, Mnemonic, Fundraiser, PrivateKey,
+  AccountPanel, ViewOnly, Mnemonic, Fundraiser, PrivateKey,
 } from './components'
 import styles from './index.less'
 
 class AccessWallet extends React.Component {
+  addNewAccount = (e) => {
+    e.preventDefault()
+  }
+
   render () {
-    const { loading } = this.props
-    return (
-      <Page loading={loading} className={styles.dashboard}>
-        <h1>
-Access Wallet / Send Token / Delegation
-        </h1>
+    const {
+      loading, walletLoaded, accounts, showNewAccountModal, transferFormFields,
+    } = this.props
+    let panel
+    if (walletLoaded) {
+      panel = (
+        <AccountPanel
+          accounts={accounts}
+          addNewAccount={this.addNewAccount}
+          showNewAccountModal={showNewAccountModal}
+          transferFormFields={transferFormFields}
+        />
+      )
+    } else {
+      panel = (
         <Card loading={loading} bordered={false}>
           <div>
             <div style={{ marginBottom: 16 }}>
-            How do you want access your wallet?
+              How do you want access your wallet?
             </div>
             <div>
               <Tabs tabPosition="left" size="large" defaultActiveKey="">
@@ -39,6 +53,14 @@ Access Wallet / Send Token / Delegation
             </div>
           </div>
         </Card>
+      )
+    }
+    return (
+      <Page loading={loading} className={styles.dashboard}>
+        <h1>
+          <FormattedMessage id="myWallet.title" defaultMessage="Send Token & Delegation" />
+        </h1>
+        {panel}
       </Page>
     )
   }
@@ -46,6 +68,18 @@ Access Wallet / Send Token / Delegation
 
 AccessWallet.propTypes = {
   loading: PropTypes.bool,
+  walletLoaded: PropTypes.bool,
+  accounts: PropTypes.array,
+  showNewAccountModal: PropTypes.bool,
+  transferFormFields: PropTypes.object,
 }
 
-export default connect()(AccessWallet)
+const mapStateToProps = (state) => {
+  return {
+    walletLoaded: state.accessWallet.walletLoaded,
+    accounts: state.myWallet.accounts,
+    transferFormFields: state.myWallet.transferFormFields,
+  }
+}
+
+export default connect(mapStateToProps)(AccessWallet)

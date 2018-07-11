@@ -1,9 +1,9 @@
-import { pull } from 'lodash'
 import sotez from 'sotez'
 
 export default {
   namespace: 'accessWallet',
   state: {
+    walletLoaded: true,
     privateKey: '',
 
     mnemonic: '',

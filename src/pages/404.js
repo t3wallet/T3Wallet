@@ -3,9 +3,9 @@ import React from 'react'
 export default () => {
   return (
     <div>
-      <text>
-          I am a 404 page, you basically can't find me
-      </text>
+      <p>
+        {'I am a 404 page, you basically can\'t find me'}
+      </p>
     </div>
   )
 }
