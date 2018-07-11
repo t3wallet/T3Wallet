@@ -11,7 +11,7 @@ const Header = ({
   return (
     <Layout.Header className={styles.header}>
       <div className={styles.logo}>
-        <span className={styles.logoText}>
+        <span>
 Hashbook
         </span>
       </div>
@@ -35,8 +35,6 @@ Hashbook
             )
           })}
         </Select>
-
-
       </div>
     </Layout.Header>
   )

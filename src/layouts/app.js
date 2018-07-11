@@ -65,7 +65,7 @@ const App = ({
   }
 
   return (
-    <div>
+    <div className="body">
       <Helmet>
         <title>
           Hashbook.io -- Your Trusted Tezos Wallet
