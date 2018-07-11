@@ -6,7 +6,7 @@
     "myWallet.managerWallet": "Main Manager Wallet",
     "myWallet.delegableWallet": "Delegable Wallet",
     "myWallet.originateAccount" : "+ New Delegable Account",
-    "myWallet.originateAccountToolTip": "You need to create an delegable which address starts with KT1 to delegate your baking right to a delegation service",
+    "myWallet.originateAccountToolTip": "You need to create an delegable which address starts with \"KT\" to delegate your baking right to a delegation service",
     "myWallet.logout": "Log out",
     "myWallet.transfer": "Transfer",
     "myWallet.delegate": "Delegate",

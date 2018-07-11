@@ -15,7 +15,7 @@ import styles from './AccountPanel.less'
 const messages = defineMessages({
   toolTip: {
     id: 'myWallet.originateAccountToolTip',
-    defaultMessage: 'You need to create an delegable which address starts with KT1 to delegate your baking right to a delegation service',
+    defaultMessage: 'You need to create an delegable which address starts with "KT" to delegate your baking right to a delegation service',
   },
 })
 
@@ -24,30 +24,28 @@ const AccountPanel = ({
 }) => {
   const { formatMessage } = intl
   return (
-    <div>
-      <Row gutter={32}>
-        <Col span={15}>
-          <AccountOperationPanel transferFormFields={transferFormFields} />
-        </Col>
-        <Col span={9}>
-          <AccountCollapse accounts={accounts} showNewAccountModal={showNewAccountModal} />
-          <Row type="flex" align="space-between" className={styles.buttonGroup}>
-            <div>
-              <a onClick={(e) => { addNewAccount(e) }}>
-                <FormattedMessage id="myWallet.originateAccount" defaultMessage="+ New Delegable Account" />
-              </a>
-              <Tooltip placement="topLeft" title={formatMessage(messages.toolTip)} className={styles.toolTip}>
-                <Icon type="question-circle-o" />
-              </Tooltip>
-            </div>
-
+    <Row gutter={32} style={styles.container}>
+      <Col span={15}>
+        <AccountOperationPanel transferFormFields={transferFormFields} />
+      </Col>
+      <Col span={9}>
+        <AccountCollapse accounts={accounts} showNewAccountModal={showNewAccountModal} />
+        <Row type="flex" align="space-between" className={styles.buttonGroup}>
+          <div>
             <a onClick={(e) => { addNewAccount(e) }}>
-              <FormattedMessage id="myWallet.logout" defaultMessage="Log out" />
+              <FormattedMessage id="myWallet.originateAccount" defaultMessage="+ New Delegable Account" />
             </a>
-          </Row>
-        </Col>
-      </Row>
-    </div>
+            <Tooltip placement="topLeft" title={formatMessage(messages.toolTip)} className={styles.toolTip}>
+              <Icon type="question-circle-o" />
+            </Tooltip>
+          </div>
+
+          <a onClick={(e) => { addNewAccount(e) }}>
+            <FormattedMessage id="myWallet.logout" defaultMessage="Log out" />
+          </a>
+        </Row>
+      </Col>
+    </Row>
   )
 }
 

@@ -11,7 +11,7 @@ export default {
     privateKey: '',
     publicKey: '',
     balance: '',
-    k1: [], // object { address: "k1...", balance: "999,999"}
+    kT: [], // object { address: "KT...", balance: "999,999"}
 
     // Modal
     showNewAccountModal: false,
@@ -30,9 +30,9 @@ export default {
     * originateAccount (action, { put }) {
       try {
         // TODO: RPC call to originate a new account
-        const address = 'kt1'
+        const address = 'KT'
         const balance = 0
-        yield put({ type: 'newK1Wallet', payload: { address, balance } })
+        yield put({ type: 'newKTWallet', payload: { address, balance } })
       } catch (e) {
         yield put({ type: 'updateMnemonic_failed' })
       }
@@ -40,9 +40,9 @@ export default {
 
   },
   reducers: {
-    newK1Wallet (draft, { payload }) {
+    newKTWallet (draft, { payload }) {
       const { address, balance } = payload
-      draft.accounts.push({ type: 'K1', address, balance })
+      draft.accounts.push({ type: 'KT', address, balance })
     },
   },
 }
