@@ -3,11 +3,9 @@
 .header {
   box-shadow: @shadow-2;
   position: relative;
-  justify-content: space-between;
-  height: 63px;
+  min-height: 66px;
+  height: auto ;
   z-index: 9;
-  display: flex;
-  align-items: center;
   background: @header-background;
   padding-left: 5% !important;
   padding-right: 5% !important;
@@ -16,26 +14,26 @@
   border-style: solid;
   border-color: @primary-3;
 
-  .rightWarpper {
+  .rightWrapper {
     flex: 1;
     display: flex;
     justify-content: flex-end;
+    align-items: center;
+  }
+
+  .leftWrapper {
+    flex:1;
+    align-items: center;
+    line-height: 66px;
   }
 
   .logo {
-    flex: 1;
-    width: 63px;
-    height: 63px;
-    line-height: 66px;
-    text-align: flex-start;
-    font-size: 99px;
     transition: @transition-ease-in;
     color: white;
     font-size: 35px;
-    span {
-      cursor: pointer;
-    }
+    cursor: pointer;
   }
+
 
   .selectBox {
     margin-right: 10px

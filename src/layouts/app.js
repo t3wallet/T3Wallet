@@ -8,7 +8,7 @@ import { Helmet } from 'react-helmet'
 import { withRouter } from 'dva/router'
 import { config } from 'utils'
 import {
-  Header, Footer, Menu, styles,
+  Header, Footer, Menu,
 } from 'components/Layout'
 import './app.less'
 
@@ -71,20 +71,17 @@ const App = ({
       <Helmet>
         <title>
           Hashbook.io -- Your Trusted Tezos Wallet
-          {/* <FormattedMessage id="slogan" defaultMessage="Hashbook.io -- Your Trusted Tezos Wallet" /> */}
         </title>
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <link rel="icon" href={logo} type="image/x-icon" />
       </Helmet>
-      <Layout className={styles.light}>
-        <Layout style={{ height: '100vh', overflow: 'scroll' }} id="mainContainer">
-          <Header {...headerProps} />
-          <Menu {...menuProps} />
-          <Content>
-            { children }
-          </Content>
-          <Footer />
-        </Layout>
+      <Layout style={{ height: '100vh', overflow: 'scroll' }} id="mainContainer">
+        <Header {...headerProps} />
+        <Menu {...menuProps} />
+        <Content>
+          { children }
+        </Content>
+        <Footer />
       </Layout>
     </div>
   )

@@ -1,9 +1,7 @@
 @import "~themes/vars.less";
 
 .footer {
-  display: flex;
-  position: relative;
-  height: 100px !important;
+  height: auto !important;
   z-index: 9;
   background: @primary-1;
   padding-left: 5% !important;
@@ -14,21 +12,18 @@
   border-color: @primary-2;
   color: white;
 
-  .leftWrapper {
+
+  .wrapper {
       flex: 1;
       display: flex;
+      justify-content: space-around;
+      align-items: center;
   }
 
-   .middleWrapper {
-        flex: 1;
-        display: flex;
-        justify-content: center;
-    }
-
-  .rightWrapper {
-    flex: 1;
-    display: flex;
-    justify-content: flex-end;
+  .middleWrapper {
+    .wrapper;
+    padding-right: 50px;
+    padding-left: 50px;
   }
 
   .button {
