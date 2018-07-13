@@ -10,7 +10,7 @@ export default {
     * unlockWallet ({ payload }, { call, put }) {
       const { walletType, payload: walletPayload } = payload
       const data = yield call(unlockWallet, walletType, walletPayload)
-      if (!data.success) {
+      if (data.success) {
         const { identity } = data
         yield put({ type: 'loadWallet' })
         yield put({ type: 'myWallet/addIdentity', payload: identity })
