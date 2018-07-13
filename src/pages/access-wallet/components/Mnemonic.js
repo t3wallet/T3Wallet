@@ -1,9 +1,12 @@
 import React from 'react'
-import { Form, Input, Button } from 'antd'
+import {
+  Form, Input, Button, message,
+} from 'antd'
 import {
   intlShape, injectIntl, defineMessages, FormattedMessage,
 } from 'react-intl'
 import PropTypes from 'prop-types'
+import bip39 from 'bip39'
 import styles from './styles.less'
 
 const FormItem = Form.Item
@@ -18,31 +21,73 @@ const messages = defineMessages({
     id: 'accessWallet.mnemonicPassword',
     defaultMessage: 'password (optional)',
   },
+  unlockButton: {
+    id: 'accessWallet.unlockWallet',
+    defaultMessage: 'Unlock Your Wallet',
+  },
 })
 
-const Mnemonic = ({ mnemonic, password, intl }) => {
-  console.log(mnemonic, password)
+const Mnemonic = ({
+  onUnlock,
+  intl,
+  form: {
+    getFieldDecorator,
+    validateFieldsAndScroll,
+  },
+}) => {
+  const handleSubmit = () => {
+    validateFieldsAndScroll((errors, values) => {
+      if (errors) {
+        message.error('Please check you input.')
+        return
+      }
+      onUnlock({ walletType: 'mnemonic', payload: values })
+    })
+  }
+
+  const isMnemonic = (rule, value, callback) => {
+    if (bip39.validateMnemonic(value)) {
+      callback()
+      return
+    }
+    callback('Invalid Mnemonic!')
+  }
   const { formatMessage } = intl
   return (
-    <Form>
+    <form>
       <FormItem>
-        <Input.TextArea rows={4} placeholder={formatMessage(messages.seed)} />
+        {getFieldDecorator('mnemonic', {
+          rules: [{ required: true, message: 'Please input your Mnemonic Phrase.' }, {
+            validator: isMnemonic,
+          }],
+        })(
+          <Input.TextArea rows={4} placeholder={formatMessage(messages.seed)} />
+        )}
       </FormItem>
 
       <FormItem>
-        <Input placeholder={formatMessage(messages.password)} />
+        {getFieldDecorator('password', {
+          rules: [], initialValue: '',
+        })(
+          <Input placeholder={formatMessage(messages.password)} />
+        )}
       </FormItem>
-      <Button type="primary" size="large" className={styles.button}>
-        <FormattedMessage id="accessWallet.unlockWallet" defaultMessage="Unlock Your Wallet" />
+      <Button
+        type="primary"
+        size="large"
+        className={styles.button}
+        onClick={handleSubmit}
+      >
+        <FormattedMessage {...messages.unlockButton} />
       </Button>
-    </Form>
+    </form>
   )
 }
 
 Mnemonic.propTypes = {
-  mnemonic: PropTypes.string,
-  password: PropTypes.string,
+  form: PropTypes.object,
+  onUnlock: PropTypes.func,
   intl: intlShape.isRequired,
 }
 
-export default injectIntl(Mnemonic)
+export default Form.create()(injectIntl(Mnemonic))

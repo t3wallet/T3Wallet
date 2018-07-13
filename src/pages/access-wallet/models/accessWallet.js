@@ -1,39 +1,31 @@
-import sotez from 'sotez'
+import { unlockWallet } from '../services/unlock'
 
 export default {
   namespace: 'accessWallet',
   state: {
     walletLoaded: false,
-    privateKey: '',
-
-    mnemonic: '',
-    mmemonicPassword: '',
-
-    foundraiser: '',
+    error: '',
   },
   effects: {
-    * createWallet (action, { put }) {
-      try {
-        const mnemonic = yield sotez.crypto.generateMnemonic()
-        yield put({ type: 'updateMnemonic', mnemonic })
-        yield put({ type: 'updateLeftWords', mnemonic })
-      } catch (e) {
-        yield put({ type: 'updateMnemonic_failed' })
+    * unlockWallet ({ payload }, { call, put }) {
+      const { walletType, payload: walletPayload } = payload
+      const data = yield call(unlockWallet, walletType, walletPayload)
+      if (!data.success) {
+        const { identity } = data
+        yield put({ type: 'loadWallet' })
+        yield put({ type: 'myWallet/addIdentity', payload: identity })
+      } else {
+        yield put({ type: 'updateError', payload: data.error })
       }
     },
 
   },
   reducers: {
-    updatePrivateKey (draft, { payload: privateKey }) {
-      draft.privateKey = privateKey
+    loadWallet (draft) {
+      draft.walletLoaded = true
     },
-
-    updateMnemonic (draft, { payload: mnemonic }) {
-      draft.updateMnemonic = mnemonic
-    },
-
-    updateMnemonicPassword (draft, { payload: mnemonicPassword }) {
-      draft.updateMnemonicPassword = mnemonicPassword
+    updateError (draft, { payload: error }) {
+      draft.error = error
     },
   },
 }

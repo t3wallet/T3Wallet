@@ -3,18 +3,11 @@
 export default {
   namespace: 'myWallet',
   state: {
-    accounts: [{
-      type: 'manager',
-      balance: '101.0001',
-      address: 'tz1XMRWVwwEZSZxkKurt3gAzr8G8fKPPE7QK',
-    }],
-    privateKey: '',
-    publicKey: '',
-    balance: '',
-    kT: [], // object { address: "KT...", balance: "999,999"}
-
+    accounts: [],
+    activeAccountAddress: 0,
     // Modal
     showNewAccountModal: false,
+
 
     // Transfer form
     transferFormFields: {
@@ -45,6 +38,9 @@ export default {
     newKTWallet (draft, { payload }) {
       const { address, balance } = payload
       draft.accounts.push({ type: 'KT', address, balance })
+    },
+    addIdentity (draft, { payload: identity }) {
+      draft.accounts.push(identity)
     },
   },
 }

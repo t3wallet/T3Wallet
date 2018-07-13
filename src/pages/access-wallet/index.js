@@ -41,8 +41,9 @@ class AccessWallet extends React.Component {
 
   render () {
     const {
-      intl, loading, walletLoaded, accounts, showNewAccountModal, transferFormFields, delegateFormFields,
+      intl, loading, accounts, showNewAccountModal, transferFormFields, delegateFormFields, accessWallet,
     } = this.props
+    const { walletLoaded } = accessWallet
     const { formatMessage } = intl
 
     let panel
@@ -69,7 +70,7 @@ class AccessWallet extends React.Component {
                   <ViewOnly />
                 </Tabs.TabPane>
                 <Tabs.TabPane tab={formatMessage(messages.mnemonic)} key="2">
-                  <Mnemonic />
+                  <Mnemonic onUnlock={this._onUnlockClick} />
                 </Tabs.TabPane>
                 <Tabs.TabPane tab={formatMessage(messages.fundraiser)} key="3">
                   <Fundraiser />
@@ -92,11 +93,20 @@ class AccessWallet extends React.Component {
       </Page>
     )
   }
+
+  _onUnlockClick = (payload) => {
+    const { dispatch } = this.props
+    dispatch({
+      type: 'accessWallet/unlockWallet',
+      payload, // {walletType: '', payload: {} }
+    })
+  }
 }
 
 AccessWallet.propTypes = {
+  dispatch: PropTypes.func,
   loading: PropTypes.bool,
-  walletLoaded: PropTypes.bool,
+  accessWallet: PropTypes.object,
   accounts: PropTypes.array,
   showNewAccountModal: PropTypes.bool,
   transferFormFields: PropTypes.object,
@@ -106,7 +116,7 @@ AccessWallet.propTypes = {
 
 const mapStateToProps = (state) => {
   return {
-    walletLoaded: state.accessWallet.walletLoaded,
+    accessWallet: state.accessWallet,
     accounts: state.myWallet.accounts,
     transferFormFields: state.myWallet.transferFormFields,
     delegateFormFields: state.myWallet.delegateFormFields,
