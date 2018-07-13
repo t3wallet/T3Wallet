@@ -5,21 +5,6 @@ export default {
   state: {
     accounts: [],
     activeAccountAddress: 0,
-    // Modal
-    showNewAccountModal: false,
-
-
-    // Transfer form
-    transferFormFields: {
-      toAddress: '',
-      amountToSend: '',
-      gasLimit: '',
-      sendData: '',
-    },
-
-    delegateFormFields: {
-      toAddress: '',
-    },
   },
   effects: {
     * originateAccount (action, { put }) {

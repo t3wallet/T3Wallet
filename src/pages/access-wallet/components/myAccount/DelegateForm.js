@@ -1,6 +1,6 @@
 import React from 'react'
 import {
-  Form, Input, Button,
+  Form, Input, Button, message,
 } from 'antd'
 import PropTypes from 'prop-types'
 import {
@@ -22,29 +22,22 @@ const messages = defineMessages({
 })
 
 
-const DelegateForm = Form.create({
-  onFieldChange (props, changedFields) {
-    const { onChange } = props
-    onChange(changedFields)
+const DelegateForm = ({
+  intl,
+  form: {
+    getFieldDecorator,
+    validateFieldsAndScroll,
   },
-  mapPropsToFields (props) {
-    const { delegateFormFields } = props
-    const {
-      toAddress,
-    } = delegateFormFields
-    return {
-      delegateToAddress: Form.createFormField({
-        ...toAddress,
-        value: toAddress,
-      }),
-    }
-  },
-  onValuesChange (_, values) {
-    console.log(values)
-  },
-})((props) => {
-  const { form, intl } = props
-  const { getFieldDecorator } = form
+}) => {
+  const handleSubmit = () => {
+    validateFieldsAndScroll((errors, values) => {
+      if (errors) {
+        message.error('Please check you input.')
+        return
+      }
+      console.log(values)
+    })
+  }
   const { formatMessage } = intl
   return (
     <Form hideRequiredMark className={styles.delegateForm}>
@@ -53,17 +46,18 @@ const DelegateForm = Form.create({
           rules: [{ required: true, type: 'string', message: 'Incorrect Address' }],
         })(<Input size="large" />)}
       </FormItem>
-      <Button type="primary" htmlType="submit" className={styles.submitButton}>
+      <Button type="primary" onClick={handleSubmit} className={styles.submitButton}>
         <FormattedMessage {...messages.confirmDelegation} />
       </Button>
 
     </Form>
   )
-})
+}
 
 DelegateForm.propTypes = {
-  delegateFormFields: PropTypes.object,
+  form: PropTypes.object,
   intl: intlShape.isRequired,
 }
 
-export default injectIntl(DelegateForm)
+
+export default Form.create()(injectIntl(DelegateForm))

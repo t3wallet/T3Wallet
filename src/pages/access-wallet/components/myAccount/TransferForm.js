@@ -1,6 +1,6 @@
 import React from 'react'
 import {
-  Form, Input, Button,
+  Form, Input, Button, message,
 } from 'antd'
 import PropTypes from 'prop-types'
 import {
@@ -30,41 +30,22 @@ const messages = defineMessages({
 })
 
 
-const TransferForm = Form.create({
-  onFieldChange (props, changedFields) {
-    const { onChange } = props
-    onChange(changedFields)
+const TransferForm = ({
+  intl,
+  form: {
+    getFieldDecorator,
+    validateFieldsAndScroll,
   },
-  mapPropsToFields (props) {
-    const { transferFormFields } = props
-    const {
-      toAddress, amountToSend, gasLimit, sendData,
-    } = transferFormFields
-    return {
-      toAddress: Form.createFormField({
-        ...toAddress,
-        value: toAddress,
-      }),
-      amountToSend: Form.createFormField({
-        ...amountToSend,
-        value: amountToSend,
-      }),
-      gasLimit: Form.createFormField({
-        ...gasLimit,
-        value: gasLimit,
-      }),
-      sendData: Form.createFormField({
-        ...sendData,
-        value: sendData,
-      }),
-    }
-  },
-  onValuesChange (_, values) {
-    console.log(values)
-  },
-})((props) => {
-  const { form, intl } = props
-  const { getFieldDecorator } = form
+}) => {
+  const handleSubmit = () => {
+    validateFieldsAndScroll((errors, values) => {
+      if (errors) {
+        message.error('Please check you input.')
+        return
+      }
+      console.log(values)
+    })
+  }
   const { formatMessage } = intl
   return (
     <Form hideRequiredMark className={styles.transferForm}>
@@ -84,17 +65,17 @@ const TransferForm = Form.create({
         })(<Input size="large" addonAfter="ꜩ" />)}
       </FormItem>
 
-      <Button type="primary" htmlType="submit" className={styles.submitButton}>
+      <Button type="primary" onClick={handleSubmit} className={styles.submitButton}>
         <FormattedMessage {...messages.sendButton} />
       </Button>
 
     </Form>
   )
-})
+}
 
 TransferForm.propTypes = {
-  transferFormFields: PropTypes.object,
+  form: PropTypes.object,
   intl: intlShape.isRequired,
 }
 
-export default injectIntl(TransferForm)
+export default Form.create()(injectIntl(TransferForm))
