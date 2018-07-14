@@ -61,7 +61,7 @@ const Mnemonic = ({
             validator: isMnemonic,
           }],
         })(
-          <Input.TextArea rows={4} placeholder={formatMessage(messages.seed)} />
+          <Input.TextArea rows={4} placeholder={formatMessage(messages.seed)} onPressEnter={handleSubmit} />
         )}
       </FormItem>
 
@@ -69,7 +69,7 @@ const Mnemonic = ({
         {getFieldDecorator('password', {
           rules: [], initialValue: '',
         })(
-          <Input placeholder={formatMessage(messages.password)} />
+          <Input placeholder={formatMessage(messages.password)} onPressEnter={handleSubmit}/>
         )}
       </FormItem>
       <Button

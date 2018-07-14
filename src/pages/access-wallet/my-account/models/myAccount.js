@@ -1,12 +1,13 @@
 import { findIndex } from 'lodash'
-import { loadAccount } from '../services/account'
+import { message } from 'antd'
+import { loadAccount, sendToken } from '../services/account'
 
 export default {
   namespace: 'myAccount',
   state: {
     accountLoaded: false,
     accounts: [],
-    activeAccount: 0,
+    activeAccountIndex: 0,
   },
   effects: {
     * loadAccount ({ payload: address }, { call, put }) {
@@ -20,6 +21,21 @@ export default {
         }
       } catch (e) {
         yield put({ type: 'updateAccountBalance_failed' })
+      }
+    },
+    * sendToken ({ payload }, { call, put }) {
+      const {
+        toAddress, amount, gas, data,
+      } = payload
+      const curAccount = this.accounts[this.activeAccountIndex]
+      const { address, keys } = curAccount
+      try {
+        const response = yield call(sendToken, toAddress, address, keys, amount, gas, data)
+        if (response.success) {
+          message.success('Send Operation Success!')
+        }
+      } catch (error) {
+        yield put({ type: 'sendToken_faild' })
       }
     },
     * originateAccount (action, { put }) {
@@ -39,14 +55,19 @@ export default {
       const { address, balance } = payload
       draft.accounts.push({ type: 'KT', address, balance })
     },
-    addIdentity (draft, { payload: identity }) {
+    resetIdentity (draft, { payload: identity }) {
       draft.accountLoaded = true
-      draft.accounts.push(identity)
+      draft.accounts = [identity]
     },
     updateAccountBalance (draft, { payload }) {
       const { address, balance } = payload
       const index = findIndex(draft.accounts, { address })
       draft.accounts[index].balance = balance
+    },
+    logout (draft) {
+      draft.accountLoaded = false
+      draft.accounts = []
+      draft.activeAccount = NaN
     },
   },
 }

@@ -44,15 +44,15 @@ class AccessWallet extends React.Component {
 
   componentDidMount () {
     this.updateDimensions()
-    window.addEventListener('resize', this.updateDimensions.bind(this))
+    window.addEventListener('resize', this.updateDimensions)
   }
 
-  componentWillUnmount () {
-    window.removeEventListener('resize', this.updateDimensions.bind(this))
+  componentWillUnmount = () => {
+    window.removeEventListener('resize', this.updateDimensions)
   }
 
 
-  updateDimensions () {
+  updateDimensions = () => {
     if (window.innerWidth < 768) {
       this.setState({ tabPosition: 'top' })
     } else {
@@ -77,7 +77,7 @@ class AccessWallet extends React.Component {
               <FormattedMessage {...messages.title} />
             </div>
             <div>
-              <Tabs tabPosition={tabPosition} size="large" defaultActiveKey="">
+              <Tabs tabPosition={tabPosition} size="large" defaultActiveKey={null}>
                 <Tabs.TabPane tab={formatMessage(messages.viewOnly)} key="1">
                   <ViewOnly />
                 </Tabs.TabPane>

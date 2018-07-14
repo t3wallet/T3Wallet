@@ -40,7 +40,7 @@ const AccountCollapse = ({ accounts }) => {
               </h3>
               <div className={styles.infoContainer}>
                 <span className={styles.value}>
-                  {`${account.balance && account.balance || 'loading'} ꜩ`}
+                  {`${typeof account.balance === 'undefined' ? 'loading': account.balance} ꜩ`}
                 </span>
               </div>
             </Row>

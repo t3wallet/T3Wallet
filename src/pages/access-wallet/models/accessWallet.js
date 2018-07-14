@@ -12,7 +12,7 @@ export default {
       const data = yield call(unlockWallet, walletType, walletPayload)
       if (data.success) {
         const { identity } = data
-        yield put({ type: 'myAccount/addIdentity', payload: identity })
+        yield put({ type: 'myAccount/resetIdentity', payload: identity })
         router.push('/access-wallet/my-account')
       } else {
         yield put({ type: 'updateError', payload: data.error })
