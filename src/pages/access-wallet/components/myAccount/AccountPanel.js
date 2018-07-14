@@ -25,10 +25,10 @@ const AccountPanel = ({
   const { formatMessage } = intl
   return (
     <Row gutter={32} style={styles.container}>
-      <Col span={15}>
+      <Col md={15}>
         <AccountOperationPanel transferFormFields={transferFormFields} delegateFormFields={delegateFormFields} />
       </Col>
-      <Col span={9}>
+      <Col md={9}>
         <AccountCollapse accounts={accounts} showNewAccountModal={showNewAccountModal} />
         <Row type="flex" align="space-between" className={styles.buttonGroup}>
           <div>

@@ -3,11 +3,13 @@ import PropTypes from 'prop-types'
 import {
   Layout, Select, Row, Col,
 } from 'antd'
+import config from 'config'
 import styles from './Header.less'
 
 const Header = ({
-  changeLang, languages, networkProviders, changeNetworkProvider, i18n, curNetworkProvider,
+  changeLang, setNetworkProvider, i18n, curNetworkProvider,
 }) => {
+  const { languages, networkProviders } = config
   return (
     <Layout.Header className={styles.header}>
       <Row type="flex">
@@ -27,10 +29,10 @@ const Header = ({
             })}
           </Select>
 
-          <Select defaultValue={curNetworkProvider.name} onSelect={changeNetworkProvider} className={styles.selectBox}>
+          <Select defaultValue={curNetworkProvider} onSelect={value => setNetworkProvider(value)} className={styles.selectBox}>
             {networkProviders.map((item) => {
               return (
-                <Select.Option key={item.url} value={item.name} size="large">
+                <Select.Option key={item.url} value={item.url} size="large">
                   {item.name}
                 </Select.Option>
               )
@@ -44,11 +46,9 @@ const Header = ({
 
 Header.propTypes = {
   changeLang: PropTypes.func,
-  languages: PropTypes.array,
-  networkProviders: PropTypes.array,
-  changeNetworkProvider: PropTypes.func,
+  setNetworkProvider: PropTypes.func,
   i18n: PropTypes.string,
-  curNetworkProvider: PropTypes.object,
+  curNetworkProvider: PropTypes.string,
 }
 
 export default Header

@@ -12,6 +12,7 @@ class Index extends React.Component {
   // Change user's language is a sync opetration so it's safe
   UNSAFE_componentWillMount () {
     this._initLang()
+    this._init()
   }
 
   render () {
@@ -28,6 +29,14 @@ class Index extends React.Component {
         </IntlProvider>
       </LocaleProvider>
     )
+  }
+
+  _init () {
+    const { dispatch } = this.props
+    dispatch({
+      type: 'global/setNetworkProvider',
+      payload: 'https://rpc.tezrpc.me/',
+    })
   }
 
   _initLang () {

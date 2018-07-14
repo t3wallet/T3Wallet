@@ -1,33 +1,14 @@
-import { networkProviders } from 'config'
-import languages from '../locales/languagesList'
+import { setNetworkProvider } from '../services/app'
 
 export default {
   namespace: 'global',
   state: {
-    menu: [
-      {
-        key: 'create-wallet',
-        localeId: 'tabs.createWallet',
-        icon: 'file-add',
-        name: 'New Wallet',
-        route: '/create-wallet',
-      },
-      {
-        key: 'access-wallet',
-        localeId: 'tabs.accessWallet',
-        icon: 'wallet',
-        name: 'Access Your Wallet',
-        route: '/access-wallet',
-      },
-    ],
     curMenu: ['create-wallet'],
-    languages,
     i18n: 'en',
-    gas: '0.001',
     locationPathname: '',
     locationQuery: {},
-    networkProviders,
-    curNetworkProvider: networkProviders[0],
+
+    curNetworkProvider: 'https://tezrpc.me',
   },
   subscriptions: {
     setupHistory ({ dispatch, history }) {
@@ -42,7 +23,13 @@ export default {
       })
     },
   },
-  effects: {},
+  effects: {
+    * setNetworkProvider ({ payload }, { call, put }) {
+      yield call(setNetworkProvider, payload)
+      yield put({ type: 'myWallet/updateNetworkProvider', payload })
+    },
+
+  },
   reducers: {
     updateState (draft, { payload }) {
       const { locationPathname, locationQuery } = payload
@@ -60,7 +47,7 @@ export default {
     changeLang (draft, { payload: locale }) {
       draft.i18n = locale
     },
-    changeNetworkProvider (draft, { payload: network }) {
+    updateNetworkProvider (draft, { payload: network }) {
       draft.curNetwork = network
     },
   },

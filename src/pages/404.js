@@ -4,7 +4,7 @@ export default () => {
   return (
     <div>
       <p>
-        {'I am a 404 page, you basically can\'t find me'}
+        {'I am a 404 page, I guess you are lost :( .'}
       </p>
     </div>
   )

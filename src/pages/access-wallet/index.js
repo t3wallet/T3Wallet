@@ -35,6 +35,31 @@ const messages = defineMessages({
 })
 
 class AccessWallet extends React.Component {
+  constructor () {
+    super()
+    this.state = {
+      tabPosition: 'left',
+    }
+  }
+
+  componentDidMount () {
+    this.updateDimensions()
+    window.addEventListener('resize', this.updateDimensions.bind(this))
+  }
+
+  componentWillUnmount () {
+    window.removeEventListener('resize', this.updateDimensions.bind(this))
+  }
+
+
+  updateDimensions () {
+    if (window.innerWidth < 768) {
+      this.setState({ tabPosition: 'top' })
+    } else {
+      this.setState({ tabPosition: 'left' })
+    }
+  }
+
   addNewAccount = (e) => {
     e.preventDefault()
   }
@@ -58,6 +83,7 @@ class AccessWallet extends React.Component {
         />
       )
     } else {
+      const { tabPosition } = this.state
       panel = (
         <Card loading={loading} bordered={false} className={styles.container}>
           <div>
@@ -65,7 +91,7 @@ class AccessWallet extends React.Component {
               <FormattedMessage {...messages.title} />
             </div>
             <div>
-              <Tabs tabPosition="left" size="large" defaultActiveKey="">
+              <Tabs tabPosition={tabPosition} size="large" defaultActiveKey="">
                 <Tabs.TabPane tab={formatMessage(messages.viewOnly)} key="1">
                   <ViewOnly />
                 </Tabs.TabPane>

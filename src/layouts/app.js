@@ -6,7 +6,7 @@ import { connect } from 'dva'
 import { Layout } from 'antd'
 import { Helmet } from 'react-helmet'
 import { withRouter } from 'dva/router'
-import { config } from 'utils'
+import config from 'config'
 import {
   Header, Footer, Menu,
 } from 'components/Layout'
@@ -18,10 +18,9 @@ const App = ({
   children, dispatch, global, loading, location,
 }) => {
   const {
-    menu, languages, curMenu, i18n, networkProviders, curNetworkProvider,
+    languages, curMenu, i18n, networkProviders, curNetworkProvider,
   } = global
-  const { logo } = config
-
+  const { logo, menu } = config
   /* NProgress listener */
   let lastHref
   const { href } = window.location
@@ -44,9 +43,9 @@ const App = ({
         payload: lang,
       })
     },
-    changeNetworkProvider (network) {
+    setNetworkProvider (network) {
       dispatch({
-        type: 'global/changeNetworkProvider',
+        type: 'global/setNetworkProvider',
         payload: network,
       })
       console.log('[Changed network provider]', network)

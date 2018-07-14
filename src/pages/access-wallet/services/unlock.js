@@ -1,6 +1,5 @@
 import sotez from 'sotez'
 
-
 const generateIdentity = (keys) => {
   const { sk, pk, pkh } = keys
   let type
