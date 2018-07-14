@@ -36,12 +36,10 @@ export default {
       draft.curStep = step
     },
     removeInputWord (draft, { payload: word }) {
-      console.log(word)
       draft.inputWords = pull(draft.inputWords, word)
       draft.leftWords = [...draft.leftWords, word]
     },
     removeLeftWord (draft, { payload: word }) {
-      console.log([...draft.inputWords, word])
       draft.leftWords = pull(draft.leftWords, word)
       draft.inputWords = [...draft.inputWords, word]
     },

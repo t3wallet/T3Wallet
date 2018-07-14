@@ -1,9 +1,9 @@
+import router from 'umi/router'
 import { unlockWallet } from '../services/unlock'
 
 export default {
   namespace: 'accessWallet',
   state: {
-    walletLoaded: false,
     error: '',
   },
   effects: {
@@ -12,8 +12,8 @@ export default {
       const data = yield call(unlockWallet, walletType, walletPayload)
       if (data.success) {
         const { identity } = data
-        yield put({ type: 'loadWallet' })
-        yield put({ type: 'myWallet/addIdentity', payload: identity })
+        yield put({ type: 'myAccount/addIdentity', payload: identity })
+        router.push('/access-wallet/my-account')
       } else {
         yield put({ type: 'updateError', payload: data.error })
       }
@@ -21,9 +21,6 @@ export default {
 
   },
   reducers: {
-    loadWallet (draft) {
-      draft.walletLoaded = true
-    },
     updateError (draft, { payload: error }) {
       draft.error = error
     },

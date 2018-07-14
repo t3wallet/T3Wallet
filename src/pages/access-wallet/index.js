@@ -7,7 +7,7 @@ import {
   intlShape, injectIntl, defineMessages, FormattedMessage,
 } from 'react-intl'
 import {
-  AccountPanel, ViewOnly, Mnemonic, Fundraiser, PrivateKey,
+  ViewOnly, Mnemonic, Fundraiser, PrivateKey,
 } from './components'
 import styles from './index.less'
 
@@ -60,31 +60,17 @@ class AccessWallet extends React.Component {
     }
   }
 
-  addNewAccount = (e) => {
-    e.preventDefault()
-  }
-
   render () {
     const {
-      intl, loading, accounts, showNewAccountModal, transferFormFields, delegateFormFields, accessWallet,
+      intl, loading,
     } = this.props
-    const { walletLoaded } = accessWallet
     const { formatMessage } = intl
-
-    let panel
-    if (walletLoaded) {
-      panel = (
-        <AccountPanel
-          accounts={accounts}
-          addNewAccount={this.addNewAccount}
-          showNewAccountModal={showNewAccountModal}
-          transferFormFields={transferFormFields}
-          delegateFormFields={delegateFormFields}
-        />
-      )
-    } else {
-      const { tabPosition } = this.state
-      panel = (
+    const { tabPosition } = this.state
+    return (
+      <Page loading={loading}>
+        <h1>
+          <FormattedMessage id="myWallet.title" defaultMessage="Send Token & Delegation" />
+        </h1>
         <Card loading={loading} bordered={false} className={styles.container}>
           <div>
             <div style={{ marginBottom: 16 }}>
@@ -108,14 +94,6 @@ class AccessWallet extends React.Component {
             </div>
           </div>
         </Card>
-      )
-    }
-    return (
-      <Page loading={loading} className={styles.dashboard}>
-        <h1>
-          <FormattedMessage id="myWallet.title" defaultMessage="Send Token & Delegation" />
-        </h1>
-        {panel}
       </Page>
     )
   }
@@ -133,19 +111,12 @@ AccessWallet.propTypes = {
   dispatch: PropTypes.func,
   loading: PropTypes.bool,
   accessWallet: PropTypes.object,
-  accounts: PropTypes.array,
-  showNewAccountModal: PropTypes.bool,
-  transferFormFields: PropTypes.object,
-  delegateFormFields: PropTypes.object,
   intl: intlShape.isRequired,
 }
 
 const mapStateToProps = (state) => {
   return {
     accessWallet: state.accessWallet,
-    accounts: state.myWallet.accounts,
-    transferFormFields: state.myWallet.transferFormFields,
-    delegateFormFields: state.myWallet.delegateFormFields,
   }
 }
 

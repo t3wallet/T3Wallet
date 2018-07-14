@@ -22,7 +22,6 @@ export const unlockWallet = (type, payload) => {
   if (type === 'mnemonic') {
     const { mnemonic, password } = payload
     const keys = sotez.crypto.generateKeys(mnemonic, password)
-    console.log(keys)
     identity = generateIdentity(keys)
     return { success: true, identity }
   } if (type === 'ico') {
