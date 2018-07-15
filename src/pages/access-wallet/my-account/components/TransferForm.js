@@ -1,6 +1,6 @@
 import React from 'react'
 import {
-  Form, Input, Button, message,
+  Form, Input, InputNumber, Button, message,
 } from 'antd'
 import PropTypes from 'prop-types'
 import {
@@ -36,6 +36,8 @@ const TransferForm = ({
     getFieldDecorator,
     validateFieldsAndScroll,
   },
+  onSendClick,
+  loading,
 }) => {
   const handleSubmit = () => {
     validateFieldsAndScroll((errors, values) => {
@@ -43,7 +45,7 @@ const TransferForm = ({
         message.error('Please check you input.')
         return
       }
-      console.log(values)
+      onSendClick(values)
     })
   }
   const { formatMessage } = intl
@@ -56,16 +58,45 @@ const TransferForm = ({
       </FormItem>
       <FormItem label={formatMessage(messages.amountToSend)}>
         {getFieldDecorator('amountToSend', {
-          rules: [{ required: true, type: 'string', message: 'Incorrect Amount To Send' }],
-        })(<Input size="large" addonAfter="ꜩ" />)}
+          rules: [{ required: true, type: 'number', message: 'Incorrect Amount To Send' }],
+          initialValue: 0,
+        })(<InputNumber size="large"
+          min={0}
+          step={0.1}
+          precision={6}
+          addonAfter="ꜩ"
+          formatter={value => `${value} ꜩ`}
+          parser={value => value.replace(' ꜩ', '')}
+          style={{ width: '100%' }}
+        />)}
+      </FormItem>
+      <FormItem label="Gas">
+        {getFieldDecorator('gas', {
+          rules: [{ required: true, type: 'number', message: 'Incorrect Gas Amount' }],
+          initialValue: 0,
+        })(<InputNumber
+          size="large"
+          min={0}
+          step={0.001}
+          precision={6}
+          formatter={value => `${value} ꜩ`}
+          parser={value => value.replace(' ꜩ', '')}
+          style={{ width: '100%' }}
+        />)}
       </FormItem>
       <FormItem label={formatMessage(messages.gasLimit)}>
         {getFieldDecorator('gasLimit', {
-          rules: [{ required: true, type: 'string', message: 'Incorrect Gas Limit' }],
-        })(<Input size="large" addonAfter="ꜩ" />)}
+          rules: [{ required: true, type: 'number', message: 'Incorrect Gas Limit' }],
+          initialValue: 200,
+        })(<InputNumber size="large"
+          min={0}
+          formatter={value => `${value} ꜩ`}
+          parser={value => value.replace(' ꜩ', '')}
+          style={{ width: '100%' }}
+        />)}
       </FormItem>
 
-      <Button type="primary" onClick={handleSubmit} className={styles.submitButton}>
+      <Button type="primary" loading={loading} onClick={handleSubmit} className={styles.submitButton}>
         <FormattedMessage {...messages.sendButton} />
       </Button>
 
@@ -76,6 +107,8 @@ const TransferForm = ({
 TransferForm.propTypes = {
   form: PropTypes.object,
   intl: intlShape.isRequired,
+  onSendClick: PropTypes.func,
+  loading: PropTypes.bool,
 }
 
 export default Form.create()(injectIntl(TransferForm))

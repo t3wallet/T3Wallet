@@ -15,6 +15,11 @@
     "myWallet.amountToSend": "发送到",
     "myWallet.sendButton": "确认发送",
 
-    "myWallet.delegateToAddress": "委托到地址",
-    "myWallet.confirmDelegationButton": "确认委托"
+    "myWallet.confirm": "确定",
+    "myWallet.delegateToAddress": "委托到该地址",
+    "myWallet.confirmDelegationButton": "确认委托",
+    "myWallet.checkOperationHash": "这里是你的转账哈希值，请点击查看:",
+
+    "myWallet.operationSuccess": "操作成功!",
+    "myWallet.operationFailed": "操作失败."
 }

@@ -1,5 +1,5 @@
-import sotez from 'sotez'
+import eztz from 'utils/eztz'
 
 export const setNetworkProvider = (network) => {
-  sotez.node.setProvider(network)
+  eztz.node.setProvider(network)
 }

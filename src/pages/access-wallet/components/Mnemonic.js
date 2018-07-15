@@ -69,7 +69,7 @@ const Mnemonic = ({
         {getFieldDecorator('password', {
           rules: [], initialValue: '',
         })(
-          <Input placeholder={formatMessage(messages.password)} onPressEnter={handleSubmit}/>
+          <Input placeholder={formatMessage(messages.password)} onPressEnter={handleSubmit} />
         )}
       </FormItem>
       <Button

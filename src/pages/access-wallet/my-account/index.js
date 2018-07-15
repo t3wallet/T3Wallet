@@ -9,7 +9,7 @@ import {
   Row, Col, Tooltip, Icon,
 } from 'antd'
 import { connect } from 'dva'
-import { AccountOperationPanel, AccountCollapse } from './components'
+import { AccountOperationPanel, AccountCollapse, SendOperationModal } from './components'
 import styles from './index.less'
 
 const messages = defineMessages({
@@ -40,7 +40,14 @@ class myAccountIndex extends React.Component {
   }
 
   addNewAccount = () => {
-    console.log('hi')
+    console.log('placeholder')
+  }
+
+  closeSendOperationModal = () => {
+    const { dispatch } = this.props
+    dispatch({
+      type: 'myAccount/closeSendOperationModal',
+    })
   }
 
   logout = () => {
@@ -48,24 +55,56 @@ class myAccountIndex extends React.Component {
     dispatch({
       type: 'myAccount/logout',
     })
+    router.push('/access-wallet')
+  }
+
+  onAccountChange = (accountAddress) => {
+    const { dispatch } = this.props
+    dispatch({
+      type: 'myAccount/changeActiveAccount',
+      payload: { accountAddress },
+    })
+  }
+
+  onSendClick = (payload) => {
+    // payload = {toAddress, amountToSend, gas, data = 'undefined',}
+    const { dispatch } = this.props
+    dispatch({
+      type: 'myAccount/sendToken',
+      payload,
+    })
+  }
+
+  onSetDelegateClick = ({ delegation }) => {
+    console.log(delegation)
   }
 
   render () {
-    const { myAccount } = this.props
-    const { accounts, activeAccountIndex, showNewAccountModal } = myAccount
-    const { loading, intl } = this.props
+    const { myAccount, loading, intl } = this.props
+    const {
+      accounts, activeAccountIndex, showNewAccountModal, sendOperationModalVisible, lastOpHash,
+    } = myAccount
     const { formatMessage } = intl
     return (
-      <Page loading={loading} className={styles.dashboard}>
+      <Page loading={loading.global} className={styles.dashboard}>
         <h1>
           <FormattedMessage id="myWallet.title" defaultMessage="Send Token & Delegation" />
         </h1>
         <Row gutter={32} style={styles.container}>
           <Col md={15}>
-            <AccountOperationPanel />
+            <AccountOperationPanel
+              onSendClick={this.onSendClick}
+              onSetDelegateClick={this.onSetDelegateClick}
+              loading={loading.models.myAccount}
+            />
           </Col>
           <Col md={9}>
-            <AccountCollapse accounts={accounts} showNewAccountModal={showNewAccountModal} />
+            <AccountCollapse
+              accounts={accounts}
+              onAccountChange={this.onAccountChange}
+              activeAccountIndex={activeAccountIndex}
+              showNewAccountModal={showNewAccountModal}
+            />
             <Row type="flex" align="space-between" className={styles.buttonGroup}>
               <div>
                 <a onClick={(e) => { this.addNewAccount(e) }}>
@@ -82,6 +121,8 @@ class myAccountIndex extends React.Component {
             </Row>
           </Col>
         </Row>
+
+        <SendOperationModal visible={sendOperationModalVisible} opHash={lastOpHash} onClose={this.closeSendOperationModal} />
       </Page>
     )
   }
@@ -98,6 +139,7 @@ myAccountIndex.propTypes = {
 const mapStateToProps = (state) => {
   return {
     myAccount: state.myAccount,
+    loading: state.loading,
   }
 }
 

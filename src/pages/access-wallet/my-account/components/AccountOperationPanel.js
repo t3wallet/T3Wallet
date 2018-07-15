@@ -15,7 +15,7 @@ const operations = [{
   tab: <FormattedMessage id="myWallet.delegate" defaultMessage="Delegate" />,
 }]
 
-class AccountCollapse extends React.Component {
+class AccountOperationPanel extends React.Component {
     state = {
       activeTabKey: 'transfer',
     }
@@ -30,14 +30,14 @@ class AccountCollapse extends React.Component {
 
 
     render () {
-      const { transferFormFields, delegateFormFields } = this.props
+      const { onSendClick, onSetDelegateClick, loading } = this.props
       const { activeTabKey } = this.state
       const content = {
         transfer: (
-          <TransferForm transferFormFields={transferFormFields} />
+          <TransferForm onSendClick={onSendClick} loading={loading} />
         ),
         delegate: (
-          <DelegateForm delegateFormFields={delegateFormFields} />
+          <DelegateForm onSetDelegateClick={onSetDelegateClick} />
         ),
       }
       return (
@@ -55,10 +55,11 @@ class AccountCollapse extends React.Component {
     }
 }
 
-AccountCollapse.propTypes = {
-  transferFormFields: PropTypes.object,
-  delegateFormFields: PropTypes.object,
+AccountOperationPanel.propTypes = {
+  onSendClick: PropTypes.func,
+  onSetDelegateClick: PropTypes.func,
+  loading: PropTypes.bool,
 }
 
 
-export default AccountCollapse
+export default AccountOperationPanel

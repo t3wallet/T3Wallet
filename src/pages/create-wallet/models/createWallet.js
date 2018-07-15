@@ -1,5 +1,5 @@
 import { pull } from 'lodash'
-import sotez from 'sotez'
+import eztz from 'utils/eztz'
 
 export default {
   namespace: 'createWallet',
@@ -12,7 +12,7 @@ export default {
   effects: {
     * createWallet (action, { put }) {
       try {
-        const mnemonic = yield sotez.crypto.generateMnemonic()
+        const mnemonic = yield eztz.crypto.generateMnemonic()
         yield put({ type: 'updateMnemonic', mnemonic })
         yield put({ type: 'updateLeftWords', mnemonic })
       } catch (e) {

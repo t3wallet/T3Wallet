@@ -1,16 +1,14 @@
-import sotez from 'sotez'
+import eztz from 'utils/eztz'
 
 const generateIdentity = (keys) => {
-  const { sk, pk, pkh } = keys
+  const { pkh } = keys
   let type
   const prefix = (pkh.slice(0, 2))
   if (prefix === 'tz') type = 'Manager'
   else if (prefix === 'KT') type = 'Smart Contract'
   let identity = {
     type,
-    sk,
-    pk,
-    pkh,
+    keys,
     address: pkh,
   }
   return identity
@@ -21,16 +19,16 @@ export const unlockWallet = (type, payload) => {
   let identity
   if (type === 'mnemonic') {
     const { mnemonic, password } = payload
-    const keys = sotez.crypto.generateKeys(mnemonic, password)
+    const keys = eztz.crypto.generateKeys(mnemonic, password)
     identity = generateIdentity(keys)
     return { success: true, identity }
   } if (type === 'ico') {
     const {
       seed, email, password, code,
     } = payload
-    const keys = sotez.crypto.generateKeys(seed, email + password)
+    const keys = eztz.crypto.generateKeys(seed, email + password)
     if (code) {
-      sotez.rpc.activate({ sk: keys.sk, pk: keys.pk, pkh: keys.pkh }, code).then(() => {
+      eztz.rpc.activate({ sk: keys.sk, pk: keys.pk, pkh: keys.pkh }, code).then(() => {
         return { success: true, identity }
       }).catch(() => {
         return { success: false, error: 'Activation Failed. Please check you input.' }
@@ -39,7 +37,7 @@ export const unlockWallet = (type, payload) => {
     return { success: true, identity }
   } if (type === 'privateKey') {
     const { privateKey } = payload
-    const keys = sotez.crypto.extractKeys(privateKey)
+    const keys = eztz.crypto.extractKeys(privateKey)
     identity = generateIdentity(keys)
     return { success: true, identity }
   }

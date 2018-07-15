@@ -7,7 +7,9 @@ export default {
   state: {
     accountLoaded: false,
     accounts: [],
-    activeAccountIndex: 0,
+    activeAccountIndex: '',
+    sendOperationModalVisible: false,
+    lastOpHash: '',
   },
   effects: {
     * loadAccount ({ payload: address }, { call, put }) {
@@ -23,15 +25,18 @@ export default {
         yield put({ type: 'updateAccountBalance_failed' })
       }
     },
-    * sendToken ({ payload }, { call, put }) {
+    * sendToken ({ payload }, { call, put, select }) {
       const {
-        toAddress, amount, gas, data,
+        toAddress, amountToSend, gas, gasLimit, data,
       } = payload
-      const curAccount = this.accounts[this.activeAccountIndex]
-      const { address, keys } = curAccount
       try {
-        const response = yield call(sendToken, toAddress, address, keys, amount, gas, data)
+        const { accounts, activeAccountIndex } = yield select(state => state.myAccount)
+        const curAccount = accounts[activeAccountIndex]
+        const { address, keys } = curAccount
+        // console.log('/ myAddress: ', address, '/ myKeys: ', keys, '/ toAddress:', toAddress, '/ amountToSend: ', amountToSend, '/ gas', gas)
+        const response = yield call(sendToken, toAddress, address, keys, amountToSend, gas, gasLimit, data)
         if (response.success) {
+          yield put({ type: 'sendSuccess', payload: response })
           message.success('Send Operation Success!')
         }
       } catch (error) {
@@ -58,16 +63,29 @@ export default {
     resetIdentity (draft, { payload: identity }) {
       draft.accountLoaded = true
       draft.accounts = [identity]
+      draft.activeAccountIndex = '0'
     },
     updateAccountBalance (draft, { payload }) {
       const { address, balance } = payload
       const index = findIndex(draft.accounts, { address })
       draft.accounts[index].balance = balance
     },
+    changeActiveAccount (draft, { payload }) {
+      const { activeAccountIndex } = payload
+      draft.activeAccountIndex = activeAccountIndex
+    },
+    sendSuccess (draft, { payload }) {
+      const { hash } = payload
+      draft.lastOpHash = hash
+      draft.sendOperationModalVisible = true
+    },
+    closeSendOperationModal (draft) {
+      draft.sendOperationModalVisible = false
+    },
     logout (draft) {
       draft.accountLoaded = false
       draft.accounts = []
-      draft.activeAccount = NaN
+      draft.activeAccountAddress = ''
     },
   },
 }

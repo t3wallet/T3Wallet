@@ -14,7 +14,12 @@
     "myWallet.gasLimit": "Gas Limit",
     "myWallet.amountToSend": "Amount To Send",
     "myWallet.sendButton": "Confirm Transaction",
+    "myWallet.confirm": "Confirm",
 
     "myWallet.delegateToAddress": "Delegate To Address",
-    "myWallet.confirmDelegationButton": "Confirm Delegation"
+    "myWallet.confirmDelegationButton": "Confirm Delegation",
+
+    "myWallet.checkOperationHash": "Here is your operation hash, click it to check out!",
+    "myWallet.operationSuccess": "Operation succeeds!",
+    "myWallet.operationFailed": "Operation failed."
 }

@@ -7,12 +7,12 @@ import styles from './AccountCollapse.less'
 
 const { Panel } = Collapse
 
-const AccountCollapse = ({ accounts }) => {
+const AccountCollapse = ({ accounts, onAccountChange, activeAccountIndex }) => {
   return (
-    <Collapse accordion bordered={false} defaultActiveKey={['0']}>
+    <Collapse accordion bordered={false} onChange={onAccountChange} defaultActiveKey={activeAccountIndex}>
       { accounts.map((account, index) => {
         let header
-        if (account.type === 'manager') {
+        if (account.type === 'Manager') {
           header = <FormattedMessage id="myWallet.managerWallet" defaultMessage="Main Manager Wallet" />
         } else {
           header = <FormattedMessage id="myWallet.delegableWallet" defaultMessage="Delegable Wallet" />
@@ -40,7 +40,7 @@ const AccountCollapse = ({ accounts }) => {
               </h3>
               <div className={styles.infoContainer}>
                 <span className={styles.value}>
-                  {`${typeof account.balance === 'undefined' ? 'loading': account.balance} ꜩ`}
+                  {`${typeof account.balance === 'undefined' ? 'loading' : account.balance} ꜩ`}
                 </span>
               </div>
             </Row>
@@ -74,6 +74,8 @@ const AccountCollapse = ({ accounts }) => {
 
 AccountCollapse.propTypes = {
   accounts: PropTypes.array.isRequired,
+  onAccountChange: PropTypes.func,
+  activeAccountIndex: PropTypes.string,
 }
 
 export default AccountCollapse

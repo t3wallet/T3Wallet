@@ -1,10 +1,10 @@
-import sotez from 'sotez'
+import eztz from 'utils/eztz'
 
 export const loadAccount = async (pkh) => {
   try {
     let balance
-    balance = await sotez.rpc.getBalance(pkh)
-    balance = sotez.utility.totez(parseInt(balance, 10))
+    balance = await eztz.rpc.getBalance(pkh)
+    balance = eztz.utility.totez(parseInt(balance, 10))
     return { success: true, balance }
   } catch (error) {
     return { success: false, error }
@@ -12,22 +12,20 @@ export const loadAccount = async (pkh) => {
 }
 
 
-export const sendToken = (toAddress, fromAddress, keys, amount, gas, data) => {
+export const sendToken = async (toAddress, fromAddress, keys, amount, gas, gasLimit, data = undefined) => {
   try {
-    let operation;
+    let response
     if (data) {
-      operation = sotez.contract.send(toAddress, fromAddress, keys, amount, data, gas);
+      console.log('called with data')
+      response = await eztz.contract.send(toAddress, fromAddress, keys, amount, data, gas)
     } else {
-      operation = window.eztz.rpc.transfer(fromAddress, keys, toAddress, amount, gas);
+      console.log('called without data')
+      response = await eztz.rpc.transfer(fromAddress, keys, toAddress, amount, gas, data, gasLimit)
     }
-    operation.then(res => {
-      return { success: true }
-    }).catch(error => {
-      console.log(error)
-      throw new Error('Send Operation Failed!')
-    })
-    
+    const { hash, operations } = response
+    return { success: true, hash, operations }
   } catch (error) {
+    console.log(error)
     throw new Error('Send Operation Failed!')
   }
 }

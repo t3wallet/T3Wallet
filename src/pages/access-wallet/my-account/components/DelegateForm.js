@@ -28,6 +28,7 @@ const DelegateForm = ({
     getFieldDecorator,
     validateFieldsAndScroll,
   },
+  onSetDelegateClick,
 }) => {
   const handleSubmit = () => {
     validateFieldsAndScroll((errors, values) => {
@@ -35,7 +36,7 @@ const DelegateForm = ({
         message.error('Please check you input.')
         return
       }
-      console.log(values)
+      onSetDelegateClick(values)
     })
   }
   const { formatMessage } = intl
@@ -57,6 +58,7 @@ const DelegateForm = ({
 DelegateForm.propTypes = {
   form: PropTypes.object,
   intl: intlShape.isRequired,
+  onSetDelegateClick: PropTypes.func,
 }
 
 
