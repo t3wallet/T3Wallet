@@ -10,6 +10,7 @@ import config from 'config'
 import {
   Header, Footer, Menu,
 } from 'components/Layout'
+import Link from 'umi/link'
 import './app.less'
 
 const { Content } = Layout
@@ -55,14 +56,14 @@ const App = ({
   const menuProps = {
     location,
     menu,
-    curMenu,
-    handleClick (e) {
-      const { key } = e
-      dispatch({
-        type: 'global/changeMenu',
-        payload: key,
-      })
-    },
+    // curMenu,
+    // handleClick (e) {
+    //   const { key } = e
+    //   dispatch({
+    //     type: 'global/changeMenu',
+    //     payload: key,
+    //   })
+    // },
   }
 
   return (
@@ -72,7 +73,7 @@ const App = ({
           Hashbook.io -- Your Trusted Tezos Wallet
         </title>
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <link rel="icon" href={logo} type="image/x-icon" />
+        {/* <link rel="icon" href={logo} type="image/x-icon" /> */}
       </Helmet>
       <Layout style={{ height: '100vh', overflow: 'scroll' }} id="mainContainer">
         <Header {...headerProps} />

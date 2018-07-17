@@ -37,7 +37,7 @@ const TransferForm = ({
     validateFieldsAndScroll,
   },
   onSendClick,
-  loading,
+  sending,
 }) => {
   const handleSubmit = () => {
     validateFieldsAndScroll((errors, values) => {
@@ -96,7 +96,7 @@ const TransferForm = ({
         />)}
       </FormItem>
 
-      <Button type="primary" loading={loading} onClick={handleSubmit} className={styles.submitButton}>
+      <Button type="primary" loading={sending} onClick={handleSubmit} className={styles.submitButton}>
         <FormattedMessage {...messages.sendButton} />
       </Button>
 
@@ -108,7 +108,8 @@ TransferForm.propTypes = {
   form: PropTypes.object,
   intl: intlShape.isRequired,
   onSendClick: PropTypes.func,
-  loading: PropTypes.bool,
+  sending: PropTypes.bool,
+  // account: PropTypes.object,
 }
 
 export default Form.create()(injectIntl(TransferForm))

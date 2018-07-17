@@ -46,10 +46,10 @@ const SendOperationModal = ({
       </p>
       <p>
         <a href={`http://tzscan.io/${opHash}`} rel="noopener noreferrer" target="_blank">
+          <Icon type="link" />
           <span>
             {opHash}
           </span>
-          <Icon type="link" />
         </a>
       </p>
     </Modal>

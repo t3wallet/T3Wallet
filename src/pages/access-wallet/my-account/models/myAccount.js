@@ -10,6 +10,8 @@ export default {
     activeAccountIndex: '',
     sendOperationModalVisible: false,
     lastOpHash: '',
+
+    sending: false,
   },
   effects: {
     * loadAccount ({ payload: address }, { call, put }) {
@@ -26,6 +28,7 @@ export default {
       }
     },
     * sendToken ({ payload }, { call, put, select }) {
+      yield put({ type: 'sending' })
       const {
         toAddress, amountToSend, gas, gasLimit, data,
       } = payload
@@ -40,7 +43,7 @@ export default {
           message.success('Send Operation Success!')
         }
       } catch (error) {
-        yield put({ type: 'sendToken_faild' })
+        yield put({ type: 'sendFailed' })
       }
     },
     * originateAccount (action, { put }) {
@@ -74,10 +77,17 @@ export default {
       const { activeAccountIndex } = payload
       draft.activeAccountIndex = activeAccountIndex
     },
+    sending (draft) {
+      draft.sending = true
+    },
     sendSuccess (draft, { payload }) {
       const { hash } = payload
       draft.lastOpHash = hash
       draft.sendOperationModalVisible = true
+      draft.sending = false
+    },
+    sendFailed (draft) {
+      draft.sending = false
     },
     closeSendOperationModal (draft) {
       draft.sendOperationModalVisible = false

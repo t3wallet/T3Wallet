@@ -82,7 +82,7 @@ class myAccountIndex extends React.Component {
   render () {
     const { myAccount, loading, intl } = this.props
     const {
-      accounts, activeAccountIndex, showNewAccountModal, sendOperationModalVisible, lastOpHash,
+      accounts, activeAccountIndex, showNewAccountModal, sendOperationModalVisible, lastOpHash, sending,
     } = myAccount
     const { formatMessage } = intl
     return (
@@ -95,7 +95,7 @@ class myAccountIndex extends React.Component {
             <AccountOperationPanel
               onSendClick={this.onSendClick}
               onSetDelegateClick={this.onSetDelegateClick}
-              loading={loading.models.myAccount}
+              sending={sending}
             />
           </Col>
           <Col md={9}>
@@ -131,7 +131,7 @@ class myAccountIndex extends React.Component {
 
 myAccountIndex.propTypes = {
   dispatch: PropTypes.func,
-  loading: PropTypes.bool,
+  loading: PropTypes.object,
   myAccount: PropTypes.object,
   intl: intlShape.isRequired,
 }

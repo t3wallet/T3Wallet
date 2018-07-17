@@ -30,11 +30,11 @@ class AccountOperationPanel extends React.Component {
 
 
     render () {
-      const { onSendClick, onSetDelegateClick, loading } = this.props
+      const { onSendClick, onSetDelegateClick, sending } = this.props
       const { activeTabKey } = this.state
       const content = {
         transfer: (
-          <TransferForm onSendClick={onSendClick} loading={loading} />
+          <TransferForm onSendClick={onSendClick} sending={sending} />
         ),
         delegate: (
           <DelegateForm onSetDelegateClick={onSetDelegateClick} />
@@ -58,7 +58,7 @@ class AccountOperationPanel extends React.Component {
 AccountOperationPanel.propTypes = {
   onSendClick: PropTypes.func,
   onSetDelegateClick: PropTypes.func,
-  loading: PropTypes.bool,
+  sending: PropTypes.bool,
 }
 
 

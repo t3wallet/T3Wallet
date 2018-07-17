@@ -1,13 +1,13 @@
 import React from 'react'
 import { connect } from 'dva'
-import {
-  Card, Button, Steps, message,
-} from 'antd'
 import { Page } from 'components'
 import PropTypes from 'prop-types'
 import {
   intlShape, injectIntl, defineMessages, FormattedMessage,
 } from 'react-intl'
+import {
+  Card, Button, Steps, message,
+} from 'antd'
 import { MnemonicDisplay, MnemonicVerify } from './components'
 import styles from './index.less'
 

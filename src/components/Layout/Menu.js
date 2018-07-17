@@ -1,7 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { Menu, Icon } from 'antd'
-import Link from 'umi/link'
+import { Link } from 'react-router-dom'
 import { FormattedMessage } from 'react-intl'
 import styles from './Menu.less'
 
@@ -23,7 +23,7 @@ const Menus = ({
   const menuItems = getMenus()
   return (
     <Menu
-      mode="horizontal"
+      // mode="horizontal"
       theme="light"
       selectedKeys={curMenu}
       className={styles.menuContainer}
