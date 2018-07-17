@@ -1,6 +1,6 @@
 import { findIndex } from 'lodash'
 import { message } from 'antd'
-import { loadAccount, sendToken } from '../services/account'
+import { loadAccount, sendToken, originateAccount } from '../services/account'
 
 export default {
   namespace: 'myAccount',
@@ -10,19 +10,18 @@ export default {
     activeAccountIndex: '',
     sendOperationModalVisible: false,
     lastOpHash: '',
-
     sending: false,
+
+    originating: false,
   },
   effects: {
     * loadAccount ({ payload: address }, { call, put }) {
       try {
         const response = yield call(loadAccount, address)
-        if (response.success) {
-          yield put({
-            type: 'updateAccountBalance',
-            payload: { address, balance: response.balance },
-          })
-        }
+        yield put({
+          type: 'updateAccountBalance',
+          payload: { address, balance: response },
+        })
       } catch (e) {
         throw new Error('updateAccountBalance_failed')
       }
@@ -38,10 +37,8 @@ export default {
         const { address, keys } = curAccount
         // console.log('/ myAddress: ', address, '/ myKeys: ', keys, '/ toAddress:', toAddress, '/ amountToSend: ', amountToSend, '/ gas', gas)
         const response = yield call(sendToken, toAddress, address, keys, amountToSend, gas, gasLimit, data)
-        if (response.success) {
-          yield put({ type: 'sendSuccess', payload: response })
-          message.success('Send Operation Success!')
-        }
+        yield put({ type: 'sendSuccess', payload: response })
+        message.success('Send Operation Success!')
       } catch (error) {
         const { errors } = error
         yield put({ type: 'sendFailed' })
@@ -52,23 +49,22 @@ export default {
         throw new Error(`Operation Failed! ${errorMessage}`)
       }
     },
-    * originateAccount (action, { put }) {
+    * originateAccount (action, { put, select, call }) {
+      yield put({ type: 'originating' })
       try {
-        // TODO: RPC call to originate a new account
-        const address = 'KT'
-        const balance = 0
-        yield put({ type: 'newKTWallet', payload: { address, balance } })
-      } catch (e) {
-        yield put({ type: 'updateMnemonic_failed' })
+        const { accounts, activeAccountIndex } = yield select(state => state.myAccount)
+        const curAccount = accounts[activeAccountIndex]
+        const { keys } = curAccount
+        const response = yield call(originateAccount, keys)
+        yield put({ type: 'originateAccountSuccess', payload: response })
+      } catch (error) {
+        console.log('[Originate Account Error]', error)
+        throw new Error('Adding Account Failed! Make sure your Main Account has enough funding')
       }
     },
 
   },
   reducers: {
-    newKTWallet (draft, { payload }) {
-      const { address, balance } = payload
-      draft.accounts.push({ type: 'KT', address, balance })
-    },
     resetIdentity (draft, { payload: identity }) {
       draft.accountLoaded = true
       draft.accounts = [identity]
@@ -97,6 +93,16 @@ export default {
     },
     closeSendOperationModal (draft) {
       draft.sendOperationModalVisible = false
+    },
+    originating (draft) {
+      draft.originating = true
+    },
+    originateAccountSuccess (draft, { payload }) {
+      const { address } = payload
+      draft.accounts.push({ type: 'KT', alias: 'Smart Contracts', address })
+    },
+    originateAccountFailed (draft) {
+      draft.originating = false
     },
     logout (draft) {
       draft.accountLoaded = false

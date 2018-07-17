@@ -4,8 +4,8 @@ export const loadAccount = async (pkh) => {
   try {
     let balance
     balance = await eztz.rpc.getBalance(pkh)
-    balance = eztz.utility.totez(parseInt(balance, 10))
-    return { success: true, balance }
+    balance = await eztz.utility.totez(parseInt(balance, 10))
+    return balance
   } catch (error) {
     return { success: false, error }
   }
@@ -23,7 +23,18 @@ export const sendToken = async (toAddress, fromAddress, keys, amount, gas, gasLi
       response = await eztz.rpc.transfer(fromAddress, keys, toAddress, amount, gas, data, gasLimit)
     }
     const { hash, operations } = response
-    return { success: true, hash, operations }
+    return { hash, operations }
+  } catch (error) {
+    throw error
+  }
+}
+
+export const originateAccount = async (keys) => {
+  try {
+    const response = eztz.rpc.acocunt(keys, 0, true, true, keys.pkh, 0)
+    const { hash } = response
+    const address = eztz.contract.hash(hash, 0)
+    return address
   } catch (error) {
     throw error
   }

@@ -6,10 +6,12 @@ import {
 } from 'react-intl'
 import router from 'umi/router'
 import {
-  Row, Col, Tooltip, Icon,
+  Row, Col, Tooltip, Icon, Modal,
 } from 'antd'
 import { connect } from 'dva'
-import { AccountOperationPanel, AccountCollapse, SendOperationModal } from './components'
+import {
+  AccountOperationPanel, AccountCollapse, SendOperationModal,
+} from './components'
 import styles from './index.less'
 
 const messages = defineMessages({
@@ -18,6 +20,7 @@ const messages = defineMessages({
     defaultMessage: 'You need to create an delegable which address starts with "KT" to delegate your baking right to a delegation service',
   },
 })
+
 class myAccountIndex extends React.Component {
   componentDidMount () {
     const { myAccount, dispatch } = this.props
@@ -39,8 +42,27 @@ class myAccountIndex extends React.Component {
     })
   }
 
-  addNewAccount = () => {
-    console.log('placeholder')
+  confirmOriginateAcountModal = () => {
+    const { dispatch } = this.props
+    Modal.confirm({
+      title: 'Do you Want to delete these items?',
+      content: 'Some descriptions',
+      onOk () {
+        dispatch({
+          type: 'myAccount/originateAccount',
+        })
+      },
+      onCancel () {
+        console.log('Cancel')
+      },
+    })
+  }
+
+  closeOriginateAccountModal = () => {
+    const { dispatch } = this.props
+    dispatch({
+      type: 'myAccount/closeOriginateAccountModal',
+    })
   }
 
   closeSendOperationModal = () => {
@@ -86,7 +108,7 @@ class myAccountIndex extends React.Component {
     } = myAccount
     const { formatMessage } = intl
     return (
-      <Page loading={loading.global} className={styles.dashboard}>
+      <Page loading={loading.global} className={styles.container}>
         <h1>
           <FormattedMessage id="myWallet.title" defaultMessage="Send Token & Delegation" />
         </h1>
@@ -108,7 +130,7 @@ class myAccountIndex extends React.Component {
             />
             <Row type="flex" align="space-between" className={styles.buttonGroup}>
               <div>
-                <a onClick={(e) => { this.addNewAccount(e) }}>
+                <a onClick={() => { this.confirmOriginateAcountModal() }}>
                   <FormattedMessage id="myWallet.originateAccount" defaultMessage="+ New Delegable Account" />
                 </a>
                 <Tooltip placement="topLeft" title={formatMessage(messages.toolTip)} className={styles.toolTip}>

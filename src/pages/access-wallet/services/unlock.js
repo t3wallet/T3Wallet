@@ -2,12 +2,13 @@ import eztz from 'utils/eztz'
 
 const generateIdentity = (keys) => {
   const { pkh } = keys
-  let type
+  let alias
   const prefix = (pkh.slice(0, 2))
-  if (prefix === 'tz') type = 'Manager'
-  else if (prefix === 'KT') type = 'Smart Contract'
+  if (prefix === 'tz') alias = 'Manager'
+  else if (prefix === 'KT') alias = 'Smart Contract'
   let identity = {
-    type,
+    type: prefix,
+    alias,
     keys,
     address: pkh,
   }

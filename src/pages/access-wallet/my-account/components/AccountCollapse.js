@@ -12,7 +12,7 @@ const AccountCollapse = ({ accounts, onAccountChange, activeAccountIndex }) => {
     <Collapse accordion bordered={false} onChange={onAccountChange} defaultActiveKey={activeAccountIndex}>
       { accounts.map((account, index) => {
         let header
-        if (account.type === 'Manager') {
+        if (account.type === 'tz') {
           header = <FormattedMessage id="myWallet.managerWallet" defaultMessage="Main Manager Wallet" />
         } else {
           header = <FormattedMessage id="myWallet.delegableWallet" defaultMessage="Delegable Wallet" />
