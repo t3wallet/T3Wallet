@@ -96,6 +96,7 @@ class myAccountIndex extends React.Component {
               onSendClick={this.onSendClick}
               onSetDelegateClick={this.onSetDelegateClick}
               sending={sending}
+              account={accounts[activeAccountIndex]}
             />
           </Col>
           <Col md={9}>

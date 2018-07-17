@@ -25,7 +25,6 @@ export const sendToken = async (toAddress, fromAddress, keys, amount, gas, gasLi
     const { hash, operations } = response
     return { success: true, hash, operations }
   } catch (error) {
-    console.log(error)
-    throw new Error('Send Operation Failed!')
+    throw error
   }
 }

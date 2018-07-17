@@ -38,6 +38,7 @@ const TransferForm = ({
   },
   onSendClick,
   sending,
+  account,
 }) => {
   const handleSubmit = () => {
     validateFieldsAndScroll((errors, values) => {
@@ -62,6 +63,7 @@ const TransferForm = ({
           initialValue: 0,
         })(<InputNumber size="large"
           min={0}
+          max={account && account.balance && account.balance || 0}
           step={0.1}
           precision={6}
           addonAfter="ꜩ"
@@ -77,6 +79,7 @@ const TransferForm = ({
         })(<InputNumber
           size="large"
           min={0}
+          max={account && account.balance && account.balance || 0}
           step={0.001}
           precision={6}
           formatter={value => `${value} ꜩ`}
@@ -109,7 +112,7 @@ TransferForm.propTypes = {
   intl: intlShape.isRequired,
   onSendClick: PropTypes.func,
   sending: PropTypes.bool,
-  // account: PropTypes.object,
+  account: PropTypes.object,
 }
 
 export default Form.create()(injectIntl(TransferForm))

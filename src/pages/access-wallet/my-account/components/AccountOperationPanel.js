@@ -30,11 +30,13 @@ class AccountOperationPanel extends React.Component {
 
 
     render () {
-      const { onSendClick, onSetDelegateClick, sending } = this.props
+      const {
+        onSendClick, onSetDelegateClick, sending, account,
+      } = this.props
       const { activeTabKey } = this.state
       const content = {
         transfer: (
-          <TransferForm onSendClick={onSendClick} sending={sending} />
+          <TransferForm onSendClick={onSendClick} sending={sending} account={account} />
         ),
         delegate: (
           <DelegateForm onSetDelegateClick={onSetDelegateClick} />
@@ -59,6 +61,7 @@ AccountOperationPanel.propTypes = {
   onSendClick: PropTypes.func,
   onSetDelegateClick: PropTypes.func,
   sending: PropTypes.bool,
+  account: PropTypes.object,
 }
 
 

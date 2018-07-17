@@ -24,7 +24,7 @@ export default {
           })
         }
       } catch (e) {
-        yield put({ type: 'updateAccountBalance_failed' })
+        throw new Error('updateAccountBalance_failed')
       }
     },
     * sendToken ({ payload }, { call, put, select }) {
@@ -43,7 +43,13 @@ export default {
           message.success('Send Operation Success!')
         }
       } catch (error) {
+        const { errors } = error
         yield put({ type: 'sendFailed' })
+        let errorMessage = errors[0].id
+        if (errorMessage === 'proto.alpha.gas_exhausted.operation') {
+          errorMessage = 'Gas quota exceeded for the operation'
+        }
+        throw new Error(`Operation Failed! ${errorMessage}`)
       }
     },
     * originateAccount (action, { put }) {
