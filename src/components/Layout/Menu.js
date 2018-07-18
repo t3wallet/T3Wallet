@@ -23,7 +23,7 @@ const Menus = ({
   const menuItems = getMenus()
   return (
     <Menu
-      // mode="horizontal"
+      mode="horizontal"
       theme="light"
       selectedKeys={curMenu}
       className={styles.menuContainer}
