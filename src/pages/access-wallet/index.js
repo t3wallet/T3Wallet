@@ -7,7 +7,7 @@ import {
   intlShape, injectIntl, defineMessages, FormattedMessage,
 } from 'react-intl'
 import {
-  ViewOnly, Mnemonic, Fundraiser, PrivateKey,
+   Mnemonic, Fundraiser, PrivateKey,
 } from './components'
 import styles from './index.less'
 
@@ -15,10 +15,6 @@ const messages = defineMessages({
   title: {
     id: 'accessWallet.title',
     defaultMessage: 'How do you want to access your wallet',
-  },
-  viewOnly: {
-    id: 'accessWallet.viewOnly',
-    defaultMessage: 'View Only',
   },
   mnemonic: {
     id: 'accessWallet.mnemonic',
@@ -77,9 +73,6 @@ class AccessWallet extends React.Component {
           </div>
           <div>
             <Tabs tabPosition={tabPosition} size="large" defaultActiveKey={null}>
-              <Tabs.TabPane tab={formatMessage(messages.viewOnly)} key="1">
-                <ViewOnly onUnlock={this._onUnlockClick} />
-              </Tabs.TabPane>
               <Tabs.TabPane tab={formatMessage(messages.mnemonic)} key="2">
                 <Mnemonic onUnlock={this._onUnlockClick} />
               </Tabs.TabPane>

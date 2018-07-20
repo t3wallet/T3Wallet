@@ -1,9 +1,5 @@
 const accessWallet = {
   'accessWallet.title': '你想通过什么样的方式恢复并使用钱包?',
-  // View Only
-  'accessWallet.viewOnly': '仅查看地址',
-  'accessWallet.viewOnlyAddress': '输入查看的地址',
-  'accessWallet.viewAddress': '查看这个地址',
   // Mnemonic Phrase
   'accessWallet.mnemonic': '助记词',
   'accessWallet.mnemonicSeed': '输入你的助记词',

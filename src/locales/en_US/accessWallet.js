@@ -1,9 +1,5 @@
 const accessWallet = {
   'accessWallet.title': 'How do you want to access your wallet?',
-  // View Only
-  'accessWallet.viewOnly': 'View Only',
-  'accessWallet.viewOnlyAddress': 'Address',
-  'accessWallet.viewAddress': 'View This Address',
   // Mnemonic Phrase
   'accessWallet.mnemonic': 'Mnemonic Phrase',
   'accessWallet.mnemonicSeed': 'Enter Your Words Mnemonic Phrase',
