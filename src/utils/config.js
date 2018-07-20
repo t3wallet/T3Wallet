@@ -1,7 +1,8 @@
 import languages from '../locales/languagesList'
 
-const localhost = { name: 'localhost', url: 'localhost:8732' }
-const tezrpc = { name: 'Tezos Betenet Network (tezrpc.me)', url: 'https://tezrpc.me' }
+const localhost = { name: 'localhost:8732', url: 'localhost:8732', type: 'betanet' }
+const tezrpc = { name: 'Tezos Betenet Network (tezrpc.me)', url: 'https://rpc.tezrpc.me', type: 'betanet' }
+const cryptonomic = { name: 'Tezos Zeronet Test Network (cryptonomic-infra.tech)', url: 'https://tezos-staging.cryptonomic-infra.tech', type: 'betanet' }
 const menu = [
   {
     key: 'create-wallet',
@@ -26,7 +27,7 @@ const config = {
   logo: '/logo.svg',
   CORS: [],
   openPages: ['/create-wallet'],
-  networkProviders: [tezrpc, localhost],
+  networkProviders: [tezrpc, cryptonomic, localhost],
   menu,
   languages,
 }

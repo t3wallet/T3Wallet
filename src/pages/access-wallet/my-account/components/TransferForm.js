@@ -67,8 +67,8 @@ const TransferForm = ({
           step={0.1}
           precision={6}
           addonAfter="ꜩ"
-          formatter={value => `${value} ꜩ`}
-          parser={value => value.replace(' ꜩ', '')}
+          formatter={value => `${value}ꜩ`}
+          parser={value => value.replace('ꜩ', '')}
           style={{ width: '100%' }}
         />)}
       </FormItem>
@@ -82,8 +82,8 @@ const TransferForm = ({
           max={account && account.balance && account.balance || 0}
           step={0.001}
           precision={6}
-          formatter={value => `${value} ꜩ`}
-          parser={value => value.replace(' ꜩ', '')}
+          formatter={value => `${value}ꜩ`}
+          parser={value => value.replace('ꜩ', '')}
           style={{ width: '100%' }}
         />)}
       </FormItem>
@@ -93,8 +93,8 @@ const TransferForm = ({
           initialValue: 200,
         })(<InputNumber size="large"
           min={0}
-          formatter={value => `${value} ꜩ`}
-          parser={value => value.replace(' ꜩ', '')}
+          formatter={value => `${value}ꜩ`}
+          parser={value => value.replace('ꜩ', '')}
           style={{ width: '100%' }}
         />)}
       </FormItem>

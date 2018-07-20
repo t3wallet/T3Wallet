@@ -15,9 +15,12 @@ const accessWallet = {
   'accessWallet.fundraiserPassword': 'ICO钱包密码',
   'accessWallet.fundraiserAddress': 'ICO钱包地址',
   'accessWallet.fundraiserCode': '激活码',
+  'accessWallet.codeWarning': '如果你已经激活你的钱包，请不要输入激活码！',
   // Private Key
   'accessWallet.privateKey': '私钥',
   'accessWallet.unlockWallet': '解锁您的钱包',
 
+  // unlock error message
+  'accessWallet.errorMessage': '输入信息有误，请检查您的输入信息。',
 }
 export default accessWallet

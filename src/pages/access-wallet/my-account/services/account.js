@@ -31,9 +31,10 @@ export const sendToken = async (toAddress, fromAddress, keys, amount, gas, gasLi
 
 export const originateAccount = async (keys) => {
   try {
-    const response = eztz.rpc.acocunt(keys, 0, true, true, keys.pkh, 0)
+    console.log(keys)
+    const response = await eztz.rpc.account(keys, 0, true, true, keys.pkh, 0)
     const { hash } = response
-    const address = eztz.contract.hash(hash, 0)
+    const address = await eztz.contract.hash(hash, 0)
     return address
   } catch (error) {
     throw error

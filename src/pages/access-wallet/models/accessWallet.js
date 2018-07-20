@@ -8,14 +8,15 @@ export default {
   },
   effects: {
     * unlockWallet ({ payload }, { call, put }) {
+      yield put({ type: 'updateError', payload: '' })
       const { walletType, payload: walletPayload } = payload
-      const data = yield call(unlockWallet, walletType, walletPayload)
-      if (data.success) {
-        const { identity } = data
+      try {
+        const identity = yield call(unlockWallet, walletType, walletPayload)
         yield put({ type: 'myAccount/resetIdentity', payload: identity })
         router.push('/access-wallet/my-account')
-      } else {
-        yield put({ type: 'updateError', payload: data.error })
+      } catch (error) {
+        console.log(error)
+        throw error
       }
     },
 

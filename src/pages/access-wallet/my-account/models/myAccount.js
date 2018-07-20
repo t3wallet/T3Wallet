@@ -40,6 +40,7 @@ export default {
         yield put({ type: 'sendSuccess', payload: response })
         message.success('Send Operation Success!')
       } catch (error) {
+        console.log(error)
         const { errors } = error
         yield put({ type: 'sendFailed' })
         let errorMessage = errors[0].id
@@ -58,14 +59,20 @@ export default {
         const response = yield call(originateAccount, keys)
         yield put({ type: 'originateAccountSuccess', payload: response })
       } catch (error) {
-        console.log('[Originate Account Error]', error)
-        throw new Error('Adding Account Failed! Make sure your Main Account has enough funding')
+        const { errors } = error
+        let errorMessage = errors[0].id
+        console.log(errorMessage)
+        if (errorMessage === 'proto.alpha.contract.balance_too_low') {
+          errorMessage = 'Balance too low. 0.25xtz is needed to generate an delegatable account.'
+        }
+        throw new Error(`Operation Failed! ${errorMessage}`)
       }
     },
 
   },
   reducers: {
     resetIdentity (draft, { payload: identity }) {
+      console.log(identity)
       draft.accountLoaded = true
       draft.accounts = [identity]
       draft.activeAccountIndex = '0'
@@ -99,7 +106,7 @@ export default {
     },
     originateAccountSuccess (draft, { payload }) {
       const { address } = payload
-      draft.accounts.push({ type: 'KT', alias: 'Smart Contracts', address })
+      draft.accounts.push({ type: 'KT', kind: 'Origination', address })
     },
     originateAccountFailed (draft) {
       draft.originating = false

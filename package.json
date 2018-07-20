@@ -8,6 +8,7 @@
     "precommit": "npm run lint"
   },
   "dependencies": {
+    "axios": "^0.18.0",
     "bip39": "^2.5.0",
     "bs58check": "^2.1.1",
     "classnames": "^2.2.6",

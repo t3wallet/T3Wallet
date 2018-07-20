@@ -1,9 +1,12 @@
 import React from 'react'
-import { Form, Input, Button } from 'antd'
+import {
+  Form, Input, Button, Alert, message,
+} from 'antd'
 import {
   intlShape, injectIntl, defineMessages, FormattedMessage,
 } from 'react-intl'
 import PropTypes from 'prop-types'
+import bip39 from 'bip39'
 import styles from './styles.less'
 
 const FormItem = Form.Item
@@ -29,49 +32,96 @@ const messages = defineMessages({
     id: 'accessWallet.fundraiserCode',
     defaultMessage: 'Activation Code',
   },
+  errorMessage: {
+    id: 'accessWallet.unlockErrorMessage',
+    defaultMessage: 'Pleace check your input',
+  },
+  codeWarning: {
+    id: 'accessWallet.codeWarning',
+    defaultMessage: 'DO NOT enter activation code if you have already activated your wallet!',
+  },
 })
 
 
 const Fundraiser = ({
-  seed, email, password, address, activationCode, intl,
+  onUnlock,
+  intl,
+  form: {
+    getFieldDecorator,
+    validateFieldsAndScroll,
+  },
 }) => {
-  console.log(seed, email, password, address, activationCode)
   const { formatMessage } = intl
+  const handleSubmit = () => {
+    validateFieldsAndScroll((errors, values) => {
+      if (errors) {
+        message.error(formatMessage(messages.errorMessage))
+        return
+      }
+      onUnlock({ walletType: 'ico', payload: values })
+    })
+  }
+  const isMnemonic = (rule, value, callback) => {
+    if (bip39.validateMnemonic(value)) {
+      callback()
+      return
+    }
+    callback('Invalid Mnemonic!')
+  }
   return (
-    <Form>
+    <form>
       <FormItem>
-        <Input.TextArea rows={4} placeholder={formatMessage(messages.seed)} />
+        {getFieldDecorator('seed', {
+          rules: [{ required: true, message: 'Please input your fundraiser seed.' }, {
+            validator: isMnemonic,
+          }],
+        })(
+          <Input.TextArea rows={4} placeholder={formatMessage(messages.seed)} />
+        )}
       </FormItem>
 
       <FormItem>
-        <Input placeholder={formatMessage(messages.email)} />
+        {getFieldDecorator('email', {
+          rules: [{ required: true, message: 'Please input your fundraiser E-mail.' }],
+        })(
+          <Input placeholder={formatMessage(messages.email)} />
+        )}
       </FormItem>
 
       <FormItem>
-        <Input placeholder={formatMessage(messages.password)} />
+        {getFieldDecorator('password', {
+          rules: [{ required: true, message: 'Please input your fundraiser password.' }],
+        })(
+          <Input placeholder={formatMessage(messages.password)} />
+        )}
       </FormItem>
 
       <FormItem>
-        <Input placeholder={formatMessage(messages.address)} />
+        {getFieldDecorator('address', {
+          rules: [{ required: true, message: 'Please input your fundraiser public address.' }],
+        })(
+          <Input placeholder={formatMessage(messages.address)} />
+        )}
       </FormItem>
-
+      <Alert message={formatMessage(messages.codeWarning)} type="warning" />
       <FormItem>
-        <Input placeholder={formatMessage(messages.code)} />
+        {getFieldDecorator('code', {
+        })(
+          <Input placeholder={formatMessage(messages.code)} />
+        )}
       </FormItem>
-      <Button type="primary" size="large" className={styles.button}>
+      <br />
+      <Button type="primary" size="large" onClick={handleSubmit} className={styles.button}>
         <FormattedMessage id="accessWallet.unlockWallet" defaultMessage="Unlock Your Wallet" />
       </Button>
-    </Form>
+    </form>
   )
 }
 
 Fundraiser.propTypes = {
-  seed: PropTypes.string,
-  email: PropTypes.string,
-  password: PropTypes.string,
-  address: PropTypes.string,
-  activationCode: PropTypes.string,
+  form: PropTypes.object.isRequired,
+  onUnlock: PropTypes.func.isRequired,
   intl: intlShape.isRequired,
 }
 
-export default injectIntl(Fundraiser)
+export default Form.create()(injectIntl(Fundraiser))

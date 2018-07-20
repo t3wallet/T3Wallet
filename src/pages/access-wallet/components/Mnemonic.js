@@ -11,7 +11,6 @@ import styles from './styles.less'
 
 const FormItem = Form.Item
 
-
 const messages = defineMessages({
   seed: {
     id: 'accessWallet.mnemonicSeed',
@@ -25,6 +24,10 @@ const messages = defineMessages({
     id: 'accessWallet.unlockWallet',
     defaultMessage: 'Unlock Your Wallet',
   },
+  errorMessage: {
+    id: 'accessWallet.errorMessage',
+    defaultMessage: 'Place check your input',
+  },
 })
 
 const Mnemonic = ({
@@ -35,10 +38,11 @@ const Mnemonic = ({
     validateFieldsAndScroll,
   },
 }) => {
+  const { formatMessage } = intl
   const handleSubmit = () => {
     validateFieldsAndScroll((errors, values) => {
       if (errors) {
-        message.error('Please check you input.')
+        message.error(formatMessage(messages.errorMessage))
         return
       }
       onUnlock({ walletType: 'mnemonic', payload: values })
@@ -52,7 +56,6 @@ const Mnemonic = ({
     }
     callback('Invalid Mnemonic!')
   }
-  const { formatMessage } = intl
   return (
     <form>
       <FormItem>

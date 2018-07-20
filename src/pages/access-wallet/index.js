@@ -72,26 +72,24 @@ class AccessWallet extends React.Component {
           <FormattedMessage id="myWallet.title" defaultMessage="Send Token & Delegation" />
         </h1>
         <Card loading={loading} bordered={false} className={styles.container}>
+          <div style={{ marginBottom: 16 }}>
+            <FormattedMessage {...messages.title} />
+          </div>
           <div>
-            <div style={{ marginBottom: 16 }}>
-              <FormattedMessage {...messages.title} />
-            </div>
-            <div>
-              <Tabs tabPosition={tabPosition} size="large" defaultActiveKey={null}>
-                <Tabs.TabPane tab={formatMessage(messages.viewOnly)} key="1">
-                  <ViewOnly />
-                </Tabs.TabPane>
-                <Tabs.TabPane tab={formatMessage(messages.mnemonic)} key="2">
-                  <Mnemonic onUnlock={this._onUnlockClick} />
-                </Tabs.TabPane>
-                <Tabs.TabPane tab={formatMessage(messages.fundraiser)} key="3">
-                  <Fundraiser />
-                </Tabs.TabPane>
-                <Tabs.TabPane tab={formatMessage(messages.privateKey)} key="4">
-                  <PrivateKey />
-                </Tabs.TabPane>
-              </Tabs>
-            </div>
+            <Tabs tabPosition={tabPosition} size="large" defaultActiveKey={null}>
+              <Tabs.TabPane tab={formatMessage(messages.viewOnly)} key="1">
+                <ViewOnly onUnlock={this._onUnlockClick} />
+              </Tabs.TabPane>
+              <Tabs.TabPane tab={formatMessage(messages.mnemonic)} key="2">
+                <Mnemonic onUnlock={this._onUnlockClick} />
+              </Tabs.TabPane>
+              <Tabs.TabPane tab={formatMessage(messages.fundraiser)} key="3">
+                <Fundraiser onUnlock={this._onUnlockClick} />
+              </Tabs.TabPane>
+              <Tabs.TabPane tab={formatMessage(messages.privateKey)} key="4">
+                <PrivateKey onUnlock={this._onUnlockClick} />
+              </Tabs.TabPane>
+            </Tabs>
           </div>
         </Card>
       </Page>

@@ -46,19 +46,19 @@ const watermark = {
 }
 const utility = {
   totez: m => parseInt(m) / 1000000,
-  mutez (tz) {
+  mutez(tz) {
     let r = tz.toFixed(6) * 1000000
     if (r > 4294967296) r = r.toString()
     return r
   },
-  b58cencode (payload, prefix) {
+  b58cencode(payload, prefix) {
     const n = new Uint8Array(prefix.length + payload.length)
     n.set(prefix)
     n.set(payload, prefix.length)
     return library.bs58check.encode(new Buffer(n, 'hex'))
   },
-  b58cdecode (enc, prefix) { return library.bs58check.decode(enc).slice(prefix.length) },
-  buf2hex (buffer) {
+  b58cdecode(enc, prefix) { return library.bs58check.decode(enc).slice(prefix.length) },
+  buf2hex(buffer) {
     const byteArray = new Uint8Array(buffer),
       hexParts = []
     for (let i = 0; i < byteArray.length; i++) {
@@ -68,24 +68,24 @@ const utility = {
     }
     return hexParts.join('')
   },
-  hex2buf (hex) {
+  hex2buf(hex) {
     return new Uint8Array(hex.match(/[\da-f]{2}/gi).map((h) => {
       return parseInt(h, 16)
     }))
   },
-  hexNonce (length) {
+  hexNonce(length) {
     let chars = '0123456789abcedf'
     let hex = ''
     while (length--) hex += chars[(Math.random() * 16) | 0]
     return hex
   },
-  mergebuf (b1, b2) {
+  mergebuf(b1, b2) {
     let r = new Uint8Array(b1.length + b2.length)
     r.set(b1)
     r.set(b2, b1.length)
     return r
   },
-  sexp2mic: function me (mi) {
+  sexp2mic: function me(mi) {
     mi = mi.replace(/(?:@[a-z_]+)|(?:#.*$)/mg, '')
       .replace(/\s+/g, ' ')
       .trim()
@@ -136,7 +136,7 @@ const utility = {
     }
     return ret
   },
-  mic2arr: function me2 (s) {
+  mic2arr: function me2(s) {
     let ret = []
     if (s.hasOwnProperty('prim')) {
       if (s.prim === 'Pair') {
@@ -178,7 +178,7 @@ const utility = {
     }
     return ret
   },
-  ml2mic: function me (mi) {
+  ml2mic: function me(mi) {
     let ret = [],
       inseq = false,
       seq = '',
@@ -235,7 +235,7 @@ const utility = {
     }
     return ret
   },
-  formatMoney (n, c, d, t) {
+  formatMoney(n, c, d, t) {
     var c = isNaN(c = Math.abs(c)) ? 2 : c,
       d = d === undefined ? '.' : d,
       t = t === undefined ? ',' : t,
@@ -247,7 +247,7 @@ const utility = {
 }
 // TODO: Add p256 and secp256k1 cryptographay
 const crypto = {
-  extractKeys (sk) {
+  extractKeys(sk) {
     const pref = sk.substr(0, 4)
     switch (pref) {
       case 'edsk':
@@ -273,7 +273,7 @@ const crypto = {
     }
   },
   generateMnemonic: () => library.bip39.generateMnemonic(160),
-  checkAddress (a) {
+  checkAddress(a) {
     try {
       utility.b58cdecode(a, prefix.tz1)
       return true
@@ -281,7 +281,7 @@ const crypto = {
       return false
     }
   },
-  generateKeysNoSeed () {
+  generateKeysNoSeed() {
     const kp = library.sodium.crypto_sign_keypair()
     return {
       sk: utility.b58cencode(kp.privateKey, prefix.edsk),
@@ -289,7 +289,7 @@ const crypto = {
       pkh: utility.b58cencode(library.sodium.crypto_generichash(20, kp.publicKey), prefix.tz1),
     }
   },
-  generateKeys (m, p) {
+  generateKeys(m, p) {
     const s = library.bip39.mnemonicToSeed(m, p).slice(0, 32)
     const kp = library.sodium.crypto_sign_seed_keypair(s)
     return {
@@ -300,7 +300,7 @@ const crypto = {
       pkh: utility.b58cencode(library.sodium.crypto_generichash(20, kp.publicKey), prefix.tz1),
     }
   },
-  generateKeysFromSeedMulti (m, p, n) {
+  generateKeysFromSeedMulti(m, p, n) {
     n /= (256 ^ 2)
     const s = library.bip39.mnemonicToSeed(m, library.pbkdf2.pbkdf2Sync(p, n.toString(36).slice(2), 0, 32, 'sha512').toString()).slice(0, 32)
     const kp = library.sodium.crypto_sign_seed_keypair(s)
@@ -313,7 +313,7 @@ const crypto = {
       pkh: utility.b58cencode(library.sodium.crypto_generichash(20, kp.publicKey), prefix.tz1),
     }
   },
-  sign (bytes, sk, wm) {
+  sign(bytes, sk, wm) {
     let bb = utility.hex2buf(bytes)
     if (typeof wm !== 'undefined') bb = utility.mergebuf(wm, bb)
     const sig = library.sodium.crypto_sign_detached(library.sodium.crypto_generichash(32, bb), utility.b58cdecode(sk, prefix.edsk), 'uint8array')
@@ -326,7 +326,7 @@ const crypto = {
       sbytes,
     }
   },
-  verify (bytes, sig, pk) {
+  verify(bytes, sig, pk) {
     return library.sodium.crypto_sign_verify_detached(sig, utility.hex2buf(bytes), utility.b58cdecode(pk, prefix.edpk))
   },
 }
@@ -334,16 +334,16 @@ const node = {
   activeProvider: defaultProvider,
   debugMode: false,
   async: true,
-  setDebugMode (t) {
+  setDebugMode(t) {
     node.debugMode = t
   },
-  setProvider (u) {
+  setProvider(u) {
     node.activeProvider = u
   },
-  resetProvider () {
+  resetProvider() {
     node.activeProvider = defaultProvider
   },
-  query (e, o, t) {
+  query(e, o, t) {
     if (typeof o === 'undefined') {
       if (typeof t === 'undefined') {
         t = 'GET'
@@ -388,7 +388,7 @@ const node = {
   },
 }
 const rpc = {
-  account (keys, amount, spendable, delegatable, delegate, fee) {
+  account(keys, amount, spendable, delegatable, delegate, fee) {
     const operation = {
       kind: 'origination',
       fee: fee.toString(),
@@ -400,27 +400,27 @@ const rpc = {
     }
     return rpc.sendOperation(keys.pkh, operation, keys)
   },
-  getBalance (tz1) {
+  getBalance(tz1) {
     return node.query(`/chains/main/blocks/head/context/contracts/${tz1}/balance`).then((r) => {
       return r
     })
   },
-  getDelegate (tz1) {
+  getDelegate(tz1) {
     return node.query(`/chains/main/blocks/head/context/contracts/${tz1}/delegate`).then((r) => {
       if (r) return r
       return false
     }).catch(() => { return false })
   },
-  getHead () {
+  getHead() {
     return node.query('/chains/main/blocks/head')
   },
-  getHeadHash () {
+  getHeadHash() {
     return node.query('/chains/main/blocks/head/hash')
   },
-  call (e, d) {
+  call(e, d) {
     return node.query(e, d)
   },
-  sendOperation (from, operation, keys) {
+  sendOperation(from, operation, keys) {
     if (typeof keys === 'undefined') keys = false
     let hash,
       counter,
@@ -514,7 +514,7 @@ const rpc = {
         }
       })
   },
-  transfer (from, keys, to, amount, fee, parameter, gasLimit, storageLimit) {
+  transfer(from, keys, to, amount, fee, parameter, gasLimit, storageLimit) {
     if (typeof gasLimit === 'undefined') gasLimit = '200'
     if (typeof storageLimit === 'undefined') storageLimit = '0'
     let operation = {
@@ -531,7 +531,7 @@ const rpc = {
     }
     return rpc.sendOperation(from, operation, keys)
   },
-  activate (pkh, secret) {
+  activate(pkh, secret) {
     let operation = {
       kind: 'activate_account',
       pkh,
@@ -539,7 +539,7 @@ const rpc = {
     }
     return rpc.sendOperation(pkh, operation, false)
   },
-  originate (keys, amount, code, init, spendable, delegatable, delegate, fee, gasLimit, storageLimit) {
+  originate(keys, amount, code, init, spendable, delegatable, delegate, fee, gasLimit, storageLimit) {
     if (typeof gasLimit === 'undefined') gasLimit = '10000'
     if (typeof storageLimit === 'undefined') storageLimit = '10000'
     let _code = utility.ml2mic(code),
@@ -561,7 +561,7 @@ const rpc = {
       }
     return rpc.sendOperation(keys.pkh, operation, keys)
   },
-  setDelegate (from, keys, delegate, fee, gasLimit, storageLimit) {
+  setDelegate(from, keys, delegate, fee, gasLimit, storageLimit) {
     if (typeof gasLimit === 'undefined') gasLimit = '0'
     if (typeof storageLimit === 'undefined') storageLimit = '0'
     let operation = {
@@ -573,7 +573,7 @@ const rpc = {
     }
     return rpc.sendOperation(from, operation, keys)
   },
-  registerDelegate (keys, fee, gasLimit, storageLimit) {
+  registerDelegate(keys, fee, gasLimit, storageLimit) {
     if (typeof gasLimit === 'undefined') gasLimit = '0'
     if (typeof storageLimit === 'undefined') storageLimit = '0'
     let operation = {
@@ -585,11 +585,11 @@ const rpc = {
     }
     return rpc.sendOperation(keys.pkh, operation, keys)
   },
-  typecheckCode (code) {
+  typecheckCode(code) {
     let _code = utility.ml2mic(code)
     return node.query('/chains/main/blocks/head/helpers/scripts/typecheck_code', { program: _code, gas: '10000' })
   },
-  packData (data, type) {
+  packData(data, type) {
     let check = {
       data: utility.sexp2mic(data),
       type: utility.sexp2mic(type),
@@ -597,7 +597,7 @@ const rpc = {
     }
     return node.query('/chains/main/blocks/head/helpers/scripts/pack_data', check)
   },
-  typecheckData (data, type) {
+  typecheckData(data, type) {
     let check = {
       data: utility.sexp2mic(data),
       type: utility.sexp2mic(type),
@@ -605,7 +605,7 @@ const rpc = {
     }
     return node.query('/chains/main/blocks/head/helpers/scripts/typecheck_data', check)
   },
-  runCode (code, amount, input, storage, trace) {
+  runCode(code, amount, input, storage, trace) {
     let ep = ((typeof trace !== 'undefined' && trace) ? 'trace_code' : 'run_code')
     return node.query(`/chains/main/blocks/head/helpers/scripts/${ep}`, {
       script: utility.ml2mic(code),
@@ -616,7 +616,7 @@ const rpc = {
   },
 }
 const contract = {
-  hash (operationHash, ind) {
+  hash(operationHash, ind) {
     let ob = utility.b58cdecode(operationHash, prefix.o),
       tt = [],
       i = 0
@@ -631,33 +631,33 @@ const contract = {
     ])
     return utility.b58cencode(library.sodium.crypto_generichash(20, new Uint8Array(tt)), prefix.KT)
   },
-  originate (keys, amount, code, init, spendable, delegatable, delegate, fee, gasLimit, storageLimit) {
+  originate(keys, amount, code, init, spendable, delegatable, delegate, fee, gasLimit, storageLimit) {
     if (typeof gasLimit === 'undefined') gasLimit = '10000'
     if (typeof storageLimit === 'undefined') storageLimit = '10000'
     return rpc.originate(keys, amount, code, init, spendable, delegatable, delegate, fee, gasLimit, storageLimit)
   },
-  send (contract, from, keys, amount, parameter, fee, gasLimit, storageLimit) {
+  send(contract, from, keys, amount, parameter, fee, gasLimit, storageLimit) {
     if (typeof gasLimit === 'undefined') gasLimit = '2000'
     if (typeof storageLimit === 'undefined') storageLimit = '0'
     return rpc.transfer(from, keys, contract, amount, fee, parameter, gasLimit, storageLimit)
   },
-  balance (contract) {
+  balance(contract) {
     return rpc.getBalance(contract)
   },
-  storage (contract) {
+  storage(contract) {
     return new Promise(((resolve, reject) => {
       eztz.node.query(`/chains/main/blocks/head/context/contracts/${contract
-      }/storage`).then((r) => {
-        resolve(r)
-      }).catch((e) => {
-        reject(e)
-      })
+        }/storage`).then((r) => {
+          resolve(r)
+        }).catch((e) => {
+          reject(e)
+        })
     }))
   },
-  load (contract) {
+  load(contract) {
     return eztz.node.query(`/chains/main/blocks/head/context/contracts/${contract}`)
   },
-  watch (cc, timeout, cb) {
+  watch(cc, timeout, cb) {
     let storage = []
     const ct = function () {
       contract.storage(cc).then((r) => {

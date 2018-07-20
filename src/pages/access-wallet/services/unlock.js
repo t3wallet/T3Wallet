@@ -2,45 +2,50 @@ import eztz from 'utils/eztz'
 
 const generateIdentity = (keys) => {
   const { pkh } = keys
-  let alias
+  let kind
   const prefix = (pkh.slice(0, 2))
-  if (prefix === 'tz') alias = 'Manager'
-  else if (prefix === 'KT') alias = 'Smart Contract'
+  if (prefix === 'tz') kind = 'manager'
+  else if (prefix === 'KT') kind = 'origination'
   let identity = {
     type: prefix,
-    alias,
+    kind,
     keys,
     address: pkh,
   }
   return identity
 }
 
-export const unlockWallet = (type, payload) => {
-  console.log('[Unlock Wallet Type]', type)
-  let identity
-  if (type === 'mnemonic') {
-    const { mnemonic, password } = payload
-    const keys = eztz.crypto.generateKeys(mnemonic, password)
-    identity = generateIdentity(keys)
-    return { success: true, identity }
-  } if (type === 'ico') {
-    const {
-      seed, email, password, code,
-    } = payload
-    const keys = eztz.crypto.generateKeys(seed, email + password)
-    if (code) {
-      eztz.rpc.activate({ sk: keys.sk, pk: keys.pk, pkh: keys.pkh }, code).then(() => {
-        return { success: true, identity }
-      }).catch(() => {
-        return { success: false, error: 'Activation Failed. Please check you input.' }
-      })
+export const unlockWallet = async (type, payload) => {
+  try {
+    console.log('[Unlock Wallet Type]', type)
+    let identity
+    if (type === 'mnemonic') {
+      const { mnemonic, password } = payload
+      const keys = await eztz.crypto.generateKeys(mnemonic, password)
+      identity = generateIdentity(keys)
+      return identity
+    } if (type === 'ico') {
+      const {
+        seed, email, password, address, code,
+      } = payload
+      const keys = await eztz.crypto.generateKeys(seed, email + password)
+      if (code) {
+        const response = await eztz.rpc.activate(address, code)
+        console.log('activation', response)
+      }
+      identity = generateIdentity(keys)
+      return identity
+    } if (type === 'privateKey') {
+      const { privateKey } = payload
+      const keys = eztz.crypto.extractKeys(privateKey)
+      if (!keys) {
+        throw new Error('Please enter private key starts with \'edsk\' ')
+      }
+      identity = generateIdentity(keys)
+      return identity
     }
-    return { success: true, identity }
-  } if (type === 'privateKey') {
-    const { privateKey } = payload
-    const keys = eztz.crypto.extractKeys(privateKey)
-    identity = generateIdentity(keys)
-    return { success: true, identity }
+    throw new Error('Wallet type not defined')
+  } catch (error) {
+    throw error
   }
-  return { success: false, error: 'Wallet Type Not Found' }
 }
