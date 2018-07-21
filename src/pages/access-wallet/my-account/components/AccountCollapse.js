@@ -13,15 +13,15 @@ const AccountCollapse = ({ accounts, onAccountChange, activeAccountIndex }) => {
       { accounts.map((account, index) => {
         let header
         if (account.type === 'tz') {
-          header = <FormattedMessage id="myWallet.managerWallet" defaultMessage="Main Manager Wallet" />
+          header = <FormattedMessage id="myAccount.managerWallet" defaultMessage="Main Manager Wallet" />
         } else {
-          header = <FormattedMessage id="myWallet.delegableWallet" defaultMessage="Delegable Wallet" />
+          header = <FormattedMessage id="myAccount.delegableWallet" defaultMessage="Delegable Wallet" />
         }
         return (
           <Panel header={header} key={index}>
             <Row className={styles.section}>
               <h3>
-                <FormattedMessage id="myWallet.walletAddress" defaultMessage="Wallet Address" />
+                <FormattedMessage id="myAccount.walletAddress" defaultMessage="Wallet Address" />
               </h3>
               <Row type="flex" align="middle" className={styles.infoContainer}>
                 <Col span={4}>
@@ -36,7 +36,7 @@ const AccountCollapse = ({ accounts, onAccountChange, activeAccountIndex }) => {
             </Row>
             <Row className={styles.section}>
               <h3>
-                <FormattedMessage id="myWallet.walletBalance" defaultMessage="Wallet Balance" />
+                <FormattedMessage id="myAccount.walletBalance" defaultMessage="Wallet Balance" />
               </h3>
               <div className={styles.infoContainer}>
                 <span className={styles.value}>
@@ -46,7 +46,7 @@ const AccountCollapse = ({ accounts, onAccountChange, activeAccountIndex }) => {
             </Row>
             <Row className={styles.section}>
               <h3>
-                <FormattedMessage id="myWallet.transactionHistory" defaultMessage="Transaction History" />
+                <FormattedMessage id="myAccount.transactionHistory" defaultMessage="Transaction History" />
               </h3>
               <Row className={styles.infoContainer}>
                 <Col style={{ marginBottom: 5 }}>

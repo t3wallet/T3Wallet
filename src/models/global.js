@@ -26,7 +26,8 @@ export default {
   effects: {
     * setNetworkProvider ({ payload }, { call, put }) {
       yield call(setNetworkProvider, payload)
-      yield put({ type: 'myWallet/updateNetworkProvider', payload })
+      yield put({ type: 'updateNetworkProvider' }, payload)
+      yield put({ type: 'myAccount/loadAccount' })
     },
 
   },

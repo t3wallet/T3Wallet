@@ -11,20 +11,24 @@ import styles from './TransferForm.less'
 const FormItem = Form.Item
 
 const messages = defineMessages({
+  fromAddress: {
+    id: 'myAccount.fromAddress',
+    defaultMessage: 'From Address',
+  },
   toAddress: {
-    id: 'myWallet.toAddress',
+    id: 'myAccount.toAddress',
     defaultMessage: 'To Address',
   },
   amountToSend: {
-    id: 'myWallet.amountToSend',
+    id: 'myAccount.amountToSend',
     defaultMessage: 'Amount To Send',
   },
   gasLimit: {
-    id: 'myWallet.gasLimit',
+    id: 'myAccount.gasLimit',
     defaultMessage: 'Gas Limit',
   },
   sendButton: {
-    id: 'myWallet.sendButton',
+    id: 'myAccount.sendButton',
     defaultMessage: 'Confirm Transcation',
   },
 })
@@ -38,7 +42,7 @@ const TransferForm = ({
   },
   onSendClick,
   sending,
-  account,
+  curAccount,
 }) => {
   const handleSubmit = () => {
     validateFieldsAndScroll((errors, values) => {
@@ -52,6 +56,12 @@ const TransferForm = ({
   const { formatMessage } = intl
   return (
     <Form hideRequiredMark className={styles.transferForm}>
+      <FormItem label={formatMessage(messages.fromAddress)}>
+        {getFieldDecorator('fromAddress', {
+          rules: [{ required: true, type: 'string', message: 'Incorrect Address' }],
+          initialValue: curAccount.address,
+        })(<Input size="large" disabled />)}
+      </FormItem>
       <FormItem label={formatMessage(messages.toAddress)}>
         {getFieldDecorator('toAddress', {
           rules: [{ required: true, type: 'string', message: 'Incorrect Address' }],
@@ -63,7 +73,7 @@ const TransferForm = ({
           initialValue: 0,
         })(<InputNumber size="large"
           min={0}
-          max={account && account.balance && account.balance || 0}
+          max={curAccount && curAccount.balance && curAccount.balance || 0}
           step={0.1}
           precision={6}
           addonAfter="ꜩ"
@@ -79,7 +89,7 @@ const TransferForm = ({
         })(<InputNumber
           size="large"
           min={0}
-          max={account && account.balance && account.balance || 0}
+          max={curAccount && curAccount.balance && curAccount.balance || 0}
           step={0.001}
           precision={6}
           formatter={value => `${value}ꜩ`}
@@ -90,7 +100,7 @@ const TransferForm = ({
       <FormItem label={formatMessage(messages.gasLimit)}>
         {getFieldDecorator('gasLimit', {
           rules: [{ required: true, type: 'number', message: 'Incorrect Gas Limit' }],
-          initialValue: 200,
+          initialValue: 2000,
         })(<InputNumber size="large"
           min={0}
           formatter={value => `${value}ꜩ`}
@@ -112,7 +122,7 @@ TransferForm.propTypes = {
   intl: intlShape.isRequired,
   onSendClick: PropTypes.func,
   sending: PropTypes.bool,
-  account: PropTypes.object,
+  curAccount: PropTypes.object,
 }
 
 export default Form.create()(injectIntl(TransferForm))

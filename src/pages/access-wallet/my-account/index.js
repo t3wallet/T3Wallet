@@ -16,21 +16,28 @@ import styles from './index.less'
 
 const messages = defineMessages({
   toolTip: {
-    id: 'myWallet.originateAccountToolTip',
+    id: 'myAccount.originateAccountToolTip',
     defaultMessage: 'You need to create an delegable which address starts with "KT" to delegate your baking right to a delegation service',
+  },
+  originationModalTitle: {
+    id: 'myAccount.originateModalTitle',
+    defaultMessage: 'Create an delegable account (Origination Account)',
+  },
+  originationModalContent: {
+    id: 'myAccount.originateModalContent',
+    defaultMessage: 'This operation need to spend ~0.25ꜩ. If you need to access delegation option and delegate your tokens, this step is necessary.',
   },
 })
 
 class myAccountIndex extends React.Component {
   componentDidMount () {
     const { myAccount, dispatch } = this.props
-    const { accountLoaded, accounts } = myAccount
+    const { accountLoaded } = myAccount
     if (!accountLoaded) {
       router.push('/access-wallet')
     } else {
       dispatch({
         type: 'myAccount/loadAccount',
-        payload: accounts[0].address,
       })
     }
   }
@@ -43,17 +50,15 @@ class myAccountIndex extends React.Component {
   }
 
   confirmOriginateAcountModal = () => {
-    const { dispatch } = this.props
+    const { dispatch, intl } = this.props
+    const { formatMessage } = intl
     Modal.confirm({
-      title: 'Do you Want to delete these items?',
-      content: 'Some descriptions',
+      title: formatMessage(messages.originationModalTitle),
+      content: formatMessage(messages.originationModalContent),
       onOk () {
         dispatch({
           type: 'myAccount/originateAccount',
         })
-      },
-      onCancel () {
-        console.log('Cancel')
       },
     })
   }
@@ -80,16 +85,15 @@ class myAccountIndex extends React.Component {
     router.push('/access-wallet')
   }
 
-  onAccountChange = (accountAddress) => {
+  onAccountChange = (activeAccountIndex) => {
     const { dispatch } = this.props
     dispatch({
       type: 'myAccount/changeActiveAccount',
-      payload: { accountAddress },
+      payload: { activeAccountIndex },
     })
   }
 
   onSendClick = (payload) => {
-    // payload = {toAddress, amountToSend, gas, data = 'undefined',}
     const { dispatch } = this.props
     dispatch({
       type: 'myAccount/sendToken',
@@ -110,15 +114,15 @@ class myAccountIndex extends React.Component {
     return (
       <Page loading={loading.global} className={styles.container}>
         <h1>
-          <FormattedMessage id="myWallet.title" defaultMessage="Send Token & Delegation" />
+          <FormattedMessage id="myAccount.title" defaultMessage="Send Token & Delegation" />
         </h1>
         <Row gutter={32} style={styles.container}>
           <Col md={15}>
             <AccountOperationPanel
+              curAccount={accounts[activeAccountIndex]}
               onSendClick={this.onSendClick}
               onSetDelegateClick={this.onSetDelegateClick}
               sending={sending}
-              account={accounts[activeAccountIndex]}
             />
           </Col>
           <Col md={9}>
@@ -131,7 +135,7 @@ class myAccountIndex extends React.Component {
             <Row type="flex" align="space-between" className={styles.buttonGroup}>
               <div>
                 <a onClick={() => { this.confirmOriginateAcountModal() }}>
-                  <FormattedMessage id="myWallet.originateAccount" defaultMessage="+ New Delegable Account" />
+                  <FormattedMessage id="myAccount.originateAccount" defaultMessage="+ New Delegable Account" />
                 </a>
                 <Tooltip placement="topLeft" title={formatMessage(messages.toolTip)} className={styles.toolTip}>
                   <Icon type="question-circle-o" />
@@ -139,7 +143,7 @@ class myAccountIndex extends React.Component {
               </div>
 
               <a onClick={() => { this.logout() }}>
-                <FormattedMessage id="myWallet.logout" defaultMessage="Log out" />
+                <FormattedMessage id="myAccount.logout" defaultMessage="Log out" />
               </a>
             </Row>
           </Col>

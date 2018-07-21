@@ -12,11 +12,11 @@ const FormItem = Form.Item
 
 const messages = defineMessages({
   delegateToAddress: {
-    id: 'myWallet.delegateToAddress',
+    id: 'myAccount.delegateToAddress',
     defaultMessage: 'Delegate To Address',
   },
   confirmDelegation: {
-    id: 'myWallet.confirmDelegationButton',
+    id: 'myAccount.confirmDelegationButton',
     defaultMessage: 'Confirm Delegation',
   },
 })

@@ -1,13 +1,15 @@
-import { findIndex } from 'lodash'
+import { findIndex, isArray } from 'lodash'
 import { message } from 'antd'
-import { loadAccount, sendToken, originateAccount } from '../services/account'
+import {
+  loadAccount, loadKTAccounts, sendToken, originateAccount,
+} from '../services/account'
 
 export default {
   namespace: 'myAccount',
   state: {
     accountLoaded: false,
     accounts: [],
-    activeAccountIndex: '',
+    activeAccountIndex: NaN,
     sendOperationModalVisible: false,
     lastOpHash: '',
     sending: false,
@@ -15,15 +17,27 @@ export default {
     originating: false,
   },
   effects: {
-    * loadAccount ({ payload: address }, { call, put }) {
-      try {
-        const response = yield call(loadAccount, address)
-        yield put({
-          type: 'updateAccountBalance',
-          payload: { address, balance: response },
-        })
-      } catch (e) {
-        throw new Error('updateAccountBalance_failed')
+    * loadAccount (action, { call, put, select }) {
+      const { accounts, activeAccountIndex } = yield select(state => state.myAccount)
+      if (accounts.length !== 0) {
+        try {
+          const { address } = accounts[activeAccountIndex]
+          const response = yield call(loadAccount, address)
+          yield put({
+            type: 'updateAccountBalance',
+            payload: { address, balance: response },
+          })
+
+          if (accounts[activeAccountIndex].kind === 'manager') {
+            const originationAcconts = yield call(loadKTAccounts, address)
+            yield put({
+              type: 'importOriginationAccounts',
+              payload: { accounts: originationAcconts },
+            })
+          }
+        } catch (e) {
+          throw new Error('updateAccount_failed')
+        }
       }
     },
     * sendToken ({ payload }, { call, put, select }) {
@@ -56,8 +70,10 @@ export default {
         const { accounts, activeAccountIndex } = yield select(state => state.myAccount)
         const curAccount = accounts[activeAccountIndex]
         const { keys } = curAccount
-        const response = yield call(originateAccount, keys)
-        yield put({ type: 'originateAccountSuccess', payload: response })
+        const result = yield call(originateAccount, keys)
+        // const result = { hash: 'hihihi', address: 'KT1111111111' }
+        yield put({ type: 'originateAccountSuccess', payload: result })
+        message.success('Operation Success!')
       } catch (error) {
         const { errors } = error
         let errorMessage = errors[0].id
@@ -82,6 +98,14 @@ export default {
       const index = findIndex(draft.accounts, { address })
       draft.accounts[index].balance = balance
     },
+    importOriginationAccounts (draft, { payload }) {
+      const { accounts } = payload
+      let accArray = accounts
+      if (!isArray(accounts)) {
+        accArray = [accounts]
+      }
+      draft.accounts = [...draft.accounts, ...accArray]
+    },
     changeActiveAccount (draft, { payload }) {
       const { activeAccountIndex } = payload
       draft.activeAccountIndex = activeAccountIndex
@@ -105,8 +129,10 @@ export default {
       draft.originating = true
     },
     originateAccountSuccess (draft, { payload }) {
-      const { address } = payload
-      draft.accounts.push({ type: 'KT', kind: 'Origination', address })
+      const { hash, address } = payload
+      draft.lastOpHash = hash
+      draft.sendOperationModalVisible = true
+      draft.accounts.push({ type: 'KT', kind: 'origination', address })
     },
     originateAccountFailed (draft) {
       draft.originating = false

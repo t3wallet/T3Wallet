@@ -7,16 +7,20 @@ import PropTypes from 'prop-types'
 
 const messages = defineMessages({
   title: {
-    id: 'myWallet.operationSuccess',
+    id: 'myAccount.operationSuccess',
     defaultMessage: 'Operation succeeds!',
   },
   confirmButton: {
-    id: 'myWallet.confirm',
+    id: 'myAccount.confirm',
     defaultMessage: 'Confirm',
   },
   checkOperationHash: {
-    id: 'myWallet.checkOperationHash',
+    id: 'myAccount.checkOperationHash',
     defaultMessage: 'Check your operation hash: ',
+  },
+  operationModalContent: {
+    id: 'myAccount.sendOperationModalContent',
+    defaultMessage: 'Your operation should be visible within a couple of minutes',
   },
 })
 
@@ -37,7 +41,7 @@ const SendOperationModal = ({
       wrapClassName="vertical-center-modal"
       footer={[
         <Button key="submit" type="primary" onClick={() => { onClose() }}>
-          <FormattedMessage id="myWallet.confirm" defaultMessage="Confirm" />
+          <FormattedMessage id="myAccount.confirm" defaultMessage="Confirm" />
         </Button>,
       ]}
     >
@@ -51,6 +55,9 @@ const SendOperationModal = ({
             {opHash}
           </span>
         </a>
+      </p>
+      <p>
+        <FormattedMessage {...messages.operationModalContent} />
       </p>
     </Modal>
   )

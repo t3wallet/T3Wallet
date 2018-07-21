@@ -7,7 +7,7 @@ import {
   intlShape, injectIntl, defineMessages, FormattedMessage,
 } from 'react-intl'
 import {
-   Mnemonic, Fundraiser, PrivateKey,
+  Mnemonic, Fundraiser, PrivateKey,
 } from './components'
 import styles from './index.less'
 
@@ -65,7 +65,7 @@ class AccessWallet extends React.Component {
     return (
       <Page loading={loading}>
         <h1>
-          <FormattedMessage id="myWallet.title" defaultMessage="Send Token & Delegation" />
+          <FormattedMessage id="myAccount.title" defaultMessage="Send Token & Delegation" />
         </h1>
         <Card loading={loading} bordered={false} className={styles.container}>
           <div style={{ marginBottom: 16 }}>

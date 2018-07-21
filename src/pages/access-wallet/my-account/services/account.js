@@ -1,4 +1,8 @@
 import eztz from 'utils/eztz'
+import axios from 'axios'
+import { flatten } from 'lodash'
+
+const apiPoint = 'http://api5.tzscan.io/v2/'
 
 export const loadAccount = async (pkh) => {
   try {
@@ -7,7 +11,32 @@ export const loadAccount = async (pkh) => {
     balance = await eztz.utility.totez(parseInt(balance, 10))
     return balance
   } catch (error) {
-    return { success: false, error }
+    throw error
+  }
+}
+
+export const loadKTAccounts = async (pkh) => {
+  try {
+    let accounts = []
+    const res = await axios({
+      url: `/operations/${pkh}`,
+      baseURL: apiPoint,
+      params: {
+        type: 'Origination',
+        p: 0,
+      },
+    })
+    console.log('[KT accounts]', res.data)
+    accounts = res.data.map((acc) => {
+      const ops = acc.type.operations
+      return ops.map((op) => {
+        return op
+      })
+    })
+    return flatten(accounts)
+  } catch (error) {
+    console.log(error)
+    return []
   }
 }
 
@@ -31,11 +60,11 @@ export const sendToken = async (toAddress, fromAddress, keys, amount, gas, gasLi
 
 export const originateAccount = async (keys) => {
   try {
-    console.log(keys)
     const response = await eztz.rpc.account(keys, 0, true, true, keys.pkh, 0)
+    console.log(response)
     const { hash } = response
     const address = await eztz.contract.hash(hash, 0)
-    return address
+    return { hash, address }
   } catch (error) {
     throw error
   }
