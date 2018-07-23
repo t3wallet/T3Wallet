@@ -1,3 +1,4 @@
+/* global isNaN */
 import React from 'react'
 import {
   Form, Input, InputNumber, Button, message,
@@ -23,9 +24,17 @@ const messages = defineMessages({
     id: 'myAccount.amountToSend',
     defaultMessage: 'Amount To Send',
   },
+  gas: {
+    id: 'myAccount.gas',
+    defaultMessage: 'Gas',
+  },
   gasLimit: {
     id: 'myAccount.gasLimit',
     defaultMessage: 'Gas Limit',
+  },
+  feeUnitExplain: {
+    id: 'myAccount.feeUnitExplain',
+    defaultMessage: '{item} is based on mutez，1 xtz = 1,000,000 mutez',
   },
   sendButton: {
     id: 'myAccount.sendButton',
@@ -76,43 +85,58 @@ const TransferForm = ({
           max={curAccount && curAccount.balance && curAccount.balance || 0}
           step={0.1}
           precision={6}
-          addonAfter="ꜩ"
-          formatter={value => `${value}ꜩ`}
-          parser={value => value.replace('ꜩ', '')}
           style={{ width: '100%' }}
         />)}
       </FormItem>
-      <FormItem label="Gas">
+      <FormItem
+        label={formatMessage(messages.gas)}
+        extra={(
+          <FormattedMessage
+            {...messages.feeUnitExplain}
+            values={{
+              item: (
+                <FormattedMessage {...messages.gas} />
+              ),
+            }}
+          />
+        )}
+      >
         {getFieldDecorator('gas', {
-          rules: [{ required: true, type: 'number', message: 'Incorrect Gas Amount' }],
+          rules: [{ required: true, type: 'integer', message: 'Incorrect Gas Amount' }],
           initialValue: 0,
         })(<InputNumber
           size="large"
           min={0}
-          max={curAccount && curAccount.balance && curAccount.balance || 0}
-          step={0.001}
-          precision={6}
-          formatter={value => `${value}ꜩ`}
-          parser={value => value.replace('ꜩ', '')}
+          step={1}
           style={{ width: '100%' }}
         />)}
       </FormItem>
-      <FormItem label={formatMessage(messages.gasLimit)}>
+      <FormItem
+        label={formatMessage(messages.gasLimit)}
+        extra={(
+          <FormattedMessage
+            {...messages.feeUnitExplain}
+            values={{
+              item: (
+                <FormattedMessage {...messages.gasLimit} />
+              ),
+            }}
+          />
+        )}
+      >
         {getFieldDecorator('gasLimit', {
-          rules: [{ required: true, type: 'number', message: 'Incorrect Gas Limit' }],
-          initialValue: 2000,
-        })(<InputNumber size="large"
+          rules: [{ required: true, type: 'integer', message: 'Incorrect Gas Limit' }],
+          initialValue: 10000,
+        })(<InputNumber
+          size="large"
           min={0}
-          formatter={value => `${value}ꜩ`}
-          parser={value => value.replace('ꜩ', '')}
           style={{ width: '100%' }}
         />)}
       </FormItem>
-
+      <br />
       <Button type="primary" loading={sending} onClick={handleSubmit} className={styles.submitButton}>
         <FormattedMessage {...messages.sendButton} />
       </Button>
-
     </Form>
   )
 }
