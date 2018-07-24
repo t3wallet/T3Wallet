@@ -40,6 +40,10 @@ const messages = defineMessages({
     id: 'myAccount.sendButton',
     defaultMessage: 'Confirm Transcation',
   },
+  incorrectValue: {
+    id: 'myAccount.incorrectValue',
+    defaultMessage: 'Incorrect {value}',
+  },
 })
 
 
@@ -67,19 +71,18 @@ const TransferForm = ({
     <Form hideRequiredMark className={styles.transferForm}>
       <FormItem label={formatMessage(messages.fromAddress)}>
         {getFieldDecorator('fromAddress', {
-          rules: [{ required: true, type: 'string', message: 'Incorrect Address' }],
-          initialValue: curAccount.address,
+          rules: [{ required: true, type: 'string', message: formatMessage(messages.incorrectValue, { value: formatMessage(messages.fromAddress) }) }],
+          initialValue: curAccount && curAccount.address || '',
         })(<Input size="large" disabled />)}
       </FormItem>
       <FormItem label={formatMessage(messages.toAddress)}>
         {getFieldDecorator('toAddress', {
-          rules: [{ required: true, type: 'string', message: 'Incorrect Address' }],
+          rules: [{ required: true, type: 'string', message: formatMessage(messages.incorrectValue, { value: formatMessage(messages.toAddress) }) }],
         })(<Input size="large" />)}
       </FormItem>
       <FormItem label={formatMessage(messages.amountToSend)}>
         {getFieldDecorator('amountToSend', {
-          rules: [{ required: true, type: 'number', message: 'Incorrect Amount To Send' }],
-          initialValue: 0,
+          rules: [{ required: true, type: 'number', message: formatMessage(messages.incorrectValue, { value: formatMessage(messages.amountToSend) }) }],
         })(<InputNumber size="large"
           min={0}
           max={curAccount && curAccount.balance && curAccount.balance || 0}
@@ -102,7 +105,7 @@ const TransferForm = ({
         )}
       >
         {getFieldDecorator('gas', {
-          rules: [{ required: true, type: 'integer', message: 'Incorrect Gas Amount' }],
+          rules: [{ required: true, type: 'integer', message: formatMessage(messages.incorrectValue, { value: formatMessage(messages.gas) }) }],
           initialValue: 0,
         })(<InputNumber
           size="large"
@@ -125,11 +128,12 @@ const TransferForm = ({
         )}
       >
         {getFieldDecorator('gasLimit', {
-          rules: [{ required: true, type: 'integer', message: 'Incorrect Gas Limit' }],
+          rules: [{ required: true, type: 'integer', message: formatMessage(messages.incorrectValue, { value: formatMessage(messages.gasLimit) }) }],
           initialValue: 10000,
         })(<InputNumber
           size="large"
           min={0}
+          step={1000}
           style={{ width: '100%' }}
         />)}
       </FormItem>

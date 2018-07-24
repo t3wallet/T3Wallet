@@ -8,7 +8,7 @@ const myAccount = {
   'myAccount.originateAccount': '+ 新建可委托账户',
   'myAccount.originateAccountToolTip': '你需要创建一个以"KT"开头的地址，才能将您的币委托给烘焙代表团并实现收益。',
   'myAccount.originateModalTitle': '创建一个可委托账户（Origination Account）',
-  'myAccount.originateModalContent': '这个操作会花费大约0.25ꜩ. 如果你想将你的代币委托出去实现收益，这个操作是必要的。',
+  'myAccount.originateModalContent': '这个操作会花费0.257ꜩ的账户创建费. 如果你想将你的代币委托出去实现收益，这个操作是必要的。',
   'myAccount.logout': '退出账户',
   'myAccount.transfer': '转账',
   'myAccount.delegate': '委托',
@@ -17,8 +17,11 @@ const myAccount = {
   'myAccount.gas': '燃料',
   'myAccount.gasLimit': '燃料上限',
   'myAccount.amountToSend': '转账数额',
-  'myAccount.feeUnitExplain': '{item}的单位为mutez，1 xtz = 100,0000 mutez',
+  'myAccount.feeUnitExplain': '{item}的单位为mutez，1 mutez = 0.000001 xtz',
   'myAccount.sendButton': '确认发送',
+
+  'myAccount.sendConfirmModalTitle': '交易确认',
+  'myAccount.sendConfirmModalContent': '你正在向下面的地址发送 {value} xtz, 操作大约花费{gas} mutez的燃料',
 
   'myAccount.confirm': '确定',
   'myAccount.delegateToAddress': '委托到该地址',
@@ -28,6 +31,9 @@ const myAccount = {
   'myAccount.operationSuccess': '操作成功!',
   'myAccount.operationFailed': '操作失败.',
   'myAccount.sendOperationModalContent': '您的操作将会在几分钟以内显示出来。',
+
+  // Error messages
+  'myAccount.incorrectValue': '{value}输入错误',
 }
 
 export default myAccount

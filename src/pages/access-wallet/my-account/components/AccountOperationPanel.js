@@ -16,7 +16,11 @@ const AccountOperationPanel = ({
         <Tabs.TabPane tab={<FormattedMessage id="myAccount.transfer" defaultMessage="Transfer" />} key="1">
           <TransferForm onSendClick={onSendClick} sending={sending} curAccount={curAccount} />
         </Tabs.TabPane>
-        <Tabs.TabPane tab={<FormattedMessage id="myAccount.delegate" defaultMessage="Delegate" />} disabled={curAccount && curAccount.type !== 'KT'} key="2">
+        <Tabs.TabPane
+          tab={<FormattedMessage id="myAccount.delegate" defaultMessage="Delegate" />}
+          disabled={typeof curAccount === 'undefined' || curAccount && curAccount.type !== 'KT'}
+          key="2"
+        >
           <DelegateForm onSetDelegateClick={onSetDelegateClick} curAccount={curAccount} />
         </Tabs.TabPane>
       </Tabs>

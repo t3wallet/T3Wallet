@@ -10,7 +10,7 @@ import {
 } from 'antd'
 import { connect } from 'dva'
 import {
-  AccountOperationPanel, AccountCollapse, SendOperationModal,
+  AccountOperationPanel, AccountCollapse, SendOperationModal, SendConfirmModal,
 } from './components'
 import styles from './index.less'
 
@@ -30,9 +30,18 @@ const messages = defineMessages({
 })
 
 class myAccountIndex extends React.Component {
-  componentDidMount () {
+  constructor (props) {
+    super(props)
+    this.state = ({
+      sendConfirmModalVisible: false,
+      sendConfirmModalContent: {},
+    })
+  }
+
+  componentWillMount () {
     const { myAccount, dispatch } = this.props
     const { accountLoaded } = myAccount
+    console.log(myAccount)
     if (!accountLoaded) {
       router.push('/access-wallet')
     } else {
@@ -77,6 +86,20 @@ class myAccountIndex extends React.Component {
     })
   }
 
+  openSendConfirmModal = (payload) => {
+    this.setState({
+      sendConfirmModalContent: payload,
+      sendConfirmModalVisible: true,
+    })
+  }
+
+  closeSendConfirmModal =() => {
+    this.setState({
+      sendConfirmModalVisible: false,
+      sendConfirmModalContent: {},
+    })
+  }
+
   logout = () => {
     const { dispatch } = this.props
     dispatch({
@@ -94,6 +117,10 @@ class myAccountIndex extends React.Component {
   }
 
   onSendClick = (payload) => {
+    this.setState({
+      sendConfirmModalVisible: false,
+      sendConfirmModalContent: {},
+    })
     const { dispatch } = this.props
     dispatch({
       type: 'myAccount/sendToken',
@@ -107,6 +134,7 @@ class myAccountIndex extends React.Component {
 
   render () {
     const { myAccount, loading, intl } = this.props
+    const { sendConfirmModalContent, sendConfirmModalVisible } = this.state
     const {
       accounts, activeAccountIndex, showNewAccountModal, sendOperationModalVisible, lastOpHash, sending,
     } = myAccount
@@ -120,7 +148,7 @@ class myAccountIndex extends React.Component {
           <Col md={15}>
             <AccountOperationPanel
               curAccount={accounts[activeAccountIndex]}
-              onSendClick={this.onSendClick}
+              onSendClick={this.openSendConfirmModal}
               onSetDelegateClick={this.onSetDelegateClick}
               sending={sending}
             />
@@ -150,6 +178,7 @@ class myAccountIndex extends React.Component {
         </Row>
 
         <SendOperationModal visible={sendOperationModalVisible} opHash={lastOpHash} onClose={this.closeSendOperationModal} />
+        <SendConfirmModal visible={sendConfirmModalVisible} operation={sendConfirmModalContent} onOk={this.onSendClick} onClose={this.closeSendConfirmModal} />
       </Page>
     )
   }

@@ -396,7 +396,7 @@ const rpc = {
       balance: utility.mutez(amount).toString(),
       spendable: (typeof spendable !== 'undefined' ? spendable : true),
       delegatable: (typeof delegatable !== 'undefined' ? delegatable : true),
-      delegate: (typeof delegate !== 'undefined' ? delegate : keys.pkh),
+      delegate: delegate,
     }
     return rpc.sendOperation(keys.pkh, operation, keys)
   },
@@ -479,6 +479,7 @@ const rpc = {
         branch: head.hash,
         contents: ops,
       }
+      console.log(opOb)
       return node.query(`/chains/${head.chain_id}/blocks/${head.hash}/helpers/forge/operations`, opOb)
     })
       .then((f) => {
@@ -550,9 +551,9 @@ const rpc = {
         storage_limit: storageLimit,
         managerPubkey: keys.pkh,
         balance: utility.mutez(amount).toString(),
-        spendable: (typeof spendable !== 'undefined' ? spendable : false),
-        delegatable: (typeof delegatable !== 'undefined' ? delegatable : false),
-        delegate: (typeof delegate !== 'undefined' && delegate ? delegate : keys.pkh),
+        spendable: (typeof spendable !== 'undefined' ? spendable : true),
+        delegatable: (typeof delegatable !== 'undefined' ? delegatable : true),
+        delegate: delegate,
         script,
       }
     return rpc.sendOperation(keys.pkh, operation, keys)

@@ -71,7 +71,7 @@ export default {
         const curAccount = accounts[activeAccountIndex]
         const { keys } = curAccount
         const result = yield call(originateAccount, keys)
-        // const result = { hash: 'hihihi', address: 'KT1111111111' }
+        // const result = { hash: 'hihihi', address: 'KT1111111111', operations: [] }
         yield put({ type: 'originateAccountSuccess', payload: result })
         message.success('Operation Success!')
       } catch (error) {
@@ -79,7 +79,7 @@ export default {
         let errorMessage = errors[0].id
         console.log(errorMessage)
         if (errorMessage === 'proto.alpha.contract.balance_too_low') {
-          errorMessage = 'Balance too low. 0.25xtz is needed to generate an delegatable account.'
+          errorMessage = 'Balance too low. 0.257xtz is needed to generate an delegatable account.'
         }
         throw new Error(`Operation Failed! ${errorMessage}`)
       }

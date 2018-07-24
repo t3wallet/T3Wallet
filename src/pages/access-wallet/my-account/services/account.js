@@ -45,13 +45,14 @@ export const sendToken = async (toAddress, fromAddress, keys, amount, gas, gasLi
   try {
     let response
     if (data) {
-      console.log('called with data')
+      console.log('[called with data]')
       response = await eztz.contract.send(toAddress, fromAddress, keys, amount, data, gas)
     } else {
-      console.log('called without data')
+      console.log('[called without data]')
       response = await eztz.rpc.transfer(fromAddress, keys, toAddress, amount, gas, data, gasLimit)
     }
     const { hash, operations } = response
+    console.log(response)
     return { hash, operations }
   } catch (error) {
     throw error
@@ -60,12 +61,14 @@ export const sendToken = async (toAddress, fromAddress, keys, amount, gas, gasLi
 
 export const originateAccount = async (keys) => {
   try {
-    const response = await eztz.rpc.account(keys, 0, true, true, keys.pkh, 0)
-    console.log(response)
-    const { hash } = response
+    const response = await eztz.rpc.account(keys, 0, true, true, undefined, 0)
+    console.log('[originated success]', response)
+    const { hash, operations } = response
     const address = await eztz.contract.hash(hash, 0)
-    return { hash, address }
+    console.log('[KT address]', address)
+    return { hash, operations, address }
   } catch (error) {
+    console.log('[Origination Error]', error)
     throw error
   }
 }

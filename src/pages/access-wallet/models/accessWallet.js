@@ -12,6 +12,7 @@ export default {
       const { walletType, payload: walletPayload } = payload
       try {
         const identity = yield call(unlockWallet, walletType, walletPayload)
+        console.log(identity)
         yield put({ type: 'myAccount/resetIdentity', payload: identity })
         router.push('/access-wallet/my-account')
       } catch (error) {
