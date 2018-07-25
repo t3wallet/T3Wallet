@@ -4,14 +4,14 @@ import { flatten } from 'lodash'
 
 const apiPoint = 'http://api5.tzscan.io/v2/'
 
-export const loadAccount = async (pkh) => {
+export const loadAccountInfo = async (pkh) => {
   try {
     let balance
     balance = await eztz.rpc.getBalance(pkh)
     balance = await eztz.utility.totez(parseInt(balance, 10))
-    return balance
+    return ({ balance })
   } catch (error) {
-    throw error
+    return (error)
   }
 }
 
@@ -26,14 +26,18 @@ export const loadKTAccounts = async (pkh) => {
         p: 0,
       },
     })
-    console.log('[KT accounts]', res.data)
-    accounts = res.data.map((acc) => {
+    accounts = flatten(res.data.map((acc) => {
       const ops = acc.type.operations
       return ops.map((op) => {
         return op
       })
+    }))
+
+    accounts = accounts.map((account) => {
+      return { ...account, address: account.tz1.tz }
     })
-    return flatten(accounts)
+    console.log('[KT accounts]', accounts)
+    return accounts
   } catch (error) {
     console.log(error)
     return []

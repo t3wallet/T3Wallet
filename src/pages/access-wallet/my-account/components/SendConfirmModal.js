@@ -29,7 +29,7 @@ const SendConfirmModal = ({
     <Modal
       title={(
         <span>
-          <Icon type="check-circle-o" style={{ marginRight: '8px', color: 'green' }} />
+          <Icon type="question-circle-o" style={{ marginRight: '8px', color: 'orange' }} />
           <FormattedMessage {...messages.title} />
         </span>
             )}

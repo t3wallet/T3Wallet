@@ -1,7 +1,7 @@
-import { findIndex, isArray } from 'lodash'
+import { unionBy, isArray } from 'lodash'
 import { message } from 'antd'
 import {
-  loadAccount, loadKTAccounts, sendToken, originateAccount,
+  loadAccountInfo, loadKTAccounts, sendToken, originateAccount,
 } from '../services/account'
 
 export default {
@@ -9,7 +9,8 @@ export default {
   state: {
     accountLoaded: false,
     accounts: [],
-    activeAccountIndex: NaN,
+    keys: {},
+    activeAccountIndex: '',
     sendOperationModalVisible: false,
     lastOpHash: '',
     sending: false,
@@ -17,27 +18,41 @@ export default {
     originating: false,
   },
   effects: {
-    * loadAccount (action, { call, put, select }) {
-      const { accounts, activeAccountIndex } = yield select(state => state.myAccount)
-      if (accounts.length !== 0) {
-        try {
-          const { address } = accounts[activeAccountIndex]
-          const response = yield call(loadAccount, address)
+    * refreshAccounts (action, {
+      all, call, put, select,
+    }) {
+      try {
+        let promises = []
+        const { accounts } = yield select(state => state.myAccount)
+        accounts.forEach((account) => {
+          const { address } = account
+          promises.push(call(loadAccountInfo, address))
+        })
+        const accountsInfo = yield all(promises)
+        for (let i = 0; i < accountsInfo.length; i++) {
+          const { balance } = accountsInfo[i]
           yield put({
             type: 'updateAccountBalance',
-            payload: { address, balance: response },
+            payload: { activeAccountIndex: i, balance },
           })
-
-          if (accounts[activeAccountIndex].kind === 'manager') {
-            const originationAcconts = yield call(loadKTAccounts, address)
-            yield put({
-              type: 'importOriginationAccounts',
-              payload: { accounts: originationAcconts },
-            })
-          }
-        } catch (e) {
-          throw new Error('updateAccount_failed')
         }
+      } catch (e) {
+        console.log(e)
+        throw new Error('Update Account Balance Error')
+      }
+    },
+
+    * loadKTAccounts (action, { call, put, select }) {
+      try {
+        const { keys } = yield select(state => state.myAccount)
+        const originationAcconts = yield call(loadKTAccounts, keys.pkh)
+        yield put({
+          type: 'importOriginationAccounts',
+          payload: { accounts: originationAcconts },
+        })
+        yield put({ type: 'refreshAccounts' })
+      } catch (e) {
+        throw new Error('Load KT Acccount Failed, Check your internet connection.')
       }
     },
     * sendToken ({ payload }, { call, put, select }) {
@@ -46,9 +61,9 @@ export default {
         toAddress, amountToSend, gas, gasLimit, data,
       } = payload
       try {
-        const { accounts, activeAccountIndex } = yield select(state => state.myAccount)
+        const { accounts, keys, activeAccountIndex } = yield select(state => state.myAccount)
         const curAccount = accounts[activeAccountIndex]
-        const { address, keys } = curAccount
+        const { address } = curAccount
         // console.log('/ myAddress: ', address, '/ myKeys: ', keys, '/ toAddress:', toAddress, '/ amountToSend: ', amountToSend, '/ gas', gas)
         const response = yield call(sendToken, toAddress, address, keys, amountToSend, gas, gasLimit, data)
         yield put({ type: 'sendSuccess', payload: response })
@@ -87,16 +102,16 @@ export default {
 
   },
   reducers: {
-    resetIdentity (draft, { payload: identity }) {
-      console.log(identity)
+    setIdentity (draft, { payload: identity }) {
+      const { keys } = identity
       draft.accountLoaded = true
       draft.accounts = [identity]
       draft.activeAccountIndex = '0'
+      draft.keys = keys
     },
     updateAccountBalance (draft, { payload }) {
-      const { address, balance } = payload
-      const index = findIndex(draft.accounts, { address })
-      draft.accounts[index].balance = balance
+      const { activeAccountIndex, balance } = payload
+      draft.accounts[activeAccountIndex].balance = balance
     },
     importOriginationAccounts (draft, { payload }) {
       const { accounts } = payload
@@ -104,7 +119,7 @@ export default {
       if (!isArray(accounts)) {
         accArray = [accounts]
       }
-      draft.accounts = [...draft.accounts, ...accArray]
+      draft.accounts = unionBy(draft.accounts, accArray, 'address')
     },
     changeActiveAccount (draft, { payload }) {
       const { activeAccountIndex } = payload

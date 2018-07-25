@@ -8120,6 +8120,14 @@ react-test-renderer@^16.0.0-0:
     prop-types "^15.6.0"
     react-is "^16.4.1"
 
+react-timeout@^1.1.1:
+  version "1.1.1"
+  resolved "https://registry.yarnpkg.com/react-timeout/-/react-timeout-1.1.1.tgz#50e49d8c861e4b5745ce230182bdd279b82400ba"
+  dependencies:
+    create-react-class "^15.5.2"
+    hoist-non-react-statics "^2.3.1"
+    object-assign "^4.0.1"
+
 react-tween-state@^0.1.5:
   version "0.1.5"
   resolved "https://registry.yarnpkg.com/react-tween-state/-/react-tween-state-0.1.5.tgz#e98b066551efb93cb92dd1be14995c2e3deae339"

@@ -1,5 +1,7 @@
 import React from 'react'
-import { Collapse, Row, Col } from 'antd'
+import {
+  Collapse, Row, Col, Tag,
+} from 'antd'
 import PropTypes from 'prop-types'
 import { FormattedMessage } from 'react-intl'
 import Blockies from 'react-blockies'
@@ -11,11 +13,42 @@ const AccountCollapse = ({ accounts, onAccountChange, activeAccountIndex }) => {
   return (
     <Collapse accordion bordered={false} onChange={onAccountChange} defaultActiveKey={activeAccountIndex}>
       { accounts.map((account, index) => {
+        console.log(account)
         let header
         if (account.type === 'tz') {
-          header = <FormattedMessage id="myAccount.managerWallet" defaultMessage="Main Manager Wallet" />
+          header = (
+            <Row type="flex" align="space-between">
+              <Col>
+                <FormattedMessage id="myAccount.managerWallet" defaultMessage="Main Manager Wallet" />
+              </Col>
+              <Col />
+            </Row>
+          )
         } else {
-          header = <FormattedMessage id="myAccount.delegableWallet" defaultMessage="Delegable Wallet" />
+          let delegableTag
+          if (account.delegatable) {
+            delegableTag = (
+              <Tag color={account.delegatable ? 'green' : 'orange'}>
+                <FormattedMessage id="myAccount.delegable" defaultMessage="Delegatable" />
+              </Tag>
+            )
+          } else {
+            delegableTag = (
+              <Tag color={account.delegatable ? 'green' : 'orange'}>
+                <FormattedMessage id="myAccount.notDelegable" defaultMessage="Not Delegatable" />
+              </Tag>
+            )
+          }
+          header = (
+            <Row type="flex" align="space-between">
+              <Col>
+                <FormattedMessage id="myAccount.delegableWallet" defaultMessage="Delegable Wallet" />
+              </Col>
+              <Col>
+                {delegableTag}
+              </Col>
+            </Row>
+          )
         }
         return (
           <Panel header={header} key={index}>

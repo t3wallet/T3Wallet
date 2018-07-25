@@ -9,6 +9,8 @@ import {
   Row, Col, Tooltip, Icon, Modal,
 } from 'antd'
 import { connect } from 'dva'
+import ReactTimeout from 'react-timeout'
+
 import {
   AccountOperationPanel, AccountCollapse, SendOperationModal, SendConfirmModal,
 } from './components'
@@ -39,22 +41,43 @@ class myAccountIndex extends React.Component {
   }
 
   componentWillMount () {
-    const { myAccount, dispatch } = this.props
+    const { myAccount } = this.props
     const { accountLoaded } = myAccount
-    console.log(myAccount)
     if (!accountLoaded) {
       router.push('/access-wallet')
-    } else {
-      dispatch({
-        type: 'myAccount/loadAccount',
-      })
     }
+  }
+
+  componentDidMount () {
+    this.initAccount()
   }
 
   componentWillUnmount () {
     const { dispatch } = this.props
     dispatch({
       type: 'myAccount/logout',
+    })
+  }
+
+  initAccount = () => {
+    const { dispatch, setInterval } = this.props
+    dispatch({
+      type: 'myAccount/loadKTAccounts',
+    })
+    setInterval(this.refreshAccounts, 60000)
+  }
+
+  refreshAccounts = () => {
+    const { dispatch } = this.props
+    dispatch({
+      type: 'myAccount/refreshAccounts',
+    })
+  }
+
+  refreshAccounts = () => {
+    const { dispatch } = this.props
+    dispatch({
+      type: 'myAccount/refreshAccounts',
     })
   }
 
@@ -190,6 +213,7 @@ myAccountIndex.propTypes = {
   loading: PropTypes.object,
   myAccount: PropTypes.object,
   intl: intlShape.isRequired,
+  setInterval: PropTypes.func,
 }
 
 const mapStateToProps = (state) => {
@@ -199,4 +223,4 @@ const mapStateToProps = (state) => {
   }
 }
 
-export default connect(mapStateToProps)(injectIntl(myAccountIndex))
+export default connect(mapStateToProps)(ReactTimeout(injectIntl(myAccountIndex)))
