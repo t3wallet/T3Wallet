@@ -8,20 +8,26 @@ import TransferForm from './TransferForm'
 import DelegateForm from './DelegateForm'
 
 const AccountOperationPanel = ({
-  onSendClick, onSetDelegateClick, sending, curAccount,
+  onSendClick, onSetDelegateClick, sending, accounts, activeAccountIndex,
 }) => {
+  const curAccount = accounts[activeAccountIndex]
   return (
     <Card style={{ width: '100%' }}>
       <Tabs defaultActiveKey="1">
         <Tabs.TabPane tab={<FormattedMessage id="myAccount.transfer" defaultMessage="Transfer" />} key="1">
-          <TransferForm onSendClick={onSendClick} sending={sending} curAccount={curAccount} />
+          <TransferForm onSendClick={onSendClick} sending={sending} accounts={accounts} curAccount={curAccount} />
         </Tabs.TabPane>
         <Tabs.TabPane
           tab={<FormattedMessage id="myAccount.delegate" defaultMessage="Delegate" />}
-          disabled={typeof curAccount === 'undefined' || curAccount && curAccount.type !== 'KT'}
+          disabled={typeof curAccount === 'undefined' || curAccount && curAccount.kind !== 'origination'}
           key="2"
         >
-          <DelegateForm onSetDelegateClick={onSetDelegateClick} curAccount={curAccount} />
+          <DelegateForm
+            onSetDelegateClick={onSetDelegateClick}
+            curAccount={curAccount}
+            disabled={typeof curAccount === 'undefined' || curAccount && curAccount.kind !== 'origination'}
+            accounts={accounts}
+          />
         </Tabs.TabPane>
       </Tabs>
 ,
@@ -33,7 +39,8 @@ AccountOperationPanel.propTypes = {
   onSendClick: PropTypes.func,
   onSetDelegateClick: PropTypes.func,
   sending: PropTypes.bool,
-  curAccount: PropTypes.object,
+  accounts: PropTypes.array,
+  activeAccountIndex: PropTypes.string,
 }
 
 

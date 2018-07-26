@@ -6,10 +6,8 @@ const apiPoint = 'http://api5.tzscan.io/v2/'
 
 export const loadAccountInfo = async (pkh) => {
   try {
-    let balance
-    balance = await eztz.rpc.getBalance(pkh)
-    balance = await eztz.utility.totez(parseInt(balance, 10))
-    return ({ balance })
+    const info = await eztz.node.query(`/chains/main/blocks/head/context/contracts/${pkh}`)
+    return { ...info, balance: await eztz.utility.totez(parseInt(info.balance, 10)) }
   } catch (error) {
     return (error)
   }
@@ -34,9 +32,9 @@ export const loadKTAccounts = async (pkh) => {
     }))
 
     accounts = accounts.map((account) => {
-      return { ...account, address: account.tz1.tz }
+      const { tz } = account.tz1
+      return { address: tz, prefix: (tz.slice(0, 2)), kind: 'origination' }
     })
-    console.log('[KT accounts]', accounts)
     return accounts
   } catch (error) {
     console.log(error)

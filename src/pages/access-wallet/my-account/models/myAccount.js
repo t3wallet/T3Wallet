@@ -28,17 +28,16 @@ export default {
           const { address } = account
           promises.push(call(loadAccountInfo, address))
         })
-        const accountsInfo = yield all(promises)
-        for (let i = 0; i < accountsInfo.length; i++) {
-          const { balance } = accountsInfo[i]
+        const accountsData = yield all(promises)
+        for (let i = 0; i < accountsData.length; i++) {
           yield put({
-            type: 'updateAccountBalance',
-            payload: { activeAccountIndex: i, balance },
+            type: 'updateAccountData',
+            payload: { activeAccountIndex: i, data: accountsData[i] },
           })
         }
       } catch (e) {
         console.log(e)
-        throw new Error('Update Account Balance Error')
+        throw new Error('Update Account Error')
       }
     },
 
@@ -109,9 +108,11 @@ export default {
       draft.activeAccountIndex = '0'
       draft.keys = keys
     },
-    updateAccountBalance (draft, { payload }) {
-      const { activeAccountIndex, balance } = payload
-      draft.accounts[activeAccountIndex].balance = balance
+    updateAccountData (draft, { payload }) {
+      const {
+        activeAccountIndex, data,
+      } = payload
+      draft.accounts[activeAccountIndex] = { ...draft.accounts[activeAccountIndex], ...data }
     },
     importOriginationAccounts (draft, { payload }) {
       const { accounts } = payload

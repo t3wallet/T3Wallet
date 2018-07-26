@@ -29,6 +29,7 @@ const DelegateForm = ({
     validateFieldsAndScroll,
   },
   onSetDelegateClick,
+  disabled,
 }) => {
   const handleSubmit = () => {
     validateFieldsAndScroll((errors, values) => {
@@ -47,7 +48,7 @@ const DelegateForm = ({
           rules: [{ required: true, type: 'string', message: 'Incorrect Address' }],
         })(<Input size="large" />)}
       </FormItem>
-      <Button type="primary" onClick={handleSubmit} className={styles.submitButton}>
+      <Button disabled={disabled} type="primary" onClick={handleSubmit} className={styles.submitButton}>
         <FormattedMessage {...messages.confirmDelegation} />
       </Button>
 
@@ -59,6 +60,7 @@ DelegateForm.propTypes = {
   form: PropTypes.object,
   intl: intlShape.isRequired,
   onSetDelegateClick: PropTypes.func,
+  disabled: PropTypes.bool,
 }
 
 

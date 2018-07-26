@@ -19,11 +19,11 @@ import styles from './index.less'
 const messages = defineMessages({
   toolTip: {
     id: 'myAccount.originateAccountToolTip',
-    defaultMessage: 'You need to create an delegable which address starts with "KT" to delegate your baking right to a delegation service',
+    defaultMessage: 'You need to create an delegatable which address starts with "KT" to delegate your baking right to a delegation service',
   },
   originationModalTitle: {
     id: 'myAccount.originateModalTitle',
-    defaultMessage: 'Create an delegable account (Origination Account)',
+    defaultMessage: 'Create an delegatable account (Origination Account)',
   },
   originationModalContent: {
     id: 'myAccount.originateModalContent',
@@ -64,7 +64,7 @@ class myAccountIndex extends React.Component {
     dispatch({
       type: 'myAccount/loadKTAccounts',
     })
-    setInterval(this.refreshAccounts, 60000)
+    setInterval(this.refreshAccounts, 40000)
   }
 
   refreshAccounts = () => {
@@ -170,7 +170,8 @@ class myAccountIndex extends React.Component {
         <Row gutter={32} style={styles.container}>
           <Col md={15}>
             <AccountOperationPanel
-              curAccount={accounts[activeAccountIndex]}
+              accounts={accounts}
+              activeAccountIndex={activeAccountIndex}
               onSendClick={this.openSendConfirmModal}
               onSetDelegateClick={this.onSetDelegateClick}
               sending={sending}
@@ -186,7 +187,7 @@ class myAccountIndex extends React.Component {
             <Row type="flex" align="space-between" className={styles.buttonGroup}>
               <div>
                 <a onClick={() => { this.confirmOriginateAcountModal() }}>
-                  <FormattedMessage id="myAccount.originateAccount" defaultMessage="+ New Delegable Account" />
+                  <FormattedMessage id="myAccount.originateAccount" defaultMessage="+ New Delegatable Account" />
                 </a>
                 <Tooltip placement="topLeft" title={formatMessage(messages.toolTip)} className={styles.toolTip}>
                   <Icon type="question-circle-o" />

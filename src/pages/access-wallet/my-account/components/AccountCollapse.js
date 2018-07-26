@@ -13,39 +13,26 @@ const AccountCollapse = ({ accounts, onAccountChange, activeAccountIndex }) => {
   return (
     <Collapse accordion bordered={false} onChange={onAccountChange} defaultActiveKey={activeAccountIndex}>
       { accounts.map((account, index) => {
-        console.log(account)
         let header
-        if (account.type === 'tz') {
-          header = (
-            <Row type="flex" align="space-between">
-              <Col>
-                <FormattedMessage id="myAccount.managerWallet" defaultMessage="Main Manager Wallet" />
-              </Col>
-              <Col />
-            </Row>
-          )
-        } else {
-          let delegableTag
-          if (account.delegatable) {
-            delegableTag = (
-              <Tag color={account.delegatable ? 'green' : 'orange'}>
-                <FormattedMessage id="myAccount.delegable" defaultMessage="Delegatable" />
-              </Tag>
-            )
-          } else {
-            delegableTag = (
-              <Tag color={account.delegatable ? 'green' : 'orange'}>
-                <FormattedMessage id="myAccount.notDelegable" defaultMessage="Not Delegatable" />
+        if (account.kind === 'manager') {
+          header = <FormattedMessage id="myAccount.managerWallet" defaultMessage="Main Manager Wallet" />
+        } else if (account.kind === 'origination') {
+          let delegatableTag
+          if (account.delegate) {
+            const { setable } = account.delegate
+            delegatableTag = (
+              <Tag color={setable ? 'green' : 'orange'}>
+                {
+                  setable ? <FormattedMessage id="myAccount.delegatable" defaultMessage="Delegatable" /> : <FormattedMessage id="myAccount.notDelegatable" defaultMessage="Not Delegatable" />
+                }
               </Tag>
             )
           }
           header = (
             <Row type="flex" align="space-between">
+              <FormattedMessage id="myAccount.originationWallet" defaultMessage="Origination Wallet" />
               <Col>
-                <FormattedMessage id="myAccount.delegableWallet" defaultMessage="Delegable Wallet" />
-              </Col>
-              <Col>
-                {delegableTag}
+                {delegatableTag}
               </Col>
             </Row>
           )
@@ -89,13 +76,13 @@ const AccountCollapse = ({ accounts, onAccountChange, activeAccountIndex }) => {
                     </span>
                   </a>
                 </Col>
-                <Col>
+                {/* <Col>
                   <a href={`https://tezos.id/account/${account.address}`} rel="noopener noreferrer" target="_blank">
                     <span className={styles.explorer}>
                     Tezos.id
                     </span>
                   </a>
-                </Col>
+                </Col> */}
               </Row>
             </Row>
           </Panel>

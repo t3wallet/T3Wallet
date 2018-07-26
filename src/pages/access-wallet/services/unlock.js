@@ -7,7 +7,7 @@ const generateIdentity = (keys) => {
   if (prefix === 'tz') kind = 'manager'
   else if (prefix === 'KT') kind = 'origination'
   let identity = {
-    type: prefix,
+    prefix,
     kind,
     keys,
     address: pkh,

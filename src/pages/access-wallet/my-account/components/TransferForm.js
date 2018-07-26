@@ -1,7 +1,7 @@
 /* global isNaN */
 import React from 'react'
 import {
-  Form, Input, InputNumber, Button, message,
+  Form, Input, InputNumber, Button, Select, message,
 } from 'antd'
 import PropTypes from 'prop-types'
 import {
@@ -46,6 +46,8 @@ const messages = defineMessages({
   },
 })
 
+const { Option } = Select
+
 
 const TransferForm = ({
   intl,
@@ -56,6 +58,7 @@ const TransferForm = ({
   onSendClick,
   sending,
   curAccount,
+  accounts,
 }) => {
   const handleSubmit = () => {
     validateFieldsAndScroll((errors, values) => {
@@ -72,8 +75,21 @@ const TransferForm = ({
       <FormItem label={formatMessage(messages.fromAddress)}>
         {getFieldDecorator('fromAddress', {
           rules: [{ required: true, type: 'string', message: formatMessage(messages.incorrectValue, { value: formatMessage(messages.fromAddress) }) }],
-          initialValue: curAccount && curAccount.address || '',
-        })(<Input size="large" disabled />)}
+          initialValue: curAccount && curAccount.address,
+        })(<Select
+          size="large"
+          showSearch
+          optionFilterProp="children"
+          filterOption={(input, option) => option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0}
+        >
+          {accounts.map((account) => {
+            return (
+              <Option value={account.address} key={account.address}>
+                {account.address}
+              </Option>
+            )
+          })}
+        </Select>)}
       </FormItem>
       <FormItem label={formatMessage(messages.toAddress)}>
         {getFieldDecorator('toAddress', {
@@ -151,6 +167,7 @@ TransferForm.propTypes = {
   onSendClick: PropTypes.func,
   sending: PropTypes.bool,
   curAccount: PropTypes.object,
+  accounts: PropTypes.array,
 }
 
 export default Form.create()(injectIntl(TransferForm))

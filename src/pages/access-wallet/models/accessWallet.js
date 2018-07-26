@@ -11,7 +11,7 @@ export default {
       yield put({ type: 'updateError', payload: '' })
       const { walletType, payload: walletPayload } = payload
       try {
-        // identity = { type: 'tz', type: 'manager', keys: {}, address: 'tz1XXX' }
+        // identity = { prefix: 'tz', type: 'manager', keys: {}, address: 'tz1XXX' }
         const identity = yield call(unlockWallet, walletType, walletPayload)
         yield put({ type: 'myAccount/setIdentity', payload: identity })
         router.push('/access-wallet/my-account')
