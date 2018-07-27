@@ -39,7 +39,7 @@ const Footer = () => {
             </div>
 
             <CopyToClipboard text="tz1XMRWVwwEZSZxkKurt3gAzr8G8fKPPE7QK"
-              onCopy={() => console.log('copied')}
+              onCopy={() => console.log('[copied]', 'tz1XMRWVwwEZSZxkKurt3gAzr8G8fKPPE7QK')}
             >
               <Tooltip title="Copied!" trigger="click">
                 <Tag color="geekblue">

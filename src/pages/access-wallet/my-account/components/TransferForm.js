@@ -32,8 +32,8 @@ const messages = defineMessages({
     id: 'myAccount.gasLimit',
     defaultMessage: 'Gas Limit',
   },
-  feeUnitExplain: {
-    id: 'myAccount.feeUnitExplain',
+  gasUnitExplain: {
+    id: 'myAccount.gasUnitExplain',
     defaultMessage: '{item} is based on mutez，1 xtz = 1,000,000 mutez',
   },
   sendButton: {
@@ -111,7 +111,7 @@ const TransferForm = ({
         label={formatMessage(messages.gas)}
         extra={(
           <FormattedMessage
-            {...messages.feeUnitExplain}
+            {...messages.gasUnitExplain}
             values={{
               item: (
                 <FormattedMessage {...messages.gas} />
@@ -134,7 +134,7 @@ const TransferForm = ({
         label={formatMessage(messages.gasLimit)}
         extra={(
           <FormattedMessage
-            {...messages.feeUnitExplain}
+            {...messages.gasUnitExplain}
             values={{
               item: (
                 <FormattedMessage {...messages.gasLimit} />

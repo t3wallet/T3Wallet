@@ -151,17 +151,22 @@ class myAccountIndex extends React.Component {
     })
   }
 
-  onSetDelegateClick = ({ delegation }) => {
-    console.log(delegation)
+  onSetDelegateClick = (payload) => {
+    const { dispatch } = this.props
+    dispatch({
+      type: 'myAccount/setDelegation',
+      payload,
+    })
   }
 
   render () {
     const { myAccount, loading, intl } = this.props
     const { sendConfirmModalContent, sendConfirmModalVisible } = this.state
     const {
-      accounts, activeAccountIndex, showNewAccountModal, sendOperationModalVisible, lastOpHash, sending,
+      accounts, activeAccountIndex, showNewAccountModal, sendOperationModalVisible, lastOpHash,
     } = myAccount
     const { formatMessage } = intl
+
     return (
       <Page loading={loading.global} className={styles.container}>
         <h1>
@@ -174,7 +179,8 @@ class myAccountIndex extends React.Component {
               activeAccountIndex={activeAccountIndex}
               onSendClick={this.openSendConfirmModal}
               onSetDelegateClick={this.onSetDelegateClick}
-              sending={sending}
+              sending={loading.effects['myAccount/sendToken']}
+              delegating={loading.effects['myAccount/setDelegation']}
             />
           </Col>
           <Col md={9}>

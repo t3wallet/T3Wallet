@@ -7,6 +7,8 @@ const myAccount = {
   'myAccount.originationWallet': 'Origination Wallet',
   'myAccount.delegatable': 'Delegatable',
   'myAccount.notDelegatable': 'Not Delegatable',
+  'myAccount.curDelegation': 'Current Delegation',
+  'myAccount.notSet': 'Not Set',
   'myAccount.originateAccount': '+ New Delegatable Account',
   'myAccount.originateAccountToolTip': 'You need to create an delegatable which address starts with "KT" to delegate your baking right to a delegation service',
   'myAccount.originateModalTitle': 'Create an delegatable account (Origination Account)',
@@ -19,7 +21,7 @@ const myAccount = {
   'myAccount.gas': 'gas',
   'myAccount.gasLimit': 'Gas Limit',
   'myAccount.amountToSend': 'Amount To Send',
-  'myAccount.feeUnitExplain': '{item} is based on mutez，1 mutez = 0.000001 xtz',
+  'myAccount.gasUnitExplain': '{item} is based on mutez，1 mutez = 0.000001 xtz',
   'myAccount.sendButton': 'Confirm Transaction',
 
   'myAccount.sendConfirmModalTitle': 'Transcation Confirmation',

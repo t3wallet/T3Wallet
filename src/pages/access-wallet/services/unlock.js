@@ -31,7 +31,7 @@ export const unlockWallet = async (type, payload) => {
       const keys = await eztz.crypto.generateKeys(seed, email + password)
       if (code) {
         const response = await eztz.rpc.activate(address, code)
-        console.log('activation', response)
+        console.log('[Activation Successful]', response)
       }
       identity = generateIdentity(keys)
       return identity

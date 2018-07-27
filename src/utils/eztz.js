@@ -559,7 +559,7 @@ const rpc = {
     return rpc.sendOperation(keys.pkh, operation, keys)
   },
   setDelegate (from, keys, delegate, fee, gasLimit, storageLimit) {
-    if (typeof gasLimit === 'undefined') gasLimit = '0'
+    if (typeof gasLimit === 'undefined') gasLimit = '10000'
     if (typeof storageLimit === 'undefined') storageLimit = '0'
     let operation = {
       kind: 'delegation',

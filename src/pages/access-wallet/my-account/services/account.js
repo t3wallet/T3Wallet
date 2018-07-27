@@ -42,7 +42,6 @@ export const loadKTAccounts = async (pkh) => {
   }
 }
 
-
 export const sendToken = async (toAddress, fromAddress, keys, amount, gas, gasLimit, data = undefined) => {
   try {
     let response
@@ -64,13 +63,25 @@ export const sendToken = async (toAddress, fromAddress, keys, amount, gas, gasLi
 export const originateAccount = async (keys) => {
   try {
     const response = await eztz.rpc.account(keys, 0, true, true, undefined, 0)
-    console.log('[originated success]', response)
+    console.log('[ORIGINATION SUCCESS]', response)
     const { hash, operations } = response
     const address = await eztz.contract.hash(hash, 0)
     console.log('[KT address]', address)
     return { hash, operations, address }
   } catch (error) {
     console.log('[Origination Error]', error)
+    throw error
+  }
+}
+
+export const setDelegation = async (fromAddress, keys, toDelegation, gas) => {
+  try {
+    console.log(fromAddress, keys, toDelegation, gas)
+    const response = await eztz.rpc.setDelegate(fromAddress, keys, toDelegation, gas) // { hash, operations }
+    console.log('[SET DELEGATION SUCCESS]', response)
+    return response
+  } catch (error) {
+    console.log('[SET DELEGATION ERROR]', error)
     throw error
   }
 }

@@ -8,7 +8,7 @@ import TransferForm from './TransferForm'
 import DelegateForm from './DelegateForm'
 
 const AccountOperationPanel = ({
-  onSendClick, onSetDelegateClick, sending, accounts, activeAccountIndex,
+  onSendClick, onSetDelegateClick, sending, delegating, accounts, activeAccountIndex,
 }) => {
   const curAccount = accounts[activeAccountIndex]
   return (
@@ -24,6 +24,7 @@ const AccountOperationPanel = ({
         >
           <DelegateForm
             onSetDelegateClick={onSetDelegateClick}
+            delegating={delegating}
             curAccount={curAccount}
             disabled={typeof curAccount === 'undefined' || curAccount && curAccount.kind !== 'origination'}
             accounts={accounts}
@@ -39,6 +40,7 @@ AccountOperationPanel.propTypes = {
   onSendClick: PropTypes.func,
   onSetDelegateClick: PropTypes.func,
   sending: PropTypes.bool,
+  delegating: PropTypes.bool,
   accounts: PropTypes.array,
   activeAccountIndex: PropTypes.string,
 }

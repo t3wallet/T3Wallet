@@ -64,6 +64,23 @@ const AccountCollapse = ({ accounts, onAccountChange, activeAccountIndex }) => {
                 </span>
               </div>
             </Row>
+            { account.kind === 'origination' ? (
+              <Row className={styles.section}>
+                <h3>
+                  <FormattedMessage id="myAccount.curDelegation" defaultMessage="Current Delegation" />
+                </h3>
+                <div className={styles.infoContainer}>
+                  <span className={styles.value}>
+                    {account.delegate && account.delegate.value ? account.delegate.value : (
+                      <span>
+                        <FormattedMessage id="myAccount.notSet" defaultMessage="Not Set" />
+                      </span>
+                    )}
+                  </span>
+                </div>
+              </Row>) : null
+            }
+
             <Row className={styles.section}>
               <h3>
                 <FormattedMessage id="myAccount.transactionHistory" defaultMessage="Transaction History" />

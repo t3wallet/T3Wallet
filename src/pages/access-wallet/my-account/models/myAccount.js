@@ -1,7 +1,7 @@
 import { unionBy, isArray } from 'lodash'
 import { message } from 'antd'
 import {
-  loadAccountInfo, loadKTAccounts, sendToken, originateAccount,
+  loadAccountInfo, loadKTAccounts, sendToken, originateAccount, setDelegation,
 } from '../services/account'
 
 export default {
@@ -13,7 +13,9 @@ export default {
     activeAccountIndex: '',
     sendOperationModalVisible: false,
     lastOpHash: '',
-    sending: false,
+    delegating: false,
+
+    delegates: [],
 
     originating: false,
   },
@@ -36,11 +38,10 @@ export default {
           })
         }
       } catch (e) {
-        console.log(e)
+        console.log('[UPDATE ACCOUNT ERROR]', e)
         throw new Error('Update Account Error')
       }
     },
-
     * loadKTAccounts (action, { call, put, select }) {
       try {
         const { keys } = yield select(state => state.myAccount)
@@ -55,7 +56,6 @@ export default {
       }
     },
     * sendToken ({ payload }, { call, put, select }) {
-      yield put({ type: 'sending' })
       const {
         toAddress, amountToSend, gas, gasLimit, data,
       } = payload
@@ -68,9 +68,7 @@ export default {
         yield put({ type: 'sendSuccess', payload: response })
         message.success('Send Operation Success!')
       } catch (error) {
-        console.log(error)
         const { errors } = error
-        yield put({ type: 'sendFailed' })
         let errorMessage = errors[0].id
         if (errorMessage === 'proto.alpha.gas_exhausted.operation') {
           errorMessage = 'Gas quota exceeded for the operation'
@@ -85,7 +83,7 @@ export default {
         const curAccount = accounts[activeAccountIndex]
         const { keys } = curAccount
         const result = yield call(originateAccount, keys)
-        // const result = { hash: 'hihihi', address: 'KT1111111111', operations: [] }
+        // const result = { hash: 'ThebEstteZoswEbwalletSofaR', address: 'KT1111111111', operations: [] }
         yield put({ type: 'originateAccountSuccess', payload: result })
         message.success('Operation Success!')
       } catch (error) {
@@ -98,7 +96,16 @@ export default {
         throw new Error(`Operation Failed! ${errorMessage}`)
       }
     },
-
+    * setDelegation ({ payload }, { put, select, call }) {
+      try {
+        const { fromAddress, toDelegation, gas } = payload
+        const { keys } = yield select(state => state.myAccount)
+        const response = yield call(setDelegation, fromAddress, keys, toDelegation, gas)
+        yield put({ type: 'setDelegationSuccess', payload: response })
+      } catch (e) {
+        throw new Error('Operation Failed', e)
+      }
+    },
   },
   reducers: {
     setIdentity (draft, { payload: identity }) {
@@ -126,17 +133,10 @@ export default {
       const { activeAccountIndex } = payload
       draft.activeAccountIndex = activeAccountIndex
     },
-    sending (draft) {
-      draft.sending = true
-    },
     sendSuccess (draft, { payload }) {
       const { hash } = payload
       draft.lastOpHash = hash
       draft.sendOperationModalVisible = true
-      draft.sending = false
-    },
-    sendFailed (draft) {
-      draft.sending = false
     },
     closeSendOperationModal (draft) {
       draft.sendOperationModalVisible = false
@@ -152,6 +152,11 @@ export default {
     },
     originateAccountFailed (draft) {
       draft.originating = false
+    },
+    setDelegationSuccess (draft, { payload }) {
+      const { hash } = payload
+      draft.lastOpHash = hash
+      draft.sendOperationModalVisible = true
     },
     logout (draft) {
       draft.accountLoaded = false
