@@ -10,20 +10,21 @@ const MnemonicVerify = ({
   inputWords, leftWords, onInputWordClick, onLeftWordClick,
 }) => {
   return (
-    <div className={styles.container}>
+    <Row type="flex" justify="center" className={styles.container}>
       <Row type="flex" className={styles.inputWordsContainer}>
-        {inputWords.map((word) => {
+        {inputWords.map((word, index) => {
           return (
             <Button size="large" className={styles.inputWordCell} key={word} onClick={() => onInputWordClick(word)}>
+              <span>
+                {`${index + 1}. `}
+              </span>
               {word}
               <Icon type="close" style={{ color: 'grey' }} />
             </Button>
           )
         })}
       </Row>
-      <br />
-      <br />
-      <Row type="flex" justify="center">
+      <Row type="flex" justify="center" style={{ width: '70%' }}>
         {leftWords.map((word) => {
           return (
             <Button size="large" className={styles.leftWordCell} key={word} onClick={() => onLeftWordClick(word)}>
@@ -32,7 +33,7 @@ const MnemonicVerify = ({
           )
         })}
       </Row>
-    </div>
+    </Row>
   )
 }
 

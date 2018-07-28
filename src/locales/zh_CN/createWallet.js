@@ -1,5 +1,6 @@
 const createWallet = {
-  'createWallet.description': '我们不保存您的私钥，请妥善保存',
+  'createWallet.passwordTip': '此密码会结合作为生产助记词的一部分，您需要助记词以及此密码解开您的钱包。如果只想通过助记词就可以恢复钱包，请不要填写这个密码。',
+  'createWallet.optionalPassword': '可选择性密码',
   'createWallet.nextStep': '下一步',
   'createWallet.prevStep': '前一步',
   'createWallet.confirm': '确认',

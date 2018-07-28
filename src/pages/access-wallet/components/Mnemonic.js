@@ -64,7 +64,7 @@ const Mnemonic = ({
             validator: isMnemonic,
           }],
         })(
-          <Input.TextArea rows={4} placeholder={formatMessage(messages.seed)} onPressEnter={handleSubmit} />
+          <Input.TextArea autoFocus rows={4} placeholder={formatMessage(messages.seed)} onPressEnter={handleSubmit} />
         )}
       </FormItem>
 

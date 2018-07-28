@@ -1,5 +1,6 @@
 const createWallet = {
-  'createWallet.description': "We dont't store your wallet, keep them safe",
+  'createWallet.passwordTip': 'This password acts as a seed to generate your keys. You will need it with Mnemonic words to unlock your wallet. Do not enter if you hope to unlock your wallet only with mnemonic words.',
+  'createWallet.optionalPassword': 'Optional Password',
   'createWallet.nextStep': 'Next Step',
   'createWallet.prevStep': 'Privious Step',
   'createWallet.confirm': 'Confirm',

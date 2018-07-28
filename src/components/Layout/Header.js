@@ -3,6 +3,7 @@ import PropTypes from 'prop-types'
 import {
   Layout, Select, Row, Col,
 } from 'antd'
+import Link from 'umi/link'
 import config from 'config'
 import logo from '../../assets/logo.png'
 import styles from './Header.less'
@@ -15,9 +16,9 @@ const Header = ({
     <Layout.Header className={styles.header}>
       <Row type="flex">
         <Col className={styles.leftWrapper} sm={12}>
-          <a>
+          <Link to="/">
             <img alt="logo" src={logo} height="45px" />
-          </a>
+          </Link>
         </Col>
         <Col className={styles.rightWrapper} sm={12}>
           <Select defaultValue={i18n} onSelect={value => changeLang(value)} className={styles.selectBox}>

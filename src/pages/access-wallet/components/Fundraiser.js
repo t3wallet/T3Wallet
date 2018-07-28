@@ -76,7 +76,7 @@ const Fundraiser = ({
             validator: isMnemonic,
           }],
         })(
-          <Input.TextArea rows={4} placeholder={formatMessage(messages.seed)} />
+          <Input.TextArea autoFocus rows={4} placeholder={formatMessage(messages.seed)} />
         )}
       </FormItem>
 

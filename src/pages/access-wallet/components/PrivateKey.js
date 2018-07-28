@@ -49,7 +49,7 @@ const PrivateKey = ({
         {getFieldDecorator('privateKey', {
           rules: [{ required: true, message: 'Please input your Private Key.' }],
         })(
-          <Input.TextArea rows={2} placeholder={formatMessage(messages.privateKey)} onPressEnter={handleSubmit} />
+          <Input.TextArea autoFocus rows={2} placeholder={formatMessage(messages.privateKey)} onPressEnter={handleSubmit} />
         )}
       </FormItem>
 

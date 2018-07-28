@@ -8,7 +8,7 @@ import {
 import {
   Card, Button, Steps, message,
 } from 'antd'
-import { MnemonicDisplay, MnemonicVerify } from './components'
+import { MnemonicDisplay, MnemonicVerify, SeedGenerationForm } from './components'
 import styles from './index.less'
 
 const messages = defineMessages({
@@ -17,9 +17,13 @@ const messages = defineMessages({
     defaultMessage: 'Create Wallet',
     desciption: 'create wallet card title',
   },
-  desciption: {
-    id: 'createWallet.description',
-    defaultMessage: "We don't store your key, keep them safe",
+  passwordTip: {
+    id: 'createWallet.passwordTip',
+    defaultMessage: 'This password acts as a seed to generate your keys. You will need it with Mnemonic words to unlock your wallet. Do not enter if you hope to unlock your wallet only with mnemonic words.',
+  },
+  optionalPassword: {
+    id: 'createWallet.optionalPassword',
+    defaultMessage: 'Optional Password',
   },
   next: {
     id: 'createWallet.nextStep',
@@ -81,6 +85,20 @@ class CreateWallet extends React.Component {
     dispatch({ type: 'createWallet/updateStep', step: curStep - 1 })
   }
 
+  _createWallet = (payload) => {
+    const { dispatch } = this.props
+    dispatch({
+      type: 'createWallet/generateMnemonic',
+      payload,
+    })
+  }
+
+  verifySeed = () => {
+    const { dispatch } = this.props
+    dispatch({
+      type: 'createWallet/verifySeed',
+    })
+  }
 
   render () {
     const {
@@ -122,9 +140,13 @@ class CreateWallet extends React.Component {
                     {...messages.title}
                   />
                 </h2>
-                <Button type="primary" icon="file-add" size="large" className={styles.button} onClick={() => this._createWallet()}>
-                  <FormattedMessage {...messages.title} />
-                </Button>
+                <h4>
+                  <FormattedMessage {...messages.optionalPassword} />
+                </h4>
+                <SeedGenerationForm onSeedGenerate={this._createWallet} />
+                <p align="center" className={styles.passwordTip}>
+                  <FormattedMessage {...messages.passwordTip} />
+                </p>
                 </div>
               )
             }
@@ -192,13 +214,6 @@ class CreateWallet extends React.Component {
         </Card>
       </Page>
     )
-  }
-
-  _createWallet = () => {
-    const { dispatch } = this.props
-    dispatch({
-      type: 'createWallet/createWallet',
-    })
   }
 }
 

@@ -5,23 +5,39 @@ export default {
   namespace: 'createWallet',
   state: {
     mnemonic: [],
+    password: '',
     curStep: 0,
     inputWords: [],
     leftWords: [],
   },
   effects: {
-    * createWallet (action, { put }) {
+    * generateMnemonic ({ payload }, { put }) {
       try {
+        const { password } = payload
         const mnemonic = yield eztz.crypto.generateMnemonic()
+        yield put({ type: 'updatePassword', password })
         yield put({ type: 'updateMnemonic', mnemonic })
         yield put({ type: 'updateLeftWords', mnemonic })
       } catch (e) {
         yield put({ type: 'updateMnemonic_failed' })
       }
     },
-
+    * verify ({ payload }, { put, select }) {
+      try {
+        const { password: verifyPassowrd } = payload
+        const { mnemonic, inputWords, password } = yield select(state => state.createWallet)
+        if (mnemonic === inputWords && verifyPassowrd === password) {
+          yield put({ type: 'verifySuccess' })
+        }
+      } catch (e) {
+        yield put({ type: 'verifyFailed' })
+      }
+    },
   },
   reducers: {
+    updatePassword (draft, { password }) {
+      draft.password = password
+    },
     updateMnemonic (draft, { mnemonic }) {
       draft.mnemonic = mnemonic.split(' ')
       draft.curStep++
@@ -42,6 +58,13 @@ export default {
     removeLeftWord (draft, { payload: word }) {
       draft.leftWords = pull(draft.leftWords, word)
       draft.inputWords = [...draft.inputWords, word]
+    },
+    verifySuccess (draft) {
+      draft.mnemonic = []
+      draft.password = ''
+      draft.curStep = 0
+      draft.inputWords = []
+      draft.leftWords = []
     },
   },
 }
