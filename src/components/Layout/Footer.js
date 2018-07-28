@@ -13,13 +13,13 @@ const Footer = () => {
         <Col sm={24} md={8}>
           <div style={{ lineHeight: 1.6 }}>
             <p>
-              Hashbook is an open-sourced Tezos Wallet web application.
+              T3Wallet is an open-sourced Tezos Wallet web application.
               You can build locally and use offline for the best security.
               Please check out our github repo and contribute.
             </p>
             <p>
               <span style={{ fontWeight: 'bold' }}>
-2018 © HashBook. All Rights Reserved.
+2018 © T3Wallet. All Rights Reserved.
               </span>
             </p>
           </div>

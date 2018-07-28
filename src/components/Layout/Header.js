@@ -4,6 +4,7 @@ import {
   Layout, Select, Row, Col,
 } from 'antd'
 import config from 'config'
+import logo from '../../assets/logo.png'
 import styles from './Header.less'
 
 const Header = ({
@@ -14,9 +15,9 @@ const Header = ({
     <Layout.Header className={styles.header}>
       <Row type="flex">
         <Col className={styles.leftWrapper} sm={12}>
-          <span className={styles.logo}>
-            Hashbook
-          </span>
+          <a>
+            <img alt="logo" src={logo} height="45px" />
+          </a>
         </Col>
         <Col className={styles.rightWrapper} sm={12}>
           <Select defaultValue={i18n} onSelect={value => changeLang(value)} className={styles.selectBox}>

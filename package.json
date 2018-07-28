@@ -7,6 +7,9 @@
     "test": "umi test",
     "precommit": "npm run lint"
   },
+  "theme": {
+    "primary-color": "#1088ae"
+  },
   "dependencies": {
     "axios": "^0.18.0",
     "bip39": "^2.5.0",

@@ -69,7 +69,7 @@ const App = ({
     <div className="body">
       <Helmet>
         <title>
-          Hashbook.io -- Your Trusted Tezos Wallet
+          T3wallet.io -- Your Trusted Tezos Wallet
         </title>
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <link rel="icon" href={logo} type="image/x-icon" />
