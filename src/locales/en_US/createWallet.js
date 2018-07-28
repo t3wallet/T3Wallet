@@ -8,8 +8,13 @@ const createWallet = {
   'createWallet.backup': 'Backup',
   'createWallet.writeDownTip': 'The best practice is to write down your Mnemonic Phrase on a paper and keep it safe. You will need it to access your wallet.',
   'createWallet.verify': 'Verify',
+  'createWallet.complete': 'Complete',
   'createWallet.saveMnemonic': 'Save Your {mnemonic}',
   'createWallet.mnemonicPhrase': 'Mnemonic Phrase',
   'createWallet.verifyMnemonic': 'Verify Your {mnemonic}',
+  'createWallet.reenterPassword': 'Re-enter your password if you set',
+  'createWallet.successMessage': 'Create Wallet Success',
+  'createWallet.accessWallet': 'Access My Tezos Wallet',
+  'createWallet.generateNew': 'Generate Another Wallet',
 }
 export default createWallet

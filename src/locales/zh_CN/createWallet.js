@@ -8,8 +8,13 @@ const createWallet = {
   'createWallet.backup': '备份',
   'createWallet.writeDownTip': '最好将你的记住词写在纸上，并妥善保存。你需要通过它来使用你的钱包。',
   'createWallet.verify': '确认',
+  'createWallet.complete': '完成',
   'createWallet.saveMnemonic': '保存你的{mnemonic}',
   'createWallet.mnemonicPhrase': '助记词',
   'createWallet.verifyMnemonic': '确认你的{mnemonic}',
+  'createWallet.reenterPassword': '如果之前创建了密码，请再次输入',
+  'createWallet.successMessage': '创建钱包成功！',
+  'createWallet.accessWallet': '开始使用我的Tezos钱包',
+  'createWallet.generateNew': '再创建一个新钱包',
 }
 export default createWallet

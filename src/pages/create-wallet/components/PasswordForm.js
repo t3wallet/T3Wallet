@@ -5,26 +5,18 @@ import {
 } from 'antd'
 import PropTypes from 'prop-types'
 import InputPassword from 'antd-input-password'
-import {
-  FormattedMessage, defineMessages,
-} from 'react-intl'
 
 const FormItem = Form.Item
 
-const messages = defineMessages({
-  createButton: {
-    id: 'tabs.createWallet',
-    defaultMessage: 'Create Wallet',
-    desciption: 'create wallet card title',
-  },
-})
-
-const SeedGenerationForm = ({
+const PasswordForm = ({
   form: {
     getFieldDecorator,
     validateFieldsAndScroll,
   },
-  onSeedGenerate,
+  onSubmit,
+  buttonText,
+  buttonIcon,
+  ...otherProps
 }) => {
   const handleSubmit = () => {
     validateFieldsAndScroll((errors, values) => {
@@ -32,7 +24,7 @@ const SeedGenerationForm = ({
         message.error('Please check you input.')
         return
       }
-      onSeedGenerate(values)
+      onSubmit(values)
     })
   }
   return (
@@ -44,19 +36,22 @@ const SeedGenerationForm = ({
       <FormItem style={{ width: '70%', alignSelf: 'center' }}>
         {getFieldDecorator('password', {
           initialValue: '',
-        })(<InputPassword autoFocus />)}
+        })(<InputPassword {...otherProps} />)}
       </FormItem>
       <br />
-      <Button type="primary" icon="file-add" size="large" style={{ width: '50%', alignSelf: 'center' }} onClick={handleSubmit}>
-        <FormattedMessage {...messages.createButton} />
+      <Button type="primary" icon={buttonIcon && buttonIcon} size="large" style={{ width: '50%', alignSelf: 'center' }} onClick={handleSubmit}>
+        {buttonText}
       </Button>
     </Form>
   )
 }
 
-SeedGenerationForm.propTypes = {
+PasswordForm.propTypes = {
   form: PropTypes.object,
-  onSeedGenerate: PropTypes.func,
+  onSubmit: PropTypes.func.isRequired,
+  buttonIcon: PropTypes.string,
+  buttonText: PropTypes.string,
+  otherProps: PropTypes.object,
 }
 
-export default Form.create()(SeedGenerationForm)
+export default Form.create()(PasswordForm)

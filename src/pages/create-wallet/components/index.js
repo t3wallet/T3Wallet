@@ -1,5 +1,5 @@
 import MnemonicDisplay from './MnemonicDisplay'
 import MnemonicVerify from './MnemonicVerify'
-import SeedGenerationForm from './SeedGenerationForm'
+import PasswordForm from './PasswordForm'
 
-export { MnemonicDisplay, MnemonicVerify, SeedGenerationForm }
+export { MnemonicDisplay, MnemonicVerify, PasswordForm }

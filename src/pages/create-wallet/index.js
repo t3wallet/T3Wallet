@@ -6,9 +6,9 @@ import {
   intlShape, injectIntl, defineMessages, FormattedMessage,
 } from 'react-intl'
 import {
-  Card, Button, Steps, message,
+  Card, Button, Steps, Icon,
 } from 'antd'
-import { MnemonicDisplay, MnemonicVerify, SeedGenerationForm } from './components'
+import { MnemonicDisplay, MnemonicVerify, PasswordForm } from './components'
 import styles from './index.less'
 
 const messages = defineMessages({
@@ -49,6 +49,10 @@ const messages = defineMessages({
     id: 'createWallet.verify',
     defaultMessage: 'Verify',
   },
+  complete: {
+    id: 'createWallet.complete',
+    defaultMessage: 'Complete',
+  },
   saveMnemonic: {
     id: 'createWallet.saveMnemonic',
     defaultMessage: 'Save your {mnemonic}',
@@ -61,6 +65,22 @@ const messages = defineMessages({
     id: 'createWallet.verifyMnemonic',
     defaultMessage: 'Verify your {mnemonic}',
   },
+  successMessage: {
+    id: 'createWallet.successMessage',
+    defaultMessage: 'Create Wallet Success!',
+  },
+  accessWallet: {
+    id: 'createWallet.accessWallet',
+    defaultMessage: 'Access My Tezos Wallet',
+  },
+  generateNew: {
+    id: 'createWallet.generateNew',
+    defaultMessage: 'Generate Another Wallet',
+  },
+  reenterPassword: {
+    id: 'createWallet.reenterPassword',
+    defaultMessage: 'Re-enter password if you set',
+  },
 })
 
 const steps = [{
@@ -72,6 +92,9 @@ const steps = [{
 }, {
   title: <FormattedMessage {...messages.verify} />,
   content: 'Verify your Mnemonic',
+}, {
+  title: <FormattedMessage {...messages.complete} />,
+  content: 'Complete',
 }]
 
 class CreateWallet extends React.Component {
@@ -90,6 +113,13 @@ class CreateWallet extends React.Component {
     dispatch({
       type: 'createWallet/generateMnemonic',
       payload,
+    })
+  }
+
+  resetState = () => {
+    const { dispatch } = this.props
+    dispatch({
+      type: 'createWallet/resetState',
     })
   }
 
@@ -143,7 +173,7 @@ class CreateWallet extends React.Component {
                 <h4>
                   <FormattedMessage {...messages.optionalPassword} />
                 </h4>
-                <SeedGenerationForm onSeedGenerate={this._createWallet} />
+                <PasswordForm autoFocus onSubmit={this._createWallet} buttonIcon="file-add" buttonText={formatMessage(messages.title)} />
                 <p align="center" className={styles.passwordTip}>
                   <FormattedMessage {...messages.passwordTip} />
                 </p>
@@ -197,14 +227,36 @@ class CreateWallet extends React.Component {
                   <MnemonicVerify {...nnemonicVerifyProps} />
                   <br />
                   <br />
-                  <Button type="primary" size="large" className={styles.button} onClick={() => message.success('Processing complete!')}>
-                    <FormattedMessage {...messages.confirm} />
-                  </Button>
+                  <PasswordForm
+                    placeholder={formatMessage(messages.reenterPassword)}
+                    buttonText={formatMessage(messages.verify)}
+                    onSubmit={this.verifySeed}
+                  />
                   <br />
                   {prevButton}
                 </div>
               )
             }
+          {
+            curStep === 3
+            && (
+              <div className={styles.container}>
+                <h2 className={styles.title} style={{ display: 'flex', alignItems: 'center' }}>
+                  <Icon type="check" style={{ color: 'green', fontSize: 40, marginRight: '10px' }} />
+                  <FormattedMessage
+                    {...messages.successMessage}
+                  />
+                </h2>
+                <Button type="primary" size="large" className={styles.button} onClick={() => console.log('hi')}>
+                  <FormattedMessage {...messages.accessWallet} />
+                </Button>
+                <Button size="large" className={styles.button} style={{ marginTop: '20px' }} onClick={() => console.log('hi')}>
+                  <FormattedMessage {...messages.generateNew} />
+                </Button>
+                <br />
+              </div>
+            )
+          }
           <br />
           <br />
           <br />

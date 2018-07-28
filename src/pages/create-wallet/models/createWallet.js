@@ -22,12 +22,14 @@ export default {
         yield put({ type: 'updateMnemonic_failed' })
       }
     },
-    * verify ({ payload }, { put, select }) {
+    * verifySeed ({ payload }, { put, select }) {
       try {
         const { password: verifyPassowrd } = payload
         const { mnemonic, inputWords, password } = yield select(state => state.createWallet)
         if (mnemonic === inputWords && verifyPassowrd === password) {
           yield put({ type: 'verifySuccess' })
+        } else {
+          yield put({ type: 'verifyFailed' })
         }
       } catch (e) {
         yield put({ type: 'verifyFailed' })
@@ -60,6 +62,9 @@ export default {
       draft.inputWords = [...draft.inputWords, word]
     },
     verifySuccess (draft) {
+      draft.curStep = 3
+    },
+    resetState (draft) {
       draft.mnemonic = []
       draft.password = ''
       draft.curStep = 0
