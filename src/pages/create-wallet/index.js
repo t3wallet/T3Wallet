@@ -8,6 +8,7 @@ import {
 import {
   Card, Button, Steps, Icon, Alert,
 } from 'antd'
+import router from 'umi/router'
 import { MnemonicDisplay, MnemonicVerify, PasswordForm } from './components'
 import styles from './index.less'
 
@@ -120,18 +121,26 @@ class CreateWallet extends React.Component {
     })
   }
 
-  resetState = () => {
+  _verifySeed = (values) => {
+    const { dispatch } = this.props
+    dispatch({
+      type: 'createWallet/verifySeed',
+      payload: values,
+    })
+  }
+
+  _resetProcess = () => {
     const { dispatch } = this.props
     dispatch({
       type: 'createWallet/resetState',
     })
   }
 
-  verifySeed = (values) => {
+  _redirectToAccessWallet = () => {
+    router.push('/access-wallet')
     const { dispatch } = this.props
     dispatch({
-      type: 'createWallet/verifySeed',
-      payload: values,
+      type: 'createWallet/resetState',
     })
   }
 
@@ -236,7 +245,7 @@ class CreateWallet extends React.Component {
                   <PasswordForm
                     placeholder={formatMessage(messages.reenterPassword)}
                     buttonText={formatMessage(messages.verify)}
-                    onSubmit={this.verifySeed}
+                    onSubmit={this._verifySeed}
                   />
                   <br />
                   {prevButton}
@@ -253,10 +262,10 @@ class CreateWallet extends React.Component {
                     {...messages.successMessage}
                   />
                 </h2>
-                <Button type="primary" size="large" className={styles.button} onClick={() => console.log('hi')}>
+                <Button type="primary" size="large" className={styles.button} onClick={() => this._redirectToAccessWallet()}>
                   <FormattedMessage {...messages.accessWallet} />
                 </Button>
-                <Button size="large" className={styles.button} style={{ marginTop: '20px' }} onClick={() => console.log('hi')}>
+                <Button size="large" className={styles.button} style={{ marginTop: '20px' }} onClick={() => this._resetProcess()}>
                   <FormattedMessage {...messages.generateNew} />
                 </Button>
                 <br />

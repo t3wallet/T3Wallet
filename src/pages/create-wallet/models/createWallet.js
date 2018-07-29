@@ -1,4 +1,4 @@
-import { pull } from 'lodash'
+import { isEqual } from 'lodash'
 import eztz from 'utils/eztz'
 
 export default {
@@ -17,7 +17,7 @@ export default {
         const { password } = payload
         const mnemonic = yield eztz.crypto.generateMnemonic()
         yield put({ type: 'updatePassword', password })
-        yield put({ type: 'updateMnemonic', mnemonic })
+        yield put({ type: 'initMnemonic', mnemonic })
         yield put({ type: 'updateLeftWords', mnemonic })
       } catch (e) {
         yield put({ type: 'updateMnemonic_failed' })
@@ -27,8 +27,7 @@ export default {
       try {
         const { password: verifyPassowrd } = payload
         const { mnemonic, inputWords, password } = yield select(state => state.createWallet)
-        console.log(verifyPassowrd, password)
-        if (mnemonic === inputWords && verifyPassowrd === password) {
+        if (isEqual(mnemonic, inputWords) && isEqual(verifyPassowrd, password)) {
           yield put({ type: 'verifySuccess' })
         } else {
           yield put({ type: 'verifyFailed' })
@@ -40,9 +39,12 @@ export default {
   },
   reducers: {
     updatePassword (draft, { password }) {
+      console.log(password)
       draft.password = password
     },
-    updateMnemonic (draft, { mnemonic }) {
+    initMnemonic (draft, { mnemonic }) {
+      draft.inputWords = []
+      draft.verifyError = ''
       draft.mnemonic = mnemonic.split(' ')
       draft.curStep++
     },
@@ -50,17 +52,19 @@ export default {
       draft.inputWords = words
     },
     updateLeftWords (draft, { mnemonic }) {
-      draft.leftWords = mnemonic.split(' ')
+      draft.leftWords = mnemonic.split(' ').sort(() => { return 0.5 - Math.random() })
     },
     updateStep (draft, { step }) {
       draft.curStep = step
     },
-    removeInputWord (draft, { payload: word }) {
-      draft.inputWords = pull(draft.inputWords, word)
+    removeInputWord (draft, { payload: index }) {
+      const word = draft.inputWords[index]
+      draft.inputWords = [...draft.inputWords.slice(0, index), ...draft.inputWords.slice(index + 1)]
       draft.leftWords = [...draft.leftWords, word]
     },
-    removeLeftWord (draft, { payload: word }) {
-      draft.leftWords = pull(draft.leftWords, word)
+    removeLeftWord (draft, { payload: index }) {
+      const word = draft.leftWords[index]
+      draft.leftWords = [...draft.leftWords.slice(0, index), ...draft.leftWords.slice(index + 1)]
       draft.inputWords = [...draft.inputWords, word]
     },
     verifySuccess (draft) {
