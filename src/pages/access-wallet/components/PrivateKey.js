@@ -1,6 +1,6 @@
 import React from 'react'
 import {
-  Input, Button, Form, message,
+  Input, Button, Form, message, Alert,
 } from 'antd'
 import {
   intlShape, injectIntl, defineMessages, FormattedMessage,
@@ -22,6 +22,10 @@ const messages = defineMessages({
   errorMessage: {
     id: 'accessWallet.errorMessage',
     defaultMessage: 'Place check your input',
+  },
+  privateKeyTip: {
+    id: 'accessWallet.privateKeyTip',
+    defaultMessage: 'Your private key should start with \'edsk\'',
   },
 })
 
@@ -52,7 +56,8 @@ const PrivateKey = ({
           <Input.TextArea autoFocus rows={2} placeholder={formatMessage(messages.privateKey)} onPressEnter={handleSubmit} />
         )}
       </FormItem>
-
+      <Alert message={formatMessage(messages.privateKeyTip)} type="info" showIcon />
+      <br />
       <Button
         type="primary"
         size="large"

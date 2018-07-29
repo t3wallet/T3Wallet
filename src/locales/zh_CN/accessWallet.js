@@ -15,6 +15,7 @@ const accessWallet = {
   // Private Key
   'accessWallet.privateKey': '私钥',
   'accessWallet.unlockWallet': '解锁您的钱包',
+  'accessWallet.privateKeyTip': '您的私钥格式应该是一个以\'edsk\'开头的字符串',
 
   // unlock error message
   'accessWallet.errorMessage': '输入信息有误，请检查您的输入信息。',

@@ -15,6 +15,7 @@ const accessWallet = {
   // Private Key
   'accessWallet.privateKey': 'Private Key',
   'accessWallet.unlockWallet': 'Unlock Your Wallet',
+  'accessWallet.privateKeyTip': 'Your private key should start with \'edsk\'',
 
   // unlock error message
   'accessWallet.errorMessage': 'Please check your input.',
