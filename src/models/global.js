@@ -1,4 +1,4 @@
-import { setNetworkProvider } from '../services/app'
+import { setNetworkProvider, getBlockHead } from '../services/app'
 
 export default {
   namespace: 'global',
@@ -8,6 +8,7 @@ export default {
     locationQuery: {},
 
     curNetworkProvider: 'https://tezrpc.me',
+    blockHead: {},
   },
   subscriptions: {
     setupHistory ({ dispatch, history }) {
@@ -24,11 +25,20 @@ export default {
   },
   effects: {
     * setNetworkProvider ({ payload }, { call, put }) {
+      yield put({ type: 'setBlockHead', payload: {} })
       yield call(setNetworkProvider, payload)
       yield put({ type: 'updateNetworkProvider' }, payload)
+      yield put({ type: 'getBlockHead' })
       yield put({ type: 'myAccount/loadAccount' })
     },
-
+    * getBlockHead (action, { call, put }) {
+      try {
+        const blockHead = yield call(getBlockHead)
+        yield put({ type: 'setBlockHead', payload: blockHead })
+      } catch (e) {
+        yield put({ type: 'connect_rp_failed' })
+      }
+    },
   },
   reducers: {
     updateState (draft, { payload }) {
@@ -45,6 +55,9 @@ export default {
     },
     updateNetworkProvider (draft, { payload: network }) {
       draft.curNetwork = network
+    },
+    setBlockHead (draft, { payload }) {
+      draft.blockHead = payload
     },
   },
 }

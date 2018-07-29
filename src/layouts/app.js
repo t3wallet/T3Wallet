@@ -12,17 +12,18 @@ import {
 } from 'components/Layout'
 import './app.less'
 
+let lastHref
+
 const { Content } = Layout
 
 const App = ({
   children, dispatch, global, loading, location,
 }) => {
   const {
-    languages, i18n, networkProviders, curNetworkProvider,
+    languages, i18n, networkProviders, curNetworkProvider, blockHead,
   } = global
   const { logo, menu } = config
   /* NProgress listener */
-  let lastHref
   const { href } = window.location
   if (lastHref !== href) {
     NProgress.start()
@@ -37,6 +38,7 @@ const App = ({
     i18n,
     networkProviders,
     curNetworkProvider,
+    blockHead,
     changeLang (lang) {
       dispatch({
         type: 'global/changeLang',

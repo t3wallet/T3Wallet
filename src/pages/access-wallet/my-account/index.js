@@ -64,7 +64,7 @@ class myAccountIndex extends React.Component {
     dispatch({
       type: 'myAccount/loadKTAccounts',
     })
-    setInterval(this.refreshAccounts, 40000)
+    setInterval(this.refreshAccounts, 30000)
   }
 
   refreshAccounts = () => {

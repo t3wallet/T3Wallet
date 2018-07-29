@@ -5,6 +5,7 @@ import PropTypes from 'prop-types'
 import { connect } from 'dva'
 import { LocaleProvider } from 'antd'
 import { IntlProvider } from 'react-intl'
+import ReactTimeout from 'react-timeout'
 import { ANT_LANGPACKAGE, LANGPACKAGE, chooseLang } from '../locales'
 import App from './app'
 
@@ -13,6 +14,11 @@ class Index extends React.Component {
   UNSAFE_componentWillMount () {
     this._initLang()
     this._init()
+  }
+
+  componentDidMount () {
+    const { setInterval } = this.props
+    setInterval(this._refreshBlock, 20000)
   }
 
   render () {
@@ -47,12 +53,20 @@ class Index extends React.Component {
       payload: locale,
     })
   }
+
+  _refreshBlock () {
+    const { dispatch } = this.props
+    dispatch({
+      type: 'global/getBlockHead',
+    })
+  }
 }
 
 Index.propTypes = {
   children: PropTypes.element.isRequired,
   i18n: PropTypes.string,
   dispatch: PropTypes.func,
+  setInterval: PropTypes.func,
 }
 
 
@@ -62,4 +76,4 @@ const mapStateToProps = (state) => {
   }
 }
 
-export default withRouter(connect(mapStateToProps)(Index))
+export default withRouter(connect(mapStateToProps)(ReactTimeout(Index)))
