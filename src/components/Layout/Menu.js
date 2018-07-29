@@ -6,7 +6,7 @@ import { FormattedMessage } from 'react-intl'
 import styles from './Menu.less'
 
 const Menus = ({
-  menu, curMenu, handleClick,
+  menu, location,
 }) => {
   const getMenus = () => {
     return menu.map((item) => {
@@ -25,9 +25,8 @@ const Menus = ({
     <Menu
       mode="horizontal"
       theme="light"
-      selectedKeys={curMenu}
+      selectedKeys={[`/${location.pathname.split('/')[1]}`]}
       className={styles.menuContainer}
-      onClick={handleClick}
     >
       {menuItems}
     </Menu>
@@ -35,9 +34,8 @@ const Menus = ({
 }
 
 Menus.propTypes = {
+  location: PropTypes.object.isRequired,
   menu: PropTypes.array.isRequired,
-  curMenu: PropTypes.array,
-  handleClick: PropTypes.func,
 }
 
 export default Menus

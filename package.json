@@ -1,4 +1,8 @@
 {
+  "name": "t3wallet",
+  "version": "0.1.0",
+  "description": "A tezos web wallet",
+  "author": "Yumeng Wang",
   "private": true,
   "scripts": {
     "start": "cross-env COMPILE_ON_DEMAND=none BABELRC=1 BROWSER=none HOST=0.0.0.0 umi dev",

@@ -3,7 +3,6 @@ import { setNetworkProvider } from '../services/app'
 export default {
   namespace: 'global',
   state: {
-    curMenu: ['create-wallet'],
     i18n: 'en',
     locationPathname: '',
     locationQuery: {},
@@ -36,10 +35,6 @@ export default {
       const { locationPathname, locationQuery } = payload
       draft.locationPathname = locationPathname
       draft.locationQuery = locationQuery
-    },
-
-    changeMenu (draft, { payload: key }) {
-      draft.curMenu = [key]
     },
 
     changeGas (draft, { payload: gas }) {

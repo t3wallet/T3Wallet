@@ -396,7 +396,7 @@ const rpc = {
       balance: utility.mutez(amount).toString(),
       spendable: (typeof spendable !== 'undefined' ? spendable : true),
       delegatable: (typeof delegatable !== 'undefined' ? delegatable : true),
-      delegate: delegate,
+      delegate: (typeof delegate != "undefined" && delegate ? delegate: undefined),
     }
     return rpc.sendOperation(keys.pkh, operation, keys)
   },
@@ -539,24 +539,22 @@ const rpc = {
   originate (keys, amount, code, init, spendable, delegatable, delegate, fee, gasLimit, storageLimit) {
     if (typeof gasLimit === 'undefined') gasLimit = '10000'
     if (typeof storageLimit === 'undefined') storageLimit = '10000'
-    let _code = utility.ml2mic(code),
-      script = {
-        code: _code,
-        storage: utility.sexp2mic(init),
-      },
-      operation = {
-        kind: 'origination',
-        fee: fee.toString(),
-        gas_limit: gasLimit,
-        storage_limit: storageLimit,
-        managerPubkey: keys.pkh,
-        balance: utility.mutez(amount).toString(),
-        spendable: (typeof spendable !== 'undefined' ? spendable : true),
-        delegatable: (typeof delegatable !== 'undefined' ? delegatable : true),
-        delegate: delegate,
-        script,
-      }
-    return rpc.sendOperation(keys.pkh, operation, keys)
+    var _code = utility.ml2mic(code), script = {
+      code: _code,
+      storage: utility.sexp2mic(init)
+    }, operation = {
+      "kind": "origination",
+      "balance": utility.mutez(amount).toString(),
+      "managerPubkey": keys.pkh,
+      "storage_limit": storageLimit,
+      "gas_limit": gasLimit,
+      "fee": fee.toString(),
+      "script": script,
+    };
+    if (typeof spendable != "undefined") operation.spendable = spendable;
+    if (typeof delegatable != "undefined") operation.delegatable = delegatable;
+    if (typeof delegate != "undefined" && delegate) operation.delegate = delegate;
+    return rpc.sendOperation(keys.pkh, operation, keys);
   },
   setDelegate (from, keys, delegate, fee, gasLimit, storageLimit) {
     if (typeof gasLimit === 'undefined') gasLimit = '10000'

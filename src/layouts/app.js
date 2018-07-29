@@ -18,7 +18,7 @@ const App = ({
   children, dispatch, global, loading, location,
 }) => {
   const {
-    languages, curMenu, i18n, networkProviders, curNetworkProvider,
+    languages, i18n, networkProviders, curNetworkProvider,
   } = global
   const { logo, menu } = config
   /* NProgress listener */
@@ -55,14 +55,6 @@ const App = ({
   const menuProps = {
     location,
     menu,
-    curMenu,
-    handleClick (e) {
-      const { key } = e
-      dispatch({
-        type: 'global/changeMenu',
-        payload: key,
-      })
-    },
   }
 
   return (

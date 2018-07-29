@@ -5,14 +5,14 @@ const tezrpc = { name: 'Tezos Betenet Network (tezrpc.me)', url: 'https://rpc.te
 const cryptonomic = { name: 'Tezos Zeronet Test Network (cryptonomic-infra.tech)', url: 'https://tezos-staging.cryptonomic-infra.tech', type: 'zeronet' }
 const menu = [
   {
-    key: 'create-wallet',
+    key: '/create-wallet',
     localeId: 'tabs.createWallet',
     icon: 'file-add',
     name: 'New Wallet',
     route: '/create-wallet',
   },
   {
-    key: 'access-wallet',
+    key: '/access-wallet',
     localeId: 'tabs.accessWallet',
     icon: 'wallet',
     name: 'Access Your Wallet',
