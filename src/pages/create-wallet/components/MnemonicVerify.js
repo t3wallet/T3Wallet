@@ -14,7 +14,7 @@ const MnemonicVerify = ({
       <Row type="flex" className={styles.inputWordsContainer}>
         {inputWords.map((word, index) => {
           return (
-            <Button size="large" className={styles.inputWordCell} key={word} onClick={() => onInputWordClick(word)}>
+            <Button size="large" className={styles.inputWordCell} key={index} onClick={() => onInputWordClick(word)}>
               <span>
                 {`${index + 1}. `}
               </span>
@@ -25,9 +25,9 @@ const MnemonicVerify = ({
         })}
       </Row>
       <Row type="flex" justify="center" style={{ width: '70%' }}>
-        {leftWords.map((word) => {
+        {leftWords.map((word, index) => {
           return (
-            <Button size="large" className={styles.leftWordCell} key={word} onClick={() => onLeftWordClick(word)}>
+            <Button size="large" className={styles.leftWordCell} key={index} onClick={() => onLeftWordClick(word)}>
               {word}
             </Button>
           )

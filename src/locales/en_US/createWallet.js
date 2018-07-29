@@ -1,5 +1,5 @@
 const createWallet = {
-  'createWallet.passwordTip': 'This password acts as a seed to generate your keys. You will need it with Mnemonic words to unlock your wallet. Do not enter if you hope to unlock your wallet only with mnemonic words.',
+  'createWallet.passwordTip': 'This password is part of your private keys. Do not enter if you hope to recover your wallet only using Mnemonic words!',
   'createWallet.optionalPassword': 'Optional Password',
   'createWallet.nextStep': 'Next Step',
   'createWallet.prevStep': 'Privious Step',
@@ -13,6 +13,7 @@ const createWallet = {
   'createWallet.mnemonicPhrase': 'Mnemonic Phrase',
   'createWallet.verifyMnemonic': 'Verify Your {mnemonic}',
   'createWallet.reenterPassword': 'Re-enter your password if you set',
+  'createWallet.verifyError': 'Mnemonic words or password not match!',
   'createWallet.successMessage': 'Create Wallet Success',
   'createWallet.accessWallet': 'Access My Tezos Wallet',
   'createWallet.generateNew': 'Generate Another Wallet',

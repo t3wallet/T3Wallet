@@ -6,7 +6,7 @@ import {
   intlShape, injectIntl, defineMessages, FormattedMessage,
 } from 'react-intl'
 import {
-  Card, Button, Steps, Icon,
+  Card, Button, Steps, Icon, Alert,
 } from 'antd'
 import { MnemonicDisplay, MnemonicVerify, PasswordForm } from './components'
 import styles from './index.less'
@@ -19,7 +19,7 @@ const messages = defineMessages({
   },
   passwordTip: {
     id: 'createWallet.passwordTip',
-    defaultMessage: 'This password acts as a seed to generate your keys. You will need it with Mnemonic words to unlock your wallet. Do not enter if you hope to unlock your wallet only with mnemonic words.',
+    defaultMessage: 'This password is part of your private keys. Do not enter if you hope to recover your wallet only using Mnemonic words!',
   },
   optionalPassword: {
     id: 'createWallet.optionalPassword',
@@ -81,6 +81,10 @@ const messages = defineMessages({
     id: 'createWallet.reenterPassword',
     defaultMessage: 'Re-enter password if you set',
   },
+  verifyError: {
+    id: 'createWallet.verifyError',
+    defaultMessage: 'Mnemonic Words or Password not match',
+  },
 })
 
 const steps = [{
@@ -123,16 +127,17 @@ class CreateWallet extends React.Component {
     })
   }
 
-  verifySeed = () => {
+  verifySeed = (values) => {
     const { dispatch } = this.props
     dispatch({
       type: 'createWallet/verifySeed',
+      payload: values,
     })
   }
 
   render () {
     const {
-      dispatch, loading, intl, curStep, mnemonic, inputWords, leftWords,
+      dispatch, loading, intl, curStep, mnemonic, inputWords, leftWords, verifyError,
     } = this.props
     const { formatMessage } = intl
 
@@ -174,9 +179,9 @@ class CreateWallet extends React.Component {
                   <FormattedMessage {...messages.optionalPassword} />
                 </h4>
                 <PasswordForm autoFocus onSubmit={this._createWallet} buttonIcon="file-add" buttonText={formatMessage(messages.title)} />
-                <p align="center" className={styles.passwordTip}>
-                  <FormattedMessage {...messages.passwordTip} />
-                </p>
+                <div className={styles.passwordTip}>
+                  <Alert message={formatMessage(messages.passwordTip)} type="warning" />
+                </div>
                 </div>
               )
             }
@@ -227,6 +232,7 @@ class CreateWallet extends React.Component {
                   <MnemonicVerify {...nnemonicVerifyProps} />
                   <br />
                   <br />
+                  {verifyError ? <Alert message={formatMessage(messages.verifyError)} type="error" /> : null}
                   <PasswordForm
                     placeholder={formatMessage(messages.reenterPassword)}
                     buttonText={formatMessage(messages.verify)}
@@ -277,6 +283,7 @@ CreateWallet.propTypes = {
   mnemonic: PropTypes.array,
   inputWords: PropTypes.array,
   leftWords: PropTypes.array,
+  verifyError: PropTypes.bool,
 }
 
 const mapStateToProps = (state) => {
@@ -286,6 +293,7 @@ const mapStateToProps = (state) => {
     mnemonic: state.createWallet.mnemonic,
     inputWords: state.createWallet.inputWords,
     leftWords: state.createWallet.leftWords,
+    verifyError: state.createWallet.verifyError,
   }
 }
 

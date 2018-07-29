@@ -1,5 +1,5 @@
 const createWallet = {
-  'createWallet.passwordTip': '此密码会结合作为生产助记词的一部分，您需要助记词以及此密码解开您的钱包。如果只想通过助记词就可以恢复钱包，请不要填写这个密码。',
+  'createWallet.passwordTip': '这个密码将会是您私钥的一部分。如果希望只通过15位助记词就可恢复钱包，请不要填写密码！',
   'createWallet.optionalPassword': '可选择性密码',
   'createWallet.nextStep': '下一步',
   'createWallet.prevStep': '前一步',
@@ -13,6 +13,7 @@ const createWallet = {
   'createWallet.mnemonicPhrase': '助记词',
   'createWallet.verifyMnemonic': '确认你的{mnemonic}',
   'createWallet.reenterPassword': '如果之前创建了密码，请再次输入',
+  'createWallet.verifyError': '助记词或密码不正确!',
   'createWallet.successMessage': '创建钱包成功！',
   'createWallet.accessWallet': '开始使用我的Tezos钱包',
   'createWallet.generateNew': '再创建一个新钱包',

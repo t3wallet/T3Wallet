@@ -9,6 +9,7 @@ export default {
     curStep: 0,
     inputWords: [],
     leftWords: [],
+    verifyError: false,
   },
   effects: {
     * generateMnemonic ({ payload }, { put }) {
@@ -26,6 +27,7 @@ export default {
       try {
         const { password: verifyPassowrd } = payload
         const { mnemonic, inputWords, password } = yield select(state => state.createWallet)
+        console.log(verifyPassowrd, password)
         if (mnemonic === inputWords && verifyPassowrd === password) {
           yield put({ type: 'verifySuccess' })
         } else {
@@ -63,6 +65,9 @@ export default {
     },
     verifySuccess (draft) {
       draft.curStep = 3
+    },
+    verifyFailed (draft) {
+      draft.verifyError = true
     },
     resetState (draft) {
       draft.mnemonic = []

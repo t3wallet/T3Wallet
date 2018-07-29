@@ -4,6 +4,7 @@ import {
   Layout, Icon, Row, Col, Tag, Tooltip,
 } from 'antd'
 import { CopyToClipboard } from 'react-copy-to-clipboard'
+import { FormattedMessage } from 'react-intl'
 import styles from './Footer.less'
 
 const Footer = () => {
@@ -13,9 +14,7 @@ const Footer = () => {
         <Col sm={24} md={8}>
           <div style={{ lineHeight: 1.6 }}>
             <p>
-              T3Wallet is an open-sourced Tezos Wallet web application.
-              You can build locally and use offline for the best security.
-              Please check out our github repo and contribute.
+              <FormattedMessage id="footer.aboutApp" defaultMessage="T3Wallet is an open-sourced Tezos Wallet web application. You can build locally and use offline for the best security. Please check out our github repo and contribution is welcome." />
             </p>
             <p>
               <span style={{ fontWeight: 'bold' }}>
@@ -26,6 +25,9 @@ const Footer = () => {
         </Col>
 
         <Col sm={24} md={8} className={styles.middleWrapper}>
+          <span style={{ fontSize: '20px' }}>
+            <FormattedMessage id="footer.followUs" defaultMessage="Follow Us" />
+          </span>
           <Icon type="github" style={{ fontSize: 40 }} />
           <Icon type="twitter" style={{ fontSize: 40 }} />
           <Icon type="wechat" style={{ fontSize: 40 }} />
@@ -35,7 +37,7 @@ const Footer = () => {
         <Col sm={24} md={8}>
           <div style={{ fontWeight: 'bold' }}>
             <div>
-              If you enjoy using our wallet, feel free to donate some tezzies to this address:
+              <FormattedMessage id="footer.donation" defaultMessage="If you enjoy using our wallet, donations are appreciated:" />
             </div>
 
             <CopyToClipboard text="tz1XMRWVwwEZSZxkKurt3gAzr8G8fKPPE7QK"
