@@ -28,10 +28,18 @@ const Footer = () => {
           <span style={{ fontSize: '20px' }}>
             <FormattedMessage id="footer.followUs" defaultMessage="Follow Us" />
           </span>
-          <Icon type="github" style={{ fontSize: 40 }} />
-          <Icon type="twitter" style={{ fontSize: 40 }} />
-          <Icon type="wechat" style={{ fontSize: 40 }} />
-          <Icon type="slack" style={{ fontSize: 40 }} />
+          <a href="https://github.com/orgs/t3wallet" style={{ color: '#fff' }} rel="noopener noreferrer" target="_blank">
+            <Icon type="github" style={{ fontSize: 40 }} />
+          </a>
+          <a href="" style={{ color: '#fff' }} rel="noopener noreferrer" target="_blank">
+            <Icon type="twitter" style={{ fontSize: 40 }} />
+          </a>
+          <a href="" style={{ color: '#fff' }} rel="noopener noreferrer" target="_blank">
+            <Icon type="wechat" style={{ fontSize: 40 }} />
+          </a>
+          <a href="https://join.slack.com/t/t3wallet/shared_invite/enQtNDA2MzQ5OTUwNzUzLWE2MTM4MGYzODU2M2Q0MDNhN2U4OGY3NTMwMjQzODFkZWI5MjM1MmE2YTI2ZjU4YWU3MTg4ZjRkYTgxNGM2ZWU" style={{ color: '#fff' }} rel="noopener noreferrer" target="_blank">
+            <Icon type="slack" style={{ fontSize: 40 }} />
+          </a>
         </Col>
 
         <Col sm={24} md={8}>
