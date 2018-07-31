@@ -1,1 +1,0 @@
-webpackJsonp([2],{CBwK:function(e,t,a){"use strict";Object.defineProperty(t,"__esModule",{value:!0});var n=a("v0vv"),u=a.n(n);t.default=function(){return u.a.createElement("div",null,u.a.createElement("p",null,"I am a 404 page, I guess you are lost :( ."))}}});
