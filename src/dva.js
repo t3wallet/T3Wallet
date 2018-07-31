@@ -7,5 +7,10 @@ export function config () {
       err.preventDefault()
       message.error(err.message)
     },
+    initialState: {
+      global: {
+        i18n: 'en',
+      },
+    },
   }
 }

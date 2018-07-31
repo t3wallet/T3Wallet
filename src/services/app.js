@@ -1,7 +1,7 @@
 import eztz from 'utils/eztz'
 
-export const setNetworkProvider = (network) => {
-  eztz.node.setProvider(network)
+export const setNetworkProvider = (networkUrl) => {
+  eztz.node.setProvider(networkUrl)
 }
 
 export const getBlockHead = async () => {

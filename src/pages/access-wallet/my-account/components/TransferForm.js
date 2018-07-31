@@ -24,13 +24,17 @@ const messages = defineMessages({
     id: 'myAccount.amountToSend',
     defaultMessage: 'Amount To Send',
   },
-  gas: {
-    id: 'myAccount.gas',
-    defaultMessage: 'Gas',
+  fee: {
+    id: 'myAccount.fee',
+    defaultMessage: 'Fee',
   },
   gasLimit: {
     id: 'myAccount.gasLimit',
     defaultMessage: 'Gas Limit',
+  },
+  gasLimitTip: {
+    id: 'myAccount.gasLimitTip',
+    defaultMessage: 'Gas Limit is the max amount of you are willing to pay for this transaction, increasing gas limit will not result a faster transaction speed.',
   },
   gasUnitExplain: {
     id: 'myAccount.gasUnitExplain',
@@ -108,20 +112,20 @@ const TransferForm = ({
         />)}
       </FormItem>
       <FormItem
-        label={formatMessage(messages.gas)}
+        label={formatMessage(messages.fee)}
         extra={(
           <FormattedMessage
             {...messages.gasUnitExplain}
             values={{
               item: (
-                <FormattedMessage {...messages.gas} />
+                <FormattedMessage {...messages.fee} />
               ),
             }}
           />
         )}
       >
-        {getFieldDecorator('gas', {
-          rules: [{ required: true, type: 'integer', message: formatMessage(messages.incorrectValue, { value: formatMessage(messages.gas) }) }],
+        {getFieldDecorator('fee', {
+          rules: [{ required: true, type: 'integer', message: formatMessage(messages.incorrectValue, { value: formatMessage(messages.fee) }) }],
           initialValue: 0,
         })(<InputNumber
           size="large"
@@ -133,14 +137,7 @@ const TransferForm = ({
       <FormItem
         label={formatMessage(messages.gasLimit)}
         extra={(
-          <FormattedMessage
-            {...messages.gasUnitExplain}
-            values={{
-              item: (
-                <FormattedMessage {...messages.gasLimit} />
-              ),
-            }}
-          />
+          <FormattedMessage {...messages.gasLimitTip} />
         )}
       >
         {getFieldDecorator('gasLimit', {

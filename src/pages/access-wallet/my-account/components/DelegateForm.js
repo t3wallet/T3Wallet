@@ -27,9 +27,9 @@ const messages = defineMessages({
     id: 'myAccount.incorrectValue',
     defaultMessage: 'Incorrect {value}',
   },
-  gas: {
-    id: 'myAccount.gas',
-    defaultMessage: 'Gas',
+  fee: {
+    id: 'myAccount.fee',
+    defaultMessage: 'Fee',
   },
   gasUnitExplain: {
     id: 'myAccount.gasUnitExplain',
@@ -93,20 +93,20 @@ const DelegateForm = ({
         })(<Input size="large" />)}
       </FormItem>
       <FormItem
-        label={formatMessage(messages.gas)}
+        label={formatMessage(messages.fee)}
         extra={(
           <FormattedMessage
             {...messages.gasUnitExplain}
             values={{
               item: (
-                <FormattedMessage {...messages.gas} />
+                <FormattedMessage {...messages.fee} />
               ),
             }}
           />
         )}
       >
-        {getFieldDecorator('gas', {
-          rules: [{ required: true, type: 'integer', message: formatMessage(messages.incorrectValue, { value: formatMessage(messages.gas) }) }],
+        {getFieldDecorator('fee', {
+          rules: [{ required: true, type: 'integer', message: formatMessage(messages.incorrectValue, { value: formatMessage(messages.fee) }) }],
           initialValue: 0,
         })(<InputNumber
           size="large"

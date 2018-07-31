@@ -12,7 +12,6 @@ import App from './app'
 class Index extends React.Component {
   // Change user's language is a sync opetration so it's safe
   UNSAFE_componentWillMount () {
-    this._initLang()
     this._init()
   }
 
@@ -39,19 +38,9 @@ class Index extends React.Component {
 
   _init () {
     const { dispatch } = this.props
-    dispatch({
-      type: 'global/setNetworkProvider',
-      payload: 'https://rpc.tezrpc.me/',
-    })
-  }
-
-  _initLang () {
-    const { dispatch } = this.props
     const locale = chooseLang(navigator.language.replace('-', '_'))
-    dispatch({
-      type: 'global/changeLang',
-      payload: locale,
-    })
+    dispatch({ type: 'global/changeLang', payload: locale })
+    dispatch({ type: 'global/setNetworkProvider', payload: 0 })
   }
 
   _refreshBlock () {

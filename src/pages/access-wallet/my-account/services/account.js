@@ -42,15 +42,15 @@ export const loadKTAccounts = async (pkh) => {
   }
 }
 
-export const sendToken = async (toAddress, fromAddress, keys, amount, gas, gasLimit, data = undefined) => {
+export const sendToken = async (toAddress, fromAddress, keys, amount, fee, gasLimit, data = undefined) => {
   try {
     let response
     if (data) {
       console.log('[called with data]')
-      response = await eztz.contract.send(toAddress, fromAddress, keys, amount, data, gas)
+      response = await eztz.contract.send(toAddress, fromAddress, keys, amount, data, fee)
     } else {
       console.log('[called without data]')
-      response = await eztz.rpc.transfer(fromAddress, keys, toAddress, amount, gas, data, gasLimit)
+      response = await eztz.rpc.transfer(fromAddress, keys, toAddress, amount, fee, data, gasLimit)
     }
     const { hash, operations } = response
     console.log(response)
@@ -74,10 +74,10 @@ export const originateAccount = async (keys) => {
   }
 }
 
-export const setDelegation = async (fromAddress, keys, toDelegation, gas) => {
+export const setDelegation = async (fromAddress, keys, toDelegation, fee) => {
   try {
-    console.log(fromAddress, keys, toDelegation, gas)
-    const response = await eztz.rpc.setDelegate(fromAddress, keys, toDelegation, gas) // { hash, operations }
+    console.log(fromAddress, keys, toDelegation, fee)
+    const response = await eztz.rpc.setDelegate(fromAddress, keys, toDelegation, fee) // { hash, operations }
     console.log('[SET DELEGATION SUCCESS]', response)
     return response
   } catch (error) {

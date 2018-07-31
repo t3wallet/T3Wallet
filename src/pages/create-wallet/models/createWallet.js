@@ -44,7 +44,7 @@ export default {
     },
     initMnemonic (draft, { mnemonic }) {
       draft.inputWords = []
-      draft.verifyError = ''
+      draft.verifyError = false
       draft.mnemonic = mnemonic.split(' ')
       draft.curStep++
     },

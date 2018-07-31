@@ -20,7 +20,7 @@ const App = ({
   children, dispatch, global, loading, location,
 }) => {
   const {
-    languages, i18n, networkProviders, curNetworkProvider, blockHead,
+    languages, i18n, networkProviders, blockHead,
   } = global
   const { logo, menu } = config
   /* NProgress listener */
@@ -37,7 +37,6 @@ const App = ({
     languages,
     i18n,
     networkProviders,
-    curNetworkProvider,
     blockHead,
     changeLang (lang) {
       dispatch({
@@ -45,12 +44,11 @@ const App = ({
         payload: lang,
       })
     },
-    setNetworkProvider (network) {
+    setNetworkProvider (index) {
       dispatch({
         type: 'global/setNetworkProvider',
-        payload: network,
+        payload: index,
       })
-      console.log('[Changed network provider]', network)
     },
   }
 

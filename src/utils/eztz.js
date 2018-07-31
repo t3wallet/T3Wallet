@@ -582,13 +582,13 @@ const rpc = {
   },
   typecheckCode (code) {
     let _code = utility.ml2mic(code)
-    return node.query('/chains/main/blocks/head/helpers/scripts/typecheck_code', { program: _code, gas: '10000' })
+    return node.query('/chains/main/blocks/head/helpers/scripts/typecheck_code', { program: _code, fee: '10000' })
   },
   packData (data, type) {
     let check = {
       data: utility.sexp2mic(data),
       type: utility.sexp2mic(type),
-      gas: '400000',
+      fee: '400000',
     }
     return node.query('/chains/main/blocks/head/helpers/scripts/pack_data', check)
   },
@@ -596,7 +596,7 @@ const rpc = {
     let check = {
       data: utility.sexp2mic(data),
       type: utility.sexp2mic(type),
-      gas: '400000',
+      fee: '400000',
     }
     return node.query('/chains/main/blocks/head/helpers/scripts/typecheck_data', check)
   },

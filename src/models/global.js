@@ -1,13 +1,15 @@
+import config from 'config'
 import { setNetworkProvider, getBlockHead } from '../services/app'
+
+const { networkProviders } = config
 
 export default {
   namespace: 'global',
   state: {
-    i18n: 'en',
+    i18n: '',
     locationPathname: '',
     locationQuery: {},
 
-    curNetworkProvider: 'https://tezrpc.me',
     blockHead: {},
   },
   subscriptions: {
@@ -24,18 +26,23 @@ export default {
     },
   },
   effects: {
-    * setNetworkProvider ({ payload }, { call, put }) {
-      yield put({ type: 'setBlockHead', payload: {} })
-      yield call(setNetworkProvider, payload)
-      yield put({ type: 'updateNetworkProvider' }, payload)
-      yield put({ type: 'getBlockHead' })
-      yield put({ type: 'myAccount/loadAccount' })
+    * setNetworkProvider ({ payload: index }, { call, put }) {
+      try {
+        const provider = networkProviders[index]
+        yield put({ type: 'setBlockHead', payload: {} })
+        yield call(setNetworkProvider, provider.url)
+        yield put({ type: 'getBlockHead' })
+      } catch (e) {
+        console.log(e)
+        throw e
+      }
     },
     * getBlockHead (action, { call, put }) {
       try {
         const blockHead = yield call(getBlockHead)
         yield put({ type: 'setBlockHead', payload: blockHead })
       } catch (e) {
+        console.log(e)
         yield put({ type: 'connect_rp_failed' })
       }
     },
@@ -47,14 +54,11 @@ export default {
       draft.locationQuery = locationQuery
     },
 
-    changeGas (draft, { payload: gas }) {
-      draft.gas = gas
+    changeFee (draft, { payload: fee }) {
+      draft.fee = fee
     },
     changeLang (draft, { payload: locale }) {
       draft.i18n = locale
-    },
-    updateNetworkProvider (draft, { payload: network }) {
-      draft.curNetwork = network
     },
     setBlockHead (draft, { payload }) {
       draft.blockHead = payload

@@ -9,10 +9,11 @@ import { FormattedMessage } from 'react-intl'
 import logo from '../../assets/logo.png'
 import styles from './Header.less'
 
+const { languages, networkProviders } = config
+
 const Header = ({
-  changeLang, setNetworkProvider, i18n, curNetworkProvider, blockHead,
+  changeLang, setNetworkProvider, i18n, blockHead,
 }) => {
-  const { languages, networkProviders } = config
   const { header } = blockHead
   return (
     <Layout.Header className={styles.header}>
@@ -39,10 +40,10 @@ const Header = ({
             })}
           </Select>
 
-          <Select defaultValue={curNetworkProvider} onSelect={value => setNetworkProvider(value)} className={styles.selectBox}>
-            {networkProviders.map((item) => {
+          <Select defaultValue={config.networkProviders[0].name} onSelect={value => setNetworkProvider(value)} className={styles.selectBox}>
+            {networkProviders.map((item, index) => {
               return (
-                <Select.Option key={item.url} value={item.url} size="large">
+                <Select.Option key={item.url} value={index} size="large">
                   {item.name}
                 </Select.Option>
               )
@@ -58,7 +59,6 @@ Header.propTypes = {
   changeLang: PropTypes.func,
   setNetworkProvider: PropTypes.func,
   i18n: PropTypes.string,
-  curNetworkProvider: PropTypes.string,
   blockHead: PropTypes.object,
 }
 

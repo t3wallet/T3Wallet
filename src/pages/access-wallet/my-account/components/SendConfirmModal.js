@@ -12,7 +12,7 @@ const messages = defineMessages({
   },
   detail: {
     id: 'myAccount.sendConfirmModalContent',
-    defaultMessage: 'Your are sending {value} xtz to this address with gas {gas} mutez: ',
+    defaultMessage: 'Your are sending {value} xtz to this address with fee price {fee} mutez: ',
   },
   confirm: {
     id: 'myAccount.confirm',
@@ -23,7 +23,7 @@ const messages = defineMessages({
 const SendConfirmModal = ({
   visible, onOk, onClose, operation, intl,
 }) => {
-  const { amountToSend, toAddress, gas } = operation
+  const { amountToSend, toAddress, fee } = operation
   const { formatMessage } = intl
   return (
     <Modal
@@ -45,8 +45,8 @@ const SendConfirmModal = ({
             value: <b>
               {amountToSend}
             </b>,
-            gas: <b>
-              {gas}
+            fee: <b>
+              {fee}
             </b>,
           }}
         />

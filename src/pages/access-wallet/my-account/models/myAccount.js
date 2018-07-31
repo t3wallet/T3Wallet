@@ -57,21 +57,21 @@ export default {
     },
     * sendToken ({ payload }, { call, put, select }) {
       const {
-        toAddress, amountToSend, gas, gasLimit, data,
+        toAddress, amountToSend, fee, gasLimit, data,
       } = payload
       try {
         const { accounts, keys, activeAccountIndex } = yield select(state => state.myAccount)
         const curAccount = accounts[activeAccountIndex]
         const { address } = curAccount
-        // console.log('/ myAddress: ', address, '/ myKeys: ', keys, '/ toAddress:', toAddress, '/ amountToSend: ', amountToSend, '/ gas', gas)
-        const response = yield call(sendToken, toAddress, address, keys, amountToSend, gas, gasLimit, data)
+        // console.log('/ myAddress: ', address, '/ myKeys: ', keys, '/ toAddress:', toAddress, '/ amountToSend: ', amountToSend, '/ fee', fee)
+        const response = yield call(sendToken, toAddress, address, keys, amountToSend, fee, gasLimit, data)
         yield put({ type: 'sendSuccess', payload: response })
         message.success('Send Operation Success!')
       } catch (error) {
         const { errors } = error
         let errorMessage = errors[0].id
         if (errorMessage === 'proto.alpha.gas_exhausted.operation') {
-          errorMessage = 'Gas quota exceeded for the operation'
+          errorMessage = 'Fee quota exceeded for the operation'
         }
         throw new Error(`Operation Failed! ${errorMessage}`)
       }
@@ -98,9 +98,9 @@ export default {
     },
     * setDelegation ({ payload }, { put, select, call }) {
       try {
-        const { fromAddress, toDelegation, gas } = payload
+        const { fromAddress, toDelegation, fee } = payload
         const { keys } = yield select(state => state.myAccount)
-        const response = yield call(setDelegation, fromAddress, keys, toDelegation, gas)
+        const response = yield call(setDelegation, fromAddress, keys, toDelegation, fee)
         yield put({ type: 'setDelegationSuccess', payload: response })
       } catch (e) {
         throw new Error('Operation Failed', e)

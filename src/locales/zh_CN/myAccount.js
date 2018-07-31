@@ -18,14 +18,15 @@ const myAccount = {
   'myAccount.delegate': '委托',
   'myAccount.fromAddress': '来自地址',
   'myAccount.toAddress': '收款地址',
-  'myAccount.gas': '燃料',
+  'myAccount.fee': '费用',
   'myAccount.gasLimit': '燃料上限',
+  'myAccount.gasLimitTip': '燃料上限是这笔交易你想付最多的燃料单位，增加这个数字并不意味着交易速度增快。',
   'myAccount.amountToSend': '转账数额',
   'myAccount.gasUnitExplain': '{item}的单位为mutez，1 mutez = 0.000001 xtz',
   'myAccount.sendButton': '确认发送',
 
   'myAccount.sendConfirmModalTitle': '交易确认',
-  'myAccount.sendConfirmModalContent': '你正在向下面的地址发送 {value} xtz, 操作大约花费{gas} mutez的燃料',
+  'myAccount.sendConfirmModalContent': '你正在向下面的地址发送 {value} xtz, 燃料价格为 {fee} mutez',
 
   'myAccount.confirm': '确定',
   'myAccount.delegateToAddress': '委托到该地址',
