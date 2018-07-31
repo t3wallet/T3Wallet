@@ -1,0 +1,1 @@
+webpackJsonp([8],{"04qB":function(e,t,u){"use strict";Object.defineProperty(t,"__esModule",{value:!0});var a=u("xM+Y"),n=u.n(a),r=u("8iLo"),o=u.n(r),c=n.a.createElement(o.a,{to:"/create-wallet"});t.default=function(){return c}},"8iLo":function(e,t,u){"use strict";Object.defineProperty(t,"__esModule",{value:!0}),t.default=void 0;var a=u("tgfu"),n=a.Redirect;t.default=n}});
