@@ -26,12 +26,16 @@ export default {
     },
   },
   effects: {
-    * setNetworkProvider ({ payload: index }, { call, put }) {
+    * setNetworkProvider ({ payload: index }, { call, put, select }) {
       try {
+        const { accounts } = yield select(state => state.account)
         const provider = networkProviders[index]
         yield put({ type: 'setBlockHead', payload: {} })
         yield call(setNetworkProvider, provider.url)
         yield put({ type: 'getBlockHead' })
+        if (accounts.length) {
+          yield put({ type: 'account/refreshAccounts' })
+        }
       } catch (e) {
         console.log(e)
         throw e

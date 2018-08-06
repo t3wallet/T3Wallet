@@ -1,6 +1,5 @@
 import React from 'react'
 import { Page } from 'components'
-import PropTypes from 'prop-types'
 import {
   intlShape, FormattedMessage, injectIntl, defineMessages,
 } from 'react-intl'
@@ -9,6 +8,7 @@ import {
   Row, Col, Tooltip, Icon, Modal,
 } from 'antd'
 import { connect } from 'dva'
+import PropTypes from 'prop-types'
 import ReactTimeout from 'react-timeout'
 
 import {
@@ -41,9 +41,9 @@ class myAccountIndex extends React.Component {
   }
 
   componentWillMount () {
-    const { myAccount } = this.props
-    const { accountLoaded } = myAccount
-    if (!accountLoaded) {
+    const { account } = this.props
+    const { accounts } = account
+    if (!accounts.length) {
       router.push('/access-wallet')
     }
   }
@@ -55,29 +55,22 @@ class myAccountIndex extends React.Component {
   componentWillUnmount () {
     const { dispatch } = this.props
     dispatch({
-      type: 'myAccount/logout',
+      type: 'account/logout',
     })
   }
 
   initAccount = () => {
     const { dispatch, setInterval } = this.props
     dispatch({
-      type: 'myAccount/loadKTAccounts',
+      type: 'account/loadKTAccounts',
     })
-    setInterval(this.refreshAccounts, 30000)
+    setInterval(this.refreshAccounts, 40000)
   }
 
   refreshAccounts = () => {
     const { dispatch } = this.props
     dispatch({
-      type: 'myAccount/refreshAccounts',
-    })
-  }
-
-  refreshAccounts = () => {
-    const { dispatch } = this.props
-    dispatch({
-      type: 'myAccount/refreshAccounts',
+      type: 'account/refreshAccounts',
     })
   }
 
@@ -89,7 +82,7 @@ class myAccountIndex extends React.Component {
       content: formatMessage(messages.originationModalContent),
       onOk () {
         dispatch({
-          type: 'myAccount/originateAccount',
+          type: 'account/originateAccount',
         })
       },
     })
@@ -98,14 +91,14 @@ class myAccountIndex extends React.Component {
   closeOriginateAccountModal = () => {
     const { dispatch } = this.props
     dispatch({
-      type: 'myAccount/closeOriginateAccountModal',
+      type: 'account/closeOriginateAccountModal',
     })
   }
 
   closeSendOperationModal = () => {
     const { dispatch } = this.props
     dispatch({
-      type: 'myAccount/closeSendOperationModal',
+      type: 'account/closeSendOperationModal',
     })
   }
 
@@ -126,7 +119,7 @@ class myAccountIndex extends React.Component {
   logout = () => {
     const { dispatch } = this.props
     dispatch({
-      type: 'myAccount/logout',
+      type: 'account/logout',
     })
     router.push('/access-wallet')
   }
@@ -134,7 +127,7 @@ class myAccountIndex extends React.Component {
   onAccountChange = (activeAccountIndex) => {
     const { dispatch } = this.props
     dispatch({
-      type: 'myAccount/changeActiveAccount',
+      type: 'account/changeActiveAccount',
       payload: { activeAccountIndex },
     })
   }
@@ -146,7 +139,7 @@ class myAccountIndex extends React.Component {
     })
     const { dispatch } = this.props
     dispatch({
-      type: 'myAccount/sendToken',
+      type: 'account/sendToken',
       payload,
     })
   }
@@ -154,17 +147,17 @@ class myAccountIndex extends React.Component {
   onSetDelegateClick = (payload) => {
     const { dispatch } = this.props
     dispatch({
-      type: 'myAccount/setDelegation',
+      type: 'account/setDelegation',
       payload,
     })
   }
 
   render () {
-    const { myAccount, loading, intl } = this.props
+    const { account, loading, intl } = this.props
     const { sendConfirmModalContent, sendConfirmModalVisible } = this.state
     const {
       accounts, activeAccountIndex, showNewAccountModal, sendOperationModalVisible, lastOpHash,
-    } = myAccount
+    } = account
     const { formatMessage } = intl
 
     return (
@@ -179,8 +172,8 @@ class myAccountIndex extends React.Component {
               activeAccountIndex={activeAccountIndex}
               onSendClick={this.openSendConfirmModal}
               onSetDelegateClick={this.onSetDelegateClick}
-              sending={loading.effects['myAccount/sendToken']}
-              delegating={loading.effects['myAccount/setDelegation']}
+              sending={loading.effects['account/sendToken']}
+              delegating={loading.effects['account/setDelegation']}
             />
           </Col>
           <Col md={9}>
@@ -218,14 +211,14 @@ class myAccountIndex extends React.Component {
 myAccountIndex.propTypes = {
   dispatch: PropTypes.func,
   loading: PropTypes.object,
-  myAccount: PropTypes.object,
+  account: PropTypes.object,
   intl: intlShape.isRequired,
   setInterval: PropTypes.func,
 }
 
 const mapStateToProps = (state) => {
   return {
-    myAccount: state.myAccount,
+    account: state.account,
     loading: state.loading,
   }
 }

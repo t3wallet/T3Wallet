@@ -2,10 +2,10 @@ import React from 'react'
 import {
   Form, Input, Button, Select, InputNumber, message,
 } from 'antd'
-import PropTypes from 'prop-types'
 import {
   intlShape, FormattedMessage, injectIntl, defineMessages,
 } from 'react-intl'
+import PropTypes from 'prop-types'
 import styles from './DelegateForm.less'
 
 const FormItem = Form.Item

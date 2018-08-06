@@ -1,13 +1,12 @@
-import { unionBy, isArray } from 'lodash'
 import { message } from 'antd'
+import { unionBy, isArray } from 'lodash'
 import {
   loadAccountInfo, loadKTAccounts, sendToken, originateAccount, setDelegation,
 } from '../services/account'
 
 export default {
-  namespace: 'myAccount',
+  namespace: 'account',
   state: {
-    accountLoaded: false,
     accounts: [],
     keys: {},
     activeAccountIndex: '',
@@ -25,7 +24,7 @@ export default {
     }) {
       try {
         let promises = []
-        const { accounts } = yield select(state => state.myAccount)
+        const { accounts } = yield select(state => state.account)
         accounts.forEach((account) => {
           const { address } = account
           promises.push(call(loadAccountInfo, address))
@@ -44,7 +43,7 @@ export default {
     },
     * loadKTAccounts (action, { call, put, select }) {
       try {
-        const { keys } = yield select(state => state.myAccount)
+        const { keys } = yield select(state => state.account)
         const originationAcconts = yield call(loadKTAccounts, keys.pkh)
         yield put({
           type: 'importOriginationAccounts',
@@ -60,7 +59,7 @@ export default {
         toAddress, amountToSend, fee, gasLimit, data,
       } = payload
       try {
-        const { accounts, keys, activeAccountIndex } = yield select(state => state.myAccount)
+        const { accounts, keys, activeAccountIndex } = yield select(state => state.account)
         const curAccount = accounts[activeAccountIndex]
         const { address } = curAccount
         // console.log('/ myAddress: ', address, '/ myKeys: ', keys, '/ toAddress:', toAddress, '/ amountToSend: ', amountToSend, '/ fee', fee)
@@ -79,7 +78,7 @@ export default {
     * originateAccount (action, { put, select, call }) {
       yield put({ type: 'originating' })
       try {
-        const { accounts, activeAccountIndex } = yield select(state => state.myAccount)
+        const { accounts, activeAccountIndex } = yield select(state => state.account)
         const curAccount = accounts[activeAccountIndex]
         const { keys } = curAccount
         const result = yield call(originateAccount, keys)
@@ -99,7 +98,7 @@ export default {
     * setDelegation ({ payload }, { put, select, call }) {
       try {
         const { fromAddress, toDelegation, fee } = payload
-        const { keys } = yield select(state => state.myAccount)
+        const { keys } = yield select(state => state.account)
         const response = yield call(setDelegation, fromAddress, keys, toDelegation, fee)
         yield put({ type: 'setDelegationSuccess', payload: response })
       } catch (e) {
@@ -110,7 +109,6 @@ export default {
   reducers: {
     setIdentity (draft, { payload: identity }) {
       const { keys } = identity
-      draft.accountLoaded = true
       draft.accounts = [identity]
       draft.activeAccountIndex = '0'
       draft.keys = keys
@@ -159,7 +157,6 @@ export default {
       draft.sendOperationModalVisible = true
     },
     logout (draft) {
-      draft.accountLoaded = false
       draft.accounts = []
       draft.activeAccountAddress = ''
     },

@@ -2,8 +2,8 @@ import React from 'react'
 import {
   Card, Tabs,
 } from 'antd'
-import PropTypes from 'prop-types'
 import { FormattedMessage } from 'react-intl'
+import PropTypes from 'prop-types'
 import TransferForm from './TransferForm'
 import DelegateForm from './DelegateForm'
 

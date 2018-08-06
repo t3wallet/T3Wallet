@@ -1,10 +1,10 @@
 /* global navigator */
 import React from 'react'
 import withRouter from 'umi/withRouter'
-import PropTypes from 'prop-types'
 import { connect } from 'dva'
 import { LocaleProvider } from 'antd'
 import { IntlProvider } from 'react-intl'
+import PropTypes from 'prop-types'
 import ReactTimeout from 'react-timeout'
 import { ANT_LANGPACKAGE, LANGPACKAGE, chooseLang } from '../locales'
 import App from './app'
@@ -17,7 +17,7 @@ class Index extends React.Component {
 
   componentDidMount () {
     const { setInterval } = this.props
-    setInterval(this._refreshBlock, 20000)
+    setInterval(this._refreshBlock, 40000)
   }
 
   render () {

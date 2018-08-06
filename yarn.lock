@@ -3208,6 +3208,19 @@ dva-core@^1.3.0:
     redux-saga "^0.16.0"
     warning "^3.0.0"
 
+dva-core@^1.3.1:
+  version "1.3.1"
+  resolved "https://registry.yarnpkg.com/dva-core/-/dva-core-1.3.1.tgz#7d833e8aae5bfc6338444942bfc35b3ec9c9d028"
+  dependencies:
+    "@babel/runtime" "7.0.0-beta.46"
+    flatten "^1.0.2"
+    global "^4.3.2"
+    invariant "^2.2.1"
+    is-plain-object "^2.0.3"
+    redux "^3.7.1"
+    redux-saga "^0.16.0"
+    warning "^3.0.0"
+
 dva-immer@^0.2.0:
   version "0.2.1"
   resolved "https://registry.yarnpkg.com/dva-immer/-/dva-immer-0.2.1.tgz#c75a9b8e407f1554267fcaeb365fcd9b89d5f5ab"
@@ -3221,7 +3234,7 @@ dva-loading@^2.0.0:
   dependencies:
     "@babel/runtime" "^7.0.0-beta.34"
 
-dva@^2.2.2, dva@^2.3.1:
+dva@^2.2.2:
   version "2.3.1"
   resolved "https://registry.yarnpkg.com/dva/-/dva-2.3.1.tgz#ce89080933f8645badf51fccd59bc34a06720b89"
   dependencies:
@@ -3230,6 +3243,24 @@ dva@^2.2.2, dva@^2.3.1:
     "@types/react-router-dom" "^4.2.7"
     "@types/react-router-redux" "^5.0.13"
     dva-core "^1.3.0"
+    global "^4.3.2"
+    history "^4.6.3"
+    invariant "^2.2.2"
+    isomorphic-fetch "^2.2.1"
+    react-redux "^5.0.5"
+    react-router-dom "^4.1.2"
+    react-router-redux "5.0.0-alpha.9"
+    redux "^3.7.2"
+
+dva@^2.3.2:
+  version "2.3.2"
+  resolved "https://registry.yarnpkg.com/dva/-/dva-2.3.2.tgz#4996b925321379197071bfe53b1b5ffe5cbeead4"
+  dependencies:
+    "@babel/runtime" "7.0.0-beta.46"
+    "@types/isomorphic-fetch" "^0.0.34"
+    "@types/react-router-dom" "^4.2.7"
+    "@types/react-router-redux" "^5.0.13"
+    dva-core "^1.3.1"
     global "^4.3.2"
     history "^4.6.3"
     invariant "^2.2.2"

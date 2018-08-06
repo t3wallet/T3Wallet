@@ -2,9 +2,9 @@ import React from 'react'
 import {
   Collapse, Row, Col, Tag,
 } from 'antd'
-import PropTypes from 'prop-types'
 import { FormattedMessage } from 'react-intl'
 import Blockies from 'react-blockies'
+import PropTypes from 'prop-types'
 import styles from './AccountCollapse.less'
 
 const { Panel } = Collapse

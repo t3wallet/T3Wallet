@@ -39,7 +39,6 @@ export default {
   },
   reducers: {
     updatePassword (draft, { password }) {
-      console.log(password)
       draft.password = password
     },
     initMnemonic (draft, { mnemonic }) {

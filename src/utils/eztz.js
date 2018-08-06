@@ -479,7 +479,6 @@ const rpc = {
         branch: head.hash,
         contents: ops,
       }
-      console.log(opOb)
       return node.query(`/chains/${head.chain_id}/blocks/${head.hash}/helpers/forge/operations`, opOb)
     })
       .then((f) => {
@@ -488,7 +487,6 @@ const rpc = {
         sopbytes = signed.sbytes
         opOb.protocol = head.protocol
         opOb.signature = signed.edsig
-
         return node.query('/chains/main/blocks/head/helpers/preapply/operations', [opOb])
       })
       .then((f) => {
@@ -509,6 +507,9 @@ const rpc = {
           hash: f,
           operations: opResponse,
         }
+      })
+      .catch((error) => {
+        console.log(error)
       })
   },
   transfer (from, keys, to, amount, fee, parameter, gasLimit, storageLimit) {

@@ -48,13 +48,13 @@ const Footer = () => {
               <FormattedMessage id="footer.donation" defaultMessage="If you enjoy using our wallet, donations are appreciated:" />
             </div>
 
-            <CopyToClipboard text="tz1XMRWVwwEZSZxkKurt3gAzr8G8fKPPE7QK"
-              onCopy={() => console.log('[copied]', 'tz1XMRWVwwEZSZxkKurt3gAzr8G8fKPPE7QK')}
+            <CopyToClipboard text="tz1LTV5GuikfVsesof2nhy3v9kCzkAQ7nmt9"
+              onCopy={() => console.log('[copied]', 'tz1LTV5GuikfVsesof2nhy3v9kCzkAQ7nmt9')}
             >
               <Tooltip title="Copied!" trigger="click">
                 <Tag color="geekblue">
                   <Icon type="copy" />
-tz1XMRWVwwEZSZxkKurt3gAzr8G8fKPPE7QK
+tz1LTV5GuikfVsesof2nhy3v9kCzkAQ7nmt9
                 </Tag>
               </Tooltip>
             </CopyToClipboard>

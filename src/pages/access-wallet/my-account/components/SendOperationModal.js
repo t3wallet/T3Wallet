@@ -49,7 +49,7 @@ const SendOperationModal = ({
         <FormattedMessage {...messages.checkOperationHash} />
       </p>
       <p>
-        <a href={`http://tzscan.io/${opHash}`} rel="noopener noreferrer" target="_blank">
+        <a href={`https://tzscan.io/${opHash}`} rel="noopener noreferrer" target="_blank">
           <Icon type="link" />
           <span>
             {opHash}

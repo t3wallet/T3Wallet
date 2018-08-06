@@ -40,7 +40,11 @@ const Header = ({
             })}
           </Select>
 
-          <Select defaultValue={config.networkProviders[0].name} onSelect={value => setNetworkProvider(value)} className={styles.selectBox}>
+          <Select
+            defaultValue={config.networkProviders[0].name}
+            onSelect={value => setNetworkProvider(value)}
+            className={styles.selectBox}
+          >
             {networkProviders.map((item, index) => {
               return (
                 <Select.Option key={item.url} value={index} size="large">

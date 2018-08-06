@@ -2,10 +2,10 @@ import React from 'react'
 import { connect } from 'dva'
 import { Card, Tabs } from 'antd'
 import { Page } from 'components'
-import PropTypes from 'prop-types'
 import {
   intlShape, injectIntl, defineMessages, FormattedMessage,
 } from 'react-intl'
+import PropTypes from 'prop-types'
 import {
   Mnemonic, Fundraiser, PrivateKey,
 } from './components'

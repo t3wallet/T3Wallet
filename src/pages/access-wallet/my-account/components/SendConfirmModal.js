@@ -51,7 +51,7 @@ const SendConfirmModal = ({
           }}
         />
       </p>
-      <a href={`http://tzscan.io/${toAddress}`} rel="noopener noreferrer" target="_blank">
+      <a href={`https://tzscan.io/${toAddress}`} rel="noopener noreferrer" target="_blank">
         <Icon type="link" />
         <span>
           {toAddress}

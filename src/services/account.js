@@ -2,7 +2,7 @@ import eztz from 'utils/eztz'
 import axios from 'axios'
 import { flatten } from 'lodash'
 
-const apiPoint = 'http://api5.tzscan.io/v2/'
+const apiPoint = 'https://api5.tzscan.io/v2/'
 
 export const loadAccountInfo = async (pkh) => {
   try {

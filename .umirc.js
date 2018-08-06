@@ -12,6 +12,5 @@ export default {
         /chart\/Container\.js$/,
       ],
     },]
-  ],
-  hashHistory: true,
+  ]
 };

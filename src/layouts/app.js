@@ -1,7 +1,6 @@
 /* global window */
 import React from 'react'
 import NProgress from 'nprogress'
-import PropTypes from 'prop-types'
 import { connect } from 'dva'
 import { Layout } from 'antd'
 import { Helmet } from 'react-helmet'
@@ -10,6 +9,7 @@ import config from 'config'
 import {
   Header, Footer, Menu,
 } from 'components/Layout'
+import PropTypes from 'prop-types'
 import './app.less'
 
 let lastHref
