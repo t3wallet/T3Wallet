@@ -39,7 +39,7 @@ const PasswordForm = ({
         })(<InputPassword {...otherProps} />)}
       </FormItem>
       <br />
-      <Button type="primary" icon={buttonIcon && buttonIcon} size="large" style={{ width: '50%', alignSelf: 'center' }} onClick={handleSubmit}>
+      <Button type="primary" icon={buttonIcon && buttonIcon} size="large" style={{ width: '50%', alignSelf: 'center', minWidth: '170px' }} onClick={handleSubmit}>
         {buttonText}
       </Button>
     </Form>

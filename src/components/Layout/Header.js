@@ -23,36 +23,40 @@ const Header = ({
             <img alt="logo" src={logo} height="45px" />
           </Link>
         </Col>
-        <Col className={styles.rightWrapper} sm={12}>
-          <Col style={{ paddingRight: '10px' }}>
-            <Icon type="bulb" style={{ color: header && header.level ? 'green' : 'red', marginRight: '5px' }} />
-            <FormattedMessage id="blockLevel" defaultMessage="Block Level: " />
-            {blockHead.header && blockHead.header.level || 'Loading...'}
-          </Col>
-
-          <Select defaultValue={i18n} onSelect={value => changeLang(value)} className={styles.selectBox}>
-            {languages.map((item) => {
-              return (
-                <Select.Option key={item.i18n} value={item.i18n} size="large">
-                  {item.label}
-                </Select.Option>
-              )
-            })}
-          </Select>
-
-          <Select
-            defaultValue={config.networkProviders[0].name}
-            onSelect={value => setNetworkProvider(value)}
-            className={styles.selectBox}
-          >
-            {networkProviders.map((item, index) => {
-              return (
-                <Select.Option key={item.url} value={index} size="large">
-                  {item.name}
-                </Select.Option>
-              )
-            })}
-          </Select>
+        <Col sm={12}>
+          <Row type="flex" justify="end">
+            <Col style={{ paddingRight: '10px' }}>
+              <Icon type="bulb" style={{ color: header && header.level ? 'green' : 'red', marginRight: '5px' }} />
+              <FormattedMessage id="blockLevel" defaultMessage="Block Level: " />
+              {blockHead.header && blockHead.header.level || 'Loading...'}
+            </Col>
+            <Col>
+              <Select defaultValue={i18n} onSelect={value => changeLang(value)} className={styles.selectBox}>
+                {languages.map((item) => {
+                  return (
+                    <Select.Option key={item.i18n} value={item.i18n} size="large">
+                      {item.label}
+                    </Select.Option>
+                  )
+                })}
+              </Select>
+            </Col>
+            <Col>
+              <Select
+                defaultValue={config.networkProviders[0].name}
+                onSelect={value => setNetworkProvider(value)}
+                className={styles.selectBox}
+              >
+                {networkProviders.map((item, index) => {
+                  return (
+                    <Select.Option key={item.url} value={index} size="large">
+                      {item.name}
+                    </Select.Option>
+                  )
+                })}
+              </Select>
+            </Col>
+          </Row>
         </Col>
       </Row>
     </Layout.Header>
