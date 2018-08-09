@@ -11,6 +11,7 @@ import {
 } from 'components/Layout'
 import PropTypes from 'prop-types'
 import './app.less'
+import favicon from '../assets/favicon.png'
 
 let lastHref
 
@@ -22,7 +23,7 @@ const App = ({
   const {
     languages, i18n, networkProviders, blockHead,
   } = global
-  const { logo, menu } = config
+  const { menu } = config
   /* NProgress listener */
   const { href } = window.location
   if (lastHref !== href) {
@@ -64,7 +65,7 @@ const App = ({
           T3wallet.io -- Your Trusted Tezos Wallet
         </title>
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <link rel="icon" href={logo} type="image/x-icon" />
+        <link rel="icon" href={favicon} type="image/png" />
       </Helmet>
       <Layout style={{ height: '100vh', overflow: 'scroll' }} id="mainContainer">
         <Header {...headerProps} />
