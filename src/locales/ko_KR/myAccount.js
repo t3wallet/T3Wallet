@@ -20,7 +20,7 @@ const myAccount = {
   'myAccount.toAddress': '입금 주소',
   'myAccount.fee': '가스',
   'myAccount.gasLimit': '가스 리밋',
-  'myAccount.gasLimitTip': 'Gas Limit is the max amount of fee you are willing to pay for this transaction, increasing gas limit will not result a faster transaction speed.',
+  'myAccount.gasLimitTip': '가스 한도는이 거래에 대해 지불 할 의사가있는 최대 금액이며, 가스 한도가 증가해도 더 빠른 거래 속도는 발생하지 않습니다.',
   'myAccount.amountToSend': '보내는 수량',
   'myAccount.gasUnitExplain': '{item}은 mutez로 표기됩니다. 1 mutez = 0.000001 xtz',
   'myAccount.sendButton': '전송 확정',
