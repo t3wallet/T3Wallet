@@ -62,7 +62,7 @@ const App = ({
     <div className="body">
       <Helmet>
         <title>
-          T3wallet.io -- Your Trusted Tezos Wallet
+          T3wallet.com -- Your Trusted Tezos Wallet
         </title>
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <link rel="icon" href={favicon} type="image/png" />

@@ -1,0 +1,8 @@
+{
+  "siteName": "T3Wallet Tezos Wallet",
+  "slogan": "신뢰할 수 있는 지갑",
+  "tabs.createWallet": "지갑 생성",
+  "tabs.accessWallet": "지갑 접속",
+  "mnemonic": "mnemonic",
+  "blockLevel": "블록 레벨: "
+}

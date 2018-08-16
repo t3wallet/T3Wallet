@@ -7,4 +7,8 @@ export default [
     i18n: 'zh_CN',
     label: '简体中文',
   },
+  {
+    i18n: 'ko_KR',
+    label: '한국어',
+  },
 ]

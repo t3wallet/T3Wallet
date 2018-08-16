@@ -5,7 +5,6 @@ import {
 } from 'antd'
 import { CopyToClipboard } from 'react-copy-to-clipboard'
 import { FormattedMessage } from 'react-intl'
-import logo from '../../assets/logo.png'
 import styles from './Footer.less'
 
 const showModal = () => {

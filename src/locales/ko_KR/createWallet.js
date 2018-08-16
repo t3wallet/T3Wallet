@@ -1,0 +1,21 @@
+const createWallet = {
+  'createWallet.passwordTip': '이 암호는 프라이빗 키의 일부입니다. Mnemonic 단어만을 사용해서 지갑을 복구할 경우 입력하지 마십시요.',
+  'createWallet.optionalPassword': '비밀번호 (선택사항)',
+  'createWallet.nextStep': '다음 단계',
+  'createWallet.prevStep': '이전 단계',
+  'createWallet.confirm': '확인',
+  'createWallet.generateMnemonic': 'Mnemonic 생성',
+  'createWallet.backup': '백업',
+  'createWallet.writeDownTip': 'Mnemonic 문구를 종이에 적어두는게 가장 좋은 방법입니다. 지갑에 접근할때 필요합니다.',
+  'createWallet.verify': '검증',
+  'createWallet.complete': '완료',
+  'createWallet.saveMnemonic': '{mnemonic} 저장',
+  'createWallet.mnemonicPhrase': 'Phrase 단어',
+  'createWallet.verifyMnemonic': '{mnemonic} 검증',
+  'createWallet.reenterPassword': '비밀번호 재확인',
+  'createWallet.verifyError': 'Mnemonic 단어 또는 암호가 일치하지 않습니다!',
+  'createWallet.successMessage': '지갑 생성 성공',
+  'createWallet.accessWallet': '지갑 접근',
+  'createWallet.generateNew': '새로운 지갑 생성',
+}
+export default createWallet
