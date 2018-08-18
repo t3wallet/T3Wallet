@@ -165,7 +165,7 @@ class myAccountIndex extends React.Component {
         <h1>
           <FormattedMessage id="myAccount.title" defaultMessage="Send Token & Delegation" />
         </h1>
-        <Row gutter={32} style={styles.container}>
+        <Row gutter={32}>
           <Col md={15}>
             <AccountOperationPanel
               accounts={accounts}
