@@ -509,6 +509,7 @@ const rpc = {
       })
       .catch((error) => {
         console.log(error)
+        throw error
       })
   },
   transfer (from, keys, to, amount, fee, parameter, gasLimit, storageLimit) {

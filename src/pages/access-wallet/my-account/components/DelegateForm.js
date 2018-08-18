@@ -66,7 +66,6 @@ const DelegateForm = ({
       <FormItem label={formatMessage(messages.fromAddress)}>
         {getFieldDecorator('fromAddress', {
           rules: [{ required: true, type: 'string', message: formatMessage(messages.incorrectValue, { value: formatMessage(messages.fromAddress) }) }],
-          initialValue: curAccount && curAccount.address && curAccount.kind === 'origination',
         })(<Select
           size="large"
           showSearch
@@ -115,7 +114,13 @@ const DelegateForm = ({
           style={{ width: '100%' }}
         />)}
       </FormItem>
-      <Button disabled={disabled} loading={delegating} type="primary" onClick={handleSubmit} className={styles.submitButton}>
+      <Button
+        disabled={disabled}
+        loading={delegating}
+        type="primary"
+        onClick={handleSubmit}
+        className={styles.submitButton}
+      >
         <FormattedMessage {...messages.confirmDelegation} />
       </Button>
 

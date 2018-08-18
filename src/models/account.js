@@ -99,7 +99,7 @@ export default {
         const response = yield call(setDelegation, fromAddress, keys, toDelegation, fee)
         yield put({ type: 'setDelegationSuccess', payload: response })
       } catch (e) {
-        throw new Error('Operation Failed', e)
+        throw new Error('Operation Failed, DO NOT reset delegator to same address, and make sure the delegator is correct')
       }
     },
   },
