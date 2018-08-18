@@ -15,7 +15,12 @@ const AccountOperationPanel = ({
     <Card style={{ width: '100%' }}>
       <Tabs defaultActiveKey="1">
         <Tabs.TabPane tab={<FormattedMessage id="myAccount.transfer" defaultMessage="Transfer" />} key="1">
-          <TransferForm onSendClick={onSendClick} sending={sending} accounts={accounts} curAccount={curAccount} />
+          <TransferForm
+            onSendClick={onSendClick}
+            sending={sending}
+            accounts={accounts}
+            curAccount={curAccount}
+          />
         </Tabs.TabPane>
         <Tabs.TabPane
           tab={<FormattedMessage id="myAccount.delegate" defaultMessage="Delegate" />}
@@ -31,7 +36,6 @@ const AccountOperationPanel = ({
           />
         </Tabs.TabPane>
       </Tabs>
-,
     </Card>
   )
 }

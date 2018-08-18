@@ -93,13 +93,6 @@ const AccountCollapse = ({ accounts, onAccountChange, activeAccountIndex }) => {
                     </span>
                   </a>
                 </Col>
-                {/* <Col>
-                  <a href={`https://tezos.id/account/${account.address}`} rel="noopener noreferrer" target="_blank">
-                    <span className={styles.explorer}>
-                    Tezos.id
-                    </span>
-                  </a>
-                </Col> */}
               </Row>
             </Row>
           </Panel>

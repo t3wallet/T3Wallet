@@ -12,7 +12,15 @@ const messages = defineMessages({
   },
   detail: {
     id: 'myAccount.sendConfirmModalContent',
-    defaultMessage: 'Your are sending {value} xtz to this address with fee price {fee} mutez: ',
+    defaultMessage: 'Your are sending {value} xtz with fee price {fee} mutez',
+  },
+  fromAddress: {
+    id: 'myAccount.fromAddress',
+    defaultMessage: 'From Address:',
+  },
+  toAddress: {
+    id: 'myAccount.toAddress',
+    defaultMessage: 'To Address:',
   },
   confirm: {
     id: 'myAccount.confirm',
@@ -21,9 +29,11 @@ const messages = defineMessages({
 })
 
 const SendConfirmModal = ({
-  visible, onOk, onClose, operation, intl,
+  visible, confirmSend, onClose, operation, intl,
 }) => {
-  const { amountToSend, toAddress, fee } = operation
+  const {
+    amountToSend, fromAddress, toAddress, fee,
+  } = operation
   const { formatMessage } = intl
   return (
     <Modal
@@ -34,7 +44,7 @@ const SendConfirmModal = ({
         </span>
             )}
       visible={visible}
-      onOk={() => { onOk(operation) }}
+      onOk={() => { confirmSend({ payload: operation }) }}
       okText={formatMessage(messages.confirm)}
       onCancel={() => { onClose() }}
       wrapClassName="vertical-center-modal"
@@ -51,19 +61,32 @@ const SendConfirmModal = ({
           }}
         />
       </p>
-      <a href={`https://tzscan.io/${toAddress}`} rel="noopener noreferrer" target="_blank">
-        <Icon type="link" />
-        <span>
-          {toAddress}
-        </span>
-      </a>
+      <FormattedMessage {...messages.fromAddress} />
+      <p>
+        <a href={`https://tzscan.io/${fromAddress}`} rel="noopener noreferrer" target="_blank">
+          <Icon type="link" />
+          <span>
+            {fromAddress}
+          </span>
+        </a>
+      </p>
+      <FormattedMessage {...messages.toAddress} />
+      <p>
+        <a href={`https://tzscan.io/${toAddress}`} rel="noopener noreferrer" target="_blank">
+          <Icon type="link" />
+          <span>
+            {toAddress}
+          </span>
+        </a>
+      </p>
+
     </Modal>
   )
 }
 
 SendConfirmModal.propTypes = {
   visible: PropTypes.bool,
-  onOk: PropTypes.func.isRequired,
+  confirmSend: PropTypes.func.isRequired,
   onClose: PropTypes.func,
   operation: PropTypes.object.isRequired,
   intl: intlShape.isRequired,

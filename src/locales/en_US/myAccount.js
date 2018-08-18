@@ -26,7 +26,7 @@ const myAccount = {
   'myAccount.sendButton': 'Confirm Transaction',
 
   'myAccount.sendConfirmModalTitle': 'Transcation Confirmation',
-  'myAccount.sendConfirmModalContent': 'Your are sending {value} xtz to this address with fee price {fee} mutez:',
+  'myAccount.sendConfirmModalContent': 'Your are sending {value} xtz with fee {fee} mutez:',
 
   'myAccount.confirm': 'Confirm',
   'myAccount.delegateToAddress': 'Delegate To Address',

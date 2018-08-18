@@ -132,15 +132,16 @@ class myAccountIndex extends React.Component {
     })
   }
 
-  onSendClick = (payload) => {
+  onSend = ({ payload }) => {
     this.setState({
       sendConfirmModalVisible: false,
       sendConfirmModalContent: {},
     })
     const { dispatch } = this.props
+    const sendOperation = payload
     dispatch({
       type: 'account/sendToken',
-      payload,
+      payload: sendOperation,
     })
   }
 
@@ -201,7 +202,12 @@ class myAccountIndex extends React.Component {
         </Row>
 
         <SendOperationModal visible={sendOperationModalVisible} opHash={lastOpHash} onClose={this.closeSendOperationModal} />
-        <SendConfirmModal visible={sendConfirmModalVisible} operation={sendConfirmModalContent} onOk={this.onSendClick} onClose={this.closeSendConfirmModal} />
+        <SendConfirmModal
+          visible={sendConfirmModalVisible}
+          operation={sendConfirmModalContent}
+          confirmSend={this.onSend}
+          onClose={this.closeSendConfirmModal}
+        />
       </Page>
     )
   }

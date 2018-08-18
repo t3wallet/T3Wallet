@@ -56,14 +56,11 @@ export default {
     },
     * sendToken ({ payload }, { call, put, select }) {
       const {
-        toAddress, amountToSend, fee, gasLimit, data,
+        fromAddress, toAddress, amountToSend, fee, gasLimit, data,
       } = payload
       try {
-        const { accounts, keys, activeAccountIndex } = yield select(state => state.account)
-        const curAccount = accounts[activeAccountIndex]
-        const { address } = curAccount
-        // console.log('/ myAddress: ', address, '/ myKeys: ', keys, '/ toAddress:', toAddress, '/ amountToSend: ', amountToSend, '/ fee', fee)
-        const response = yield call(sendToken, toAddress, address, keys, amountToSend, fee, gasLimit, data)
+        const { keys } = yield select(state => state.account)
+        const response = yield call(sendToken, toAddress, fromAddress, keys, amountToSend, fee, gasLimit, data)
         yield put({ type: 'sendSuccess', payload: response })
         message.success('Send Operation Success!')
       } catch (error) {

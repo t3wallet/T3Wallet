@@ -45,22 +45,22 @@ const watermark = {
   generic: new Uint8Array([3]),
 }
 const utility = {
-  totez: m => parseInt(m) / 1000000,
+  totez: m => parseInt(m, 10) / 1000000,
   mutez (tz) {
     let r = tz.toFixed(6) * 1000000
     if (r > 4294967296) r = r.toString()
     return r
   },
-  b58cencode (payload, prefix) {
-    const n = new Uint8Array(prefix.length + payload.length)
-    n.set(prefix)
-    n.set(payload, prefix.length)
-    return library.bs58check.encode(new Buffer(n, 'hex'))
+  b58cencode: (payload, prefixArg) => {
+    const n = new Uint8Array(prefixArg.length + payload.length)
+    n.set(prefixArg)
+    n.set(payload, prefixArg.length)
+    return library.bs58check.encode(Buffer.from(n, 'hex'))
   },
-  b58cdecode (enc, prefix) { return library.bs58check.decode(enc).slice(prefix.length) },
+  b58cdecode: (enc, prefixArg) => library.bs58check.decode(enc).slice(prefixArg.length),
   buf2hex (buffer) {
-    const byteArray = new Uint8Array(buffer),
-      hexParts = []
+    const byteArray = new Uint8Array(buffer)
+    const hexParts = []
     for (let i = 0; i < byteArray.length; i++) {
       let hex = byteArray[i].toString(16)
       let paddedHex = (`00${hex}`).slice(-2)
@@ -106,10 +106,10 @@ const utility = {
       } else if ((i === (mi.length - 1) && sopen === false) || (mi[i] === ' ' && pl === 0 && sopen === false)) {
         if (i === (mi.length - 1)) val += mi[i]
         if (val) {
-          if (val === parseInt(val).toString()) {
+          if (val === parseInt(val, 10).toString()) {
             if (!ret.prim) return { int: val }
             ret.args.push({ int: val })
-          } else if (val[0] == '0') {
+          } else if (val[0] === '0') {
             if (!ret.prim) return { bytes: val }
             ret.args.push({ bytes: val })
           } else if (ret.prim) {
@@ -172,21 +172,21 @@ const utility = {
     } else if (s.hasOwnProperty('string')) {
       ret = s.string
     } else if (s.hasOwnProperty('int')) {
-      ret = parseInt(s.int)
+      ret = parseInt(s.int, 10)
     } else {
       ret = s
     }
     return ret
   },
   ml2mic: function me (mi) {
-    let ret = [],
-      inseq = false,
-      seq = '',
-      val = '',
-      pl = 0,
-      bl = 0,
-      sopen = false,
-      escaped = false
+    const ret = []
+    let inseq = false
+    let seq = ''
+    let val = ''
+    let pl = 0
+    let bl = 0
+    let sopen = false
+    let escaped = false
     for (let i = 0; i < mi.length; i++) {
       if (val === '}' || val === ';') {
         val = ''
@@ -223,7 +223,7 @@ const utility = {
           val = ''
           continue
         }
-        ret.push(eztz.utility.ml2tzjson(val))
+        ret.push(utility.ml2tzjson(val))
         val = ''
         continue
       } else if (mi[i] === '"' && sopen) sopen = false
@@ -235,14 +235,14 @@ const utility = {
     }
     return ret
   },
-  formatMoney (n, c, d, t) {
-    var c = isNaN(c = Math.abs(c)) ? 2 : c,
-      d = d === undefined ? '.' : d,
-      t = t === undefined ? ',' : t,
-      s = n < 0 ? '-' : '',
-      i = String(parseInt(n = Math.abs(Number(n) || 0).toFixed(c))),
-      j = (j = i.length) > 3 ? j % 3 : 0
-    return s + (j ? i.substr(0, j) + t : '') + i.substr(j).replace(/(\d{3})(?=\d)/g, `$1${t}`) + (c ? d + Math.abs(n - i).toFixed(c).slice(2) : '')
+  formatMoney: (n, c, d, t) => {
+    const cc = isNaN(c = Math.abs(c)) ? 2 : c; // eslint-disable-line
+    const dd = d === undefined ? '.' : d
+    const tt = t === undefined ? ',' : t
+    const s = n < 0 ? '-' : ''
+    const i = String(parseInt(n = Math.abs(Number(n) || 0).toFixed(cc), 10))
+    const j = i.length > 3 ? i.length % 3 : 0
+    return s + (j ? i.substr(0, j) + tt : '') + i.substr(j).replace(/(\d{3})(?=\d)/g, `$1${tt}`) + (cc ? dd + Math.abs(n - i).toFixed(c).slice(2) : '')
   },
 }
 // TODO: Add p256 and secp256k1 cryptographay
@@ -251,13 +251,13 @@ const crypto = {
     const pref = sk.substr(0, 4)
     switch (pref) {
       case 'edsk':
-        if (sk.length == 98) {
+        if (sk.length === 98) {
           return {
             pk: utility.b58cencode(utility.b58cdecode(sk, prefix.edsk).slice(32), prefix.edpk),
             pkh: utility.b58cencode(library.sodium.crypto_generichash(20, utility.b58cdecode(sk, prefix.edsk).slice(32)), prefix.tz1),
             sk,
           }
-        } if (sk.length == 54) { // seed
+        } if (sk.length === 54) { // seed
           const s = utility.b58cdecode(sk, prefix.edsk2)
           const kp = library.sodium.crypto_sign_seed_keypair(s)
           return {
@@ -269,10 +269,9 @@ const crypto = {
         break
       default:
         return false
-        break
     }
   },
-  generateMnemonic: () => library.bip39.generateMnemonic(160),
+  generateMnemonic: () => library.bip39.generateMnemonic(256),
   checkAddress (a) {
     try {
       utility.b58cdecode(a, prefix.tz1)
@@ -365,7 +364,7 @@ const node = {
                 resolve(r)
               }
             } else {
-              reject('Empty response returned')
+              reject(new Error('Empty response returned'))
             }
           } else if (http.responseText) {
             reject(http.responseText)
@@ -377,13 +376,13 @@ const node = {
           if (node.debugMode) { console.log(e, o, http.responseText) }
           reject(http.statusText)
         }
-        if (t == 'POST') {
+        if (t === 'POST') {
           http.setRequestHeader('Content-Type', 'application/json')
           http.send(JSON.stringify(o))
         } else {
           http.send()
         }
-      } catch (e) { reject(e) }
+      } catch (error) { reject(error) }
     }))
   },
 }
@@ -396,7 +395,7 @@ const rpc = {
       balance: utility.mutez(amount).toString(),
       spendable: (typeof spendable !== 'undefined' ? spendable : true),
       delegatable: (typeof delegatable !== 'undefined' ? delegatable : true),
-      delegate: (typeof delegate != "undefined" && delegate ? delegate: undefined),
+      delegate: (typeof delegate !== 'undefined' && delegate ? delegate : undefined),
     }
     return rpc.sendOperation(keys.pkh, operation, keys)
   },
@@ -525,7 +524,7 @@ const rpc = {
     }
     if (typeof parameter === 'undefined') parameter = false
     if (parameter) {
-      operation.parameters = eztz.utility.sexp2mic(parameter)
+      operation.parameters = utility.sexp2mic(parameter)
     }
     return rpc.sendOperation(from, operation, keys)
   },
@@ -540,22 +539,24 @@ const rpc = {
   originate (keys, amount, code, init, spendable, delegatable, delegate, fee, gasLimit, storageLimit) {
     if (typeof gasLimit === 'undefined') gasLimit = '10000'
     if (typeof storageLimit === 'undefined') storageLimit = '10000'
-    var _code = utility.ml2mic(code), script = {
+    let _code = utility.ml2mic(code)
+    let script = {
       code: _code,
-      storage: utility.sexp2mic(init)
-    }, operation = {
-      "kind": "origination",
-      "balance": utility.mutez(amount).toString(),
-      "managerPubkey": keys.pkh,
-      "storage_limit": storageLimit,
-      "gas_limit": gasLimit,
-      "fee": fee.toString(),
-      "script": script,
-    };
-    if (typeof spendable != "undefined") operation.spendable = spendable;
-    if (typeof delegatable != "undefined") operation.delegatable = delegatable;
-    if (typeof delegate != "undefined" && delegate) operation.delegate = delegate;
-    return rpc.sendOperation(keys.pkh, operation, keys);
+      storage: utility.sexp2mic(init),
+    }
+    let operation = {
+      kind: 'origination',
+      balance: utility.mutez(amount).toString(),
+      managerPubkey: keys.pkh,
+      storage_limit: storageLimit,
+      gas_limit: gasLimit,
+      fee: fee.toString(),
+      script,
+    }
+    if (typeof spendable !== 'undefined') operation.spendable = spendable
+    if (typeof delegatable !== 'undefined') operation.delegatable = delegatable
+    if (typeof delegate !== 'undefined' && delegate) operation.delegate = delegate
+    return rpc.sendOperation(keys.pkh, operation, keys)
   },
   setDelegate (from, keys, delegate, fee, gasLimit, storageLimit) {
     if (typeof gasLimit === 'undefined') gasLimit = '10000'
@@ -613,9 +614,9 @@ const rpc = {
 }
 const contract = {
   hash (operationHash, ind) {
-    let ob = utility.b58cdecode(operationHash, prefix.o),
-      tt = [],
-      i = 0
+    let ob = utility.b58cdecode(operationHash, prefix.o)
+    let tt = []
+    let i = 0
     for (; i < ob.length; i++) {
       tt.push(ob[i])
     }
@@ -632,32 +633,24 @@ const contract = {
     if (typeof storageLimit === 'undefined') storageLimit = '10000'
     return rpc.originate(keys, amount, code, init, spendable, delegatable, delegate, fee, gasLimit, storageLimit)
   },
-  send (contract, from, keys, amount, parameter, fee, gasLimit, storageLimit) {
-    if (typeof gasLimit === 'undefined') gasLimit = '2000'
-    if (typeof storageLimit === 'undefined') storageLimit = '0'
-    return rpc.transfer(from, keys, contract, amount, fee, parameter, gasLimit, storageLimit)
-  },
-  balance (contract) {
-    return rpc.getBalance(contract)
-  },
-  storage (contract) {
+  storage (contractArg) {
     return new Promise(((resolve, reject) => {
-      eztz.node.query(`/chains/main/blocks/head/context/contracts/${contract
-      }/storage`).then((r) => {
-        resolve(r)
-      }).catch((e) => {
-        reject(e)
-      })
+      node.query(`/chains/main/blocks/head/context/contracts/${contractArg}/storage`)
+        .then((r) => {
+          resolve(r)
+        }).catch((e) => {
+          reject(e)
+        })
     }))
   },
-  load (contract) {
-    return eztz.node.query(`/chains/main/blocks/head/context/contracts/${contract}`)
+  load (contractArg) {
+    return node.query(`/chains/main/blocks/head/context/contracts/${contractArg}`)
   },
   watch (cc, timeout, cb) {
     let storage = []
     const ct = function () {
       contract.storage(cc).then((r) => {
-        if (JSON.stringify(storage) != JSON.stringify(r)) {
+        if (JSON.stringify(storage) !== JSON.stringify(r)) {
           storage = r
           cb(storage)
         }

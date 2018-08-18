@@ -26,7 +26,7 @@ const myAccount = {
   'myAccount.sendButton': '确认发送',
 
   'myAccount.sendConfirmModalTitle': '交易确认',
-  'myAccount.sendConfirmModalContent': '你正在向下面的地址发送 {value} xtz, 燃料价格为 {fee} mutez',
+  'myAccount.sendConfirmModalContent': '您正在发送 {value} xtz, 燃料价格为 {fee} mutez',
 
   'myAccount.confirm': '确定',
   'myAccount.delegateToAddress': '委托到该地址',
