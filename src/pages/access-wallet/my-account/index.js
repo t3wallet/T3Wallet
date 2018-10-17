@@ -17,6 +17,10 @@ import {
 import styles from './index.less'
 
 const messages = defineMessages({
+  title: {
+    id: 'myAccount.title',
+    defaultMessage: 'Send Token & Delegation',
+  },
   toolTip: {
     id: 'myAccount.originateAccountToolTip',
     defaultMessage: 'You need to create an delegatable which address starts with "KT" to delegate your baking right to a delegation service',
@@ -157,14 +161,14 @@ class myAccountIndex extends React.Component {
     const { account, loading, intl } = this.props
     const { sendConfirmModalContent, sendConfirmModalVisible } = this.state
     const {
-      accounts, activeAccountIndex, showNewAccountModal, sendOperationModalVisible, lastOpHash,
+      accounts, activeAccountIndex, showNewAccountModal, sendOperationModalVisible, lastOpHash, opType,
     } = account
     const { formatMessage } = intl
 
     return (
       <Page loading={loading.global} className={styles.container}>
         <h1>
-          <FormattedMessage id="myAccount.title" defaultMessage="Send Token & Delegation" />
+          <FormattedMessage {...messages.title} />
         </h1>
         <Row gutter={32}>
           <Col md={15}>
@@ -201,7 +205,12 @@ class myAccountIndex extends React.Component {
           </Col>
         </Row>
 
-        <SendOperationModal visible={sendOperationModalVisible} opHash={lastOpHash} onClose={this.closeSendOperationModal} />
+        <SendOperationModal
+          visible={sendOperationModalVisible}
+          opHash={lastOpHash}
+          opType={opType}
+          onClose={this.closeSendOperationModal}
+        />
         <SendConfirmModal
           visible={sendConfirmModalVisible}
           operation={sendConfirmModalContent}

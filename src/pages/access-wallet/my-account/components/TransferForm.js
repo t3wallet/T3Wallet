@@ -105,7 +105,6 @@ const TransferForm = ({
           rules: [{ required: true, type: 'number', message: formatMessage(messages.incorrectValue, { value: formatMessage(messages.amountToSend) }) }],
         })(<InputNumber size="large"
           min={0}
-          max={curAccount && curAccount.balance && curAccount.balance || 0}
           step={0.1}
           precision={6}
           style={{ width: '100%' }}

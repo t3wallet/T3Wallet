@@ -10,12 +10,13 @@ export default {
     accounts: [],
     keys: {},
     activeAccountIndex: '',
+
     sendOperationModalVisible: false,
     lastOpHash: '',
+    opType: '',
+
     delegating: false,
-
     delegates: [],
-
     originating: false,
   },
   effects: {
@@ -98,8 +99,13 @@ export default {
         const { keys } = yield select(state => state.account)
         const response = yield call(setDelegation, fromAddress, keys, toDelegation, fee)
         yield put({ type: 'setDelegationSuccess', payload: response })
-      } catch (e) {
-        throw new Error('Operation Failed, DO NOT reset delegator to same address, and make sure the delegator is correct')
+      } catch (error) {
+        const { errors } = error
+        let errorMessage = errors[0].id
+        if (errorMessage === 'proto.alpha.gas_exhausted.operation') {
+          errorMessage = 'Fee quota exceeded for the operation'
+        }
+        throw new Error(`Operation Failed! ${errorMessage}`)
       }
     },
   },
@@ -135,22 +141,26 @@ export default {
     },
     closeSendOperationModal (draft) {
       draft.sendOperationModalVisible = false
+      draft.opType = ''
+      draft.lastOpHash = ''
     },
     originating (draft) {
       draft.originating = true
     },
+    originateAccountFailed (draft) {
+      draft.originating = false
+    },
     originateAccountSuccess (draft, { payload }) {
       const { hash, address } = payload
       draft.lastOpHash = hash
+      draft.opType = 'origination'
       draft.sendOperationModalVisible = true
       draft.accounts.push({ type: 'KT', kind: 'origination', address })
-    },
-    originateAccountFailed (draft) {
-      draft.originating = false
     },
     setDelegationSuccess (draft, { payload }) {
       const { hash } = payload
       draft.lastOpHash = hash
+      draft.opType = 'delegation'
       draft.sendOperationModalVisible = true
     },
     logout (draft) {
