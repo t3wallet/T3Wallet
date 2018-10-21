@@ -44,7 +44,7 @@ class myAccountIndex extends React.Component {
     })
   }
 
-  componentWillMount () {
+  UNSAFE_componentWillMount () {
     const { account } = this.props
     const { accounts } = account
     if (!accounts.length) {

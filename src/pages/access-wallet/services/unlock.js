@@ -1,6 +1,6 @@
 import eztz from 'utils/eztz'
 
-const generateIdentity = (keys) => {
+export const generateIdentity = (keys) => {
   const { pkh } = keys
   let kind
   const prefix = (pkh.slice(0, 2))

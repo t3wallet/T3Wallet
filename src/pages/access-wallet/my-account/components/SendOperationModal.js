@@ -68,6 +68,7 @@ SendOperationModal.propTypes = {
   opHash: PropTypes.string,
   intl: intlShape.isRequired,
   onClose: PropTypes.func,
+  opType: PropTypes.string,
 }
 
 
