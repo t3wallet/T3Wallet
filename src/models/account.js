@@ -104,10 +104,8 @@ export default {
         message.success('Send Operation Success!')
       } catch (e) {
         console.log(e)
-
         yield put({ type: 'toggleLedgerSignModal', payload: { isShow: false } })
         const { errors } = e
-
         let errorMessage = ''
         if (errors && errors[0] && errors[0].id) {
           errorMessage = errors[0].id
@@ -123,22 +121,37 @@ export default {
     },
     * originateAccount (action, { put, select, call }) {
       yield put({ type: 'originating' })
+      let result
       try {
-        const { accounts, activeAccountIndex } = yield select(
-          state => state.account
-        )
-        const curAccount = accounts[activeAccountIndex]
-        const { keys } = curAccount
-        const result = yield call(originateAccount, keys)
+        const { keys, walletType, HDPath } = yield select(state => state.account)
+        if (walletType === 'ledger') {
+          const { opbytes, opOb } = yield call(genUnsignedTransaction, 'origination', { keys })
+          yield put({ type: 'toggleLedgerSignModal', payload: { isShow: true } })
+          const { signature } = yield call(signOperation, HDPath, `03${opbytes}`)
+          yield put({ type: 'toggleLedgerSignModal', payload: { isShow: false } })
+          result = yield call(injectTransaction, opbytes, opOb, signature)
+          if (result.error) {
+            throw new Error('Origination Failed')
+          }
+        } else {
+          result = yield call(originateAccount, keys)
+        }
         // const result = { hash: 'ThebEstteZoswEbwalletSofaR', address: 'KT1111111111', operations: [] }
         yield put({ type: 'originateAccountSuccess', payload: result })
         message.success('Operation Success!')
-      } catch (error) {
-        const { errors } = error
-        let errorMessage = errors[0].id
-        console.log(errorMessage)
-        if (errorMessage === 'proto.alpha.contract.balance_too_low') {
-          errorMessage = 'Balance too low. 0.257xtz is needed to generate an delegatable account.'
+      } catch (e) {
+        yield put({ type: 'toggleLedgerSignModal', payload: { isShow: false } })
+        const { errors } = e
+        let errorMessage = ''
+        if (errors && errors[0] && errors[0].id) {
+          errorMessage = errors[0].id
+          console.log(errorMessage)
+          if (errorMessage === 'proto.alpha.contract.balance_too_low') {
+            errorMessage = 'Balance too low. 0.257xtz is needed to generate an delegatable account.'
+          }
+        }
+        if (errorMessage === '') {
+          throw e
         }
         throw new Error(`Operation Failed! ${errorMessage}`)
       }

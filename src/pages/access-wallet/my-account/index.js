@@ -5,7 +5,7 @@ import {
 } from 'react-intl'
 import router from 'umi/router'
 import {
-  Row, Col, Tooltip, Icon, Modal,
+  Row, Col, Tooltip, Icon, Modal, Spin,
 } from 'antd'
 import { connect } from 'dva'
 import PropTypes from 'prop-types'
@@ -27,7 +27,12 @@ const messages = defineMessages({
   },
   toolTip: {
     id: 'myAccount.originateAccountToolTip',
-    defaultMessage: 'You need to create an delegatable which address starts with "KT" to delegate your baking right to a delegation service',
+    defaultMessage:
+      'You need to create an delegatable which address starts with "KT" to delegate your baking right to a delegation service',
+  },
+  originateAccount: {
+    id: 'myAccount.originateAccount',
+    defaultMessage: '+ New Delegatable Account',
   },
   originationModalTitle: {
     id: 'myAccount.originateModalTitle',
@@ -35,7 +40,8 @@ const messages = defineMessages({
   },
   originationModalContent: {
     id: 'myAccount.originateModalContent',
-    defaultMessage: 'This operation need to spend ~0.25ꜩ. If you need to access delegation option and delegate your tokens, this step is necessary.',
+    defaultMessage:
+      'This operation need to spend ~0.25ꜩ. If you need to access delegation option and delegate your tokens, this step is necessary.',
   },
 })
 
@@ -206,61 +212,33 @@ class myAccountIndex extends React.Component {
               activeAccountIndex={activeAccountIndex}
               showNewAccountModal={showNewAccountModal}
             />
-            <Row
-              type="flex"
-              align="space-between"
-              className={styles.buttonGroup}
-            >
+            <Row type="flex" align="space-between" className={styles.buttonGroup}>
               <div>
-                <a
-                  onClick={() => {
-                    this.confirmOriginateAcountModal()
-                  }}
+                <Spin spinning={loading.effects['account/originateAccount'] === true} />
+                <a onClick={() => {
+                  this.confirmOriginateAcountModal()
+                }}
                 >
-                  <FormattedMessage
-                    id="myAccount.originateAccount"
-                    defaultMessage="+ New Delegatable Account"
-                  />
+                  <FormattedMessage {...messages.originateAccount} />
                 </a>
-                <Tooltip
-                  placement="topLeft"
-                  title={formatMessage(messages.toolTip)}
-                  className={styles.toolTip}
-                >
+                <Tooltip placement="topLeft" title={formatMessage(messages.toolTip)} className={styles.toolTip}>
                   <Icon type="question-circle-o" />
                 </Tooltip>
               </div>
 
-              <a
-                onClick={() => {
-                  this.logout()
-                }}
+              <a onClick={() => {
+                this.logout()
+              }}
               >
-                <FormattedMessage
-                  id="myAccount.logout"
-                  defaultMessage="Log out"
-                />
+                <FormattedMessage id="myAccount.logout" defaultMessage="Log out" />
               </a>
             </Row>
           </Col>
         </Row>
 
-        <SendOperationModal
-          visible={sendOperationModalVisible}
-          opHash={lastOpHash}
-          opType={opType}
-          onClose={this.closeSendOperationModal}
-        />
-        <SendConfirmModal
-          visible={sendConfirmModalVisible}
-          operation={sendConfirmModalContent}
-          confirmSend={this.onSend}
-          onClose={this.closeSendConfirmModal}
-        />
-        <LedgerSignModal
-          visible={ledgerSignModalVisible}
-          onCancel={this.closeLedgerSignModal}
-        />
+        <SendOperationModal visible={sendOperationModalVisible} opHash={lastOpHash} opType={opType} onClose={this.closeSendOperationModal} />
+        <SendConfirmModal visible={sendConfirmModalVisible} operation={sendConfirmModalContent} confirmSend={this.onSend} onClose={this.closeSendConfirmModal} />
+        <LedgerSignModal visible={ledgerSignModalVisible} onCancel={this.closeLedgerSignModal} />
       </Page>
     )
   }

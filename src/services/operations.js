@@ -51,7 +51,7 @@ export const loadKTAccounts = async (pkh) => {
  *    if kind ===  'delegation'
  *          {fromAddress, keys, toDelegation, fee}
  *    if kind === 'origination'
- *          {address}
+ *          { keys }
  * ]
  * @param {*} keys
  * @param {*} amount
@@ -74,6 +74,17 @@ export const genUnsignedTransaction = async (kind, payload) => {
       } else {
         res = await eztz.rpc.transfer(fromAddress, keys, toAddress, amount, fee, data, gasLimit)
       }
+      if (!res.opbytes || !res.opOb) throw new Error('Operation Failed')
+      return res // { opbytes, opOb }
+    } catch (err) {
+      throw err
+    }
+  } else if (kind === 'origination') {
+    const { keys: ks } = payload
+    let keys = {}
+    typeof ks.sk !== 'undefined' ? (keys = { ...ks, sk: undefined }) : keys = ks
+    try {
+      res = await eztz.rpc.account(keys, 0, true, true, undefined, 0)
       if (!res.opbytes || !res.opOb) throw new Error('Operation Failed')
       return res // { opbytes, opOb }
     } catch (err) {
