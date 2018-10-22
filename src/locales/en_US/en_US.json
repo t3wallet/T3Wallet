@@ -4,5 +4,7 @@
   "tabs.createWallet": "Create Wallet",
   "tabs.accessWallet": "Access Wallet",
   "mnemonic": "mnemonic",
-  "blockLevel": "Block Level: "
+  "blockLevel": "Block Level: ",
+  "confirm": "Confirm",
+  "cancel": "Cancel"
 }

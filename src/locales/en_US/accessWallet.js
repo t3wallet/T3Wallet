@@ -11,8 +11,7 @@ const accessWallet = {
   'accessWallet.fundraiserPassword': 'Fundraiser Password',
   'accessWallet.fundraiserAddress': 'Fundraiser Address',
   'accessWallet.fundraiserCode': 'Activation Code',
-  'accessWallet.codeWarning':
-    'DO NOT enter activation code if you have already activated your wallet!',
+  'accessWallet.codeWarning': 'DO NOT enter activation code if you have already activated your wallet!',
   // Private Key
   'accessWallet.privateKey': 'Private Key',
   'accessWallet.privateKeyTip': "Your private key should start with 'edsk'",
@@ -25,8 +24,6 @@ const accessWallet = {
 
   // common
   'accessWallet.unlockWallet': 'Unlock Your Wallet',
-  'accessWallet.confirm': 'Confirm',
-  'accessWallet.cancel': 'Cancel',
 
   // unlock error message
   'accessWallet.errorMessage': 'Please check your input.',

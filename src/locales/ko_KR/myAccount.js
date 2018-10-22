@@ -25,6 +25,8 @@ const myAccount = {
   'myAccount.gasUnitExplain': '{item}은 mutez로 표기됩니다. 1 mutez = 0.000001 xtz',
   'myAccount.sendButton': '전송 확정',
 
+  'myAccount.signOnLedger': 'Please sign Transaction on Ledger.',
+
   'myAccount.sendConfirmModalTitle': '전송 확인',
   'myAccount.sendConfirmModalContent': '이 주소로 {value} xtz과 가스 {fee} mutez를 전송중입니다:',
 

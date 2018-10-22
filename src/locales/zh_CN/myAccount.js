@@ -25,6 +25,8 @@ const myAccount = {
   'myAccount.gasUnitExplain': '{item}的单位为mutez，1 mutez = 0.000001 xtz',
   'myAccount.sendButton': '确认发送',
 
+  'myAccount.signOnLedger': '请在您的Ledger上签名交易.',
+
   'myAccount.sendConfirmModalTitle': '交易确认',
   'myAccount.sendConfirmModalContent': '您正在发送 {value} xtz, 燃料价格为 {fee} mutez',
 

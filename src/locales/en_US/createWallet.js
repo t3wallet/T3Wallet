@@ -3,7 +3,6 @@ const createWallet = {
   'createWallet.optionalPassword': 'Optional Password',
   'createWallet.nextStep': 'Next Step',
   'createWallet.prevStep': 'Privious Step',
-  'createWallet.confirm': 'Confirm',
   'createWallet.generateMnemonic': 'Generate Mnemonic',
   'createWallet.backup': 'Backup',
   'createWallet.writeDownTip': 'The best practice is to write down your Mnemonic Phrase on a paper and keep it safe. You will need it to access your wallet.',

@@ -25,6 +25,8 @@ const myAccount = {
   'myAccount.gasUnitExplain': '{item} is based on mutez，1 mutez = 0.000001 xtz',
   'myAccount.sendButton': 'Confirm Transaction',
 
+  'myAccount.signOnLedger': 'Please sign Transaction on Ledger.',
+
   'myAccount.sendConfirmModalTitle': 'Transcation Confirmation',
   'myAccount.sendConfirmModalContent': 'Your are sending {value} xtz with fee {fee} mutez:',
 

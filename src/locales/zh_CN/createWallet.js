@@ -3,7 +3,6 @@ const createWallet = {
   'createWallet.optionalPassword': '可选择性密码',
   'createWallet.nextStep': '下一步',
   'createWallet.prevStep': '前一步',
-  'createWallet.confirm': '确认',
   'createWallet.generateMnemonic': '生产助记词',
   'createWallet.backup': '备份',
   'createWallet.writeDownTip': '最好将你的记住词写在纸上，并妥善保存。你需要通过它来使用你的钱包。',

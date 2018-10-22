@@ -19,6 +19,7 @@ const genAddress = async (publicKey) => {
     throw e
   }
 }
+
 export const getAddress = async (path) => {
   try {
     const transport = await Transport.create()
@@ -35,7 +36,7 @@ export const signOperation = async (path, opBytes) => {
   try {
     const transport = await Transport.create()
     const xtz = new App(transport)
-    const result = await xtz.signOperation(path, `03${opBytes}`)
+    const result = await xtz.signOperation(path, opBytes)
     return result.signature
   } catch (err) {
     throw err
@@ -53,20 +54,14 @@ export const getVersion = async () => {
   }
 }
 
-export const ledgerSignTransaction = (toAddress, fromAddress, keys, amount, fee, gasLimit, data = undefined) => {
-  let response
-  if (data) {
-    console.log('[called with data]')
-    response = eztz.contract.send(toAddress, fromAddress, keys, amount, data, fee)
-  } else {
-    console.log('[called without data]')
-    response = eztz.rpc.transfer(fromAddress, keys, toAddress, amount, fee, data, gasLimit)
+export const signTransaction = async (opbytes, opOb, HDPath) => {
+  try {
+    const signature = await signOperation(HDPath, `03${opbytes}`)
+    opOb.signature = await eztz.utility.b58cencode(eztz.utility.hex2buf(signature), eztz.prefix.edsig)
+    const res = await eztz.rpc.inject(opOb, opbytes + signature)
+    const { hash, operations } = res
+    return { hash, operations }
+  } catch (err) {
+    throw err
   }
-  response.then((r) => {
-    console.log(r)
-    return r
-  })
-    .catch((e) => {
-      console.log(e)
-    })
 }

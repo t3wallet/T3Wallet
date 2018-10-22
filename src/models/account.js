@@ -6,13 +6,16 @@ import {
   sendToken,
   originateAccount,
   setDelegation,
+  genUnsignedTransaction,
 } from '../services/operations'
+import { signTransaction } from '../services/ledger'
 
 export default {
   namespace: 'account',
   state: {
     walletType: '',
     HDPath: "44'/1729'/0'/0'",
+    ledgerSignModalVisible: false,
 
     accounts: [],
     keys: {},
@@ -66,30 +69,30 @@ export default {
     },
     * sendToken ({ payload }, { call, put, select }) {
       const {
-        fromAddress,
-        toAddress,
-        amountToSend,
-        fee,
-        gasLimit,
-        data,
+        fromAddress, toAddress, amountToSend, fee, gasLimit, data,
       } = payload
       try {
-        const { keys: ks, walletType, HDPath } = yield select(state => state.account)
-        let keys = {}
-        walletType === 'ledger' ? keys = { ...ks, sk: undefined } : keys = ks
-        const response = yield call(
-          sendToken,
-          toAddress,
-          fromAddress,
-          keys,
-          amountToSend,
-          fee,
-          gasLimit,
-          data,
-          walletType,
-          HDPath
-        )
-        yield put({ type: 'sendSuccess', payload: response })
+        let res
+        const { keys, walletType, HDPath } = yield select(state => state.account)
+        if (walletType === 'ledger') {
+          const { opbytes, opOb } = yield call(genUnsignedTransaction, 'transaction', { ...payload, keys })
+          yield put({ type: 'toggleLedgerSignModal', payload: { isShow: true } })
+          res = yield call(signTransaction, opbytes, opOb, HDPath)
+        } else {
+          res = yield call(
+            sendToken,
+            toAddress,
+            fromAddress,
+            keys,
+            amountToSend,
+            fee,
+            gasLimit,
+            data,
+            walletType,
+            HDPath
+          )
+        }
+        yield put({ type: 'sendSuccess', payload: res })
         message.success('Send Operation Success!')
       } catch (error) {
         const { errors } = error
@@ -173,9 +176,14 @@ export default {
       const { activeAccountIndex } = payload
       draft.activeAccountIndex = activeAccountIndex
     },
+    toggleLedgerSignModal (draft, { payload }) {
+      const { isShow } = payload
+      draft.ledgerSignModalVisible = isShow
+    },
     sendSuccess (draft, { payload }) {
       const { hash } = payload
       draft.lastOpHash = hash
+      draft.ledgerSignModalVisible = false
       draft.sendOperationModalVisible = true
     },
     closeSendOperationModal (draft) {

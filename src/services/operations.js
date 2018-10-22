@@ -43,7 +43,47 @@ export const loadKTAccounts = async (pkh) => {
   }
 }
 
-export const sendToken = async (toAddress, fromAddress, keys, amount, fee, gasLimit, data = undefined, walletType, HDPath) => {
+/**
+ *
+ * @param kind: ['delegation', 'transaction', 'origination']
+ * @param payload [
+ *    if kind === 'transaction':
+ *          {toAddress, fromAddress, keys, amount, fee, gasLimit, data = undefined}
+ *    if kind ===  'delegation'
+ *          {fromAddress, keys, toDelegation, fee}
+ *    if kind === 'origination'
+ *          {address}
+ * ]
+ * @param {*} keys
+ * @param {*} amount
+ * @param {*} fee
+ * @param {*} gasLimit
+ * @param {*} data
+ */
+
+export const genUnsignedTransaction = async (kind, payload) => {
+  if (kind === 'transaction') {
+    const {
+      toAddress, fromAddress, keys: ks, amount, fee, gasLimit, data,
+    } = payload
+    let keys = ks
+    if (ks.sk) keys = { ...keys, sk: undefined }
+    try {
+      let res
+      if (data) {
+        res = await eztz.contract.send(toAddress, fromAddress, keys, amount, data, fee)
+      } else {
+        res = await eztz.rpc.transfer(fromAddress, keys, toAddress, amount, fee, data, gasLimit)
+      }
+      if (!res.opbytes || !res.opOb) throw new Error({ error: 'Operation Failed' })
+      return res // { opbytes, opOb }
+    } catch (err) {
+      throw err
+    }
+  }
+}
+
+export const sendToken = async (toAddress, fromAddress, keys, amount, fee, gasLimit, data = undefined) => {
   let response
   try {
     if (data) {
@@ -52,14 +92,14 @@ export const sendToken = async (toAddress, fromAddress, keys, amount, fee, gasLi
       response = await eztz.rpc.transfer(fromAddress, keys, toAddress, amount, fee, data, gasLimit)
     }
 
-    if (walletType === 'ledger') {
-      const { opbytes, opOb } = response
-      const signature = await signOperation(HDPath, opbytes)
-      opOb.signature = await eztz.utility.b58cencode(eztz.utility.hex2buf(signature), eztz.prefix.edsig)
-      const res = await eztz.rpc.inject(opOb, opbytes + signature)
-      const { hash, operations } = res
-      return { hash, operations }
-    }
+    // if (walletType === 'ledger') {
+    //   const { opbytes, opOb } = response
+    //   const signature = await signOperation(HDPath, `03${opbytes}`)
+    //   opOb.signature = await eztz.utility.b58cencode(eztz.utility.hex2buf(signature), eztz.prefix.edsig)
+    //   const res = await eztz.rpc.inject(opOb, opbytes + signature)
+    //   const { hash, operations } = res
+    //   return { hash, operations }
+    // }
     const { hash, operations } = response
     return { hash, operations }
   } catch (err) {

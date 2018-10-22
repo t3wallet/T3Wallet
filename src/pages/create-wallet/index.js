@@ -35,7 +35,7 @@ const messages = defineMessages({
     defaultMessage: 'Previous step',
   },
   confirm: {
-    id: 'createWallet.confirm',
+    id: 'confirm',
     defaultMessage: 'Confirm',
   },
   generateMnemonic: {
