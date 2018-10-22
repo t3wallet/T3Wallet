@@ -103,7 +103,8 @@ const LedgerPathSelectionModal = ({
           />
           {formatMessage(messages.title)}
         </span>
-)}
+      )}
+      centered
       visible={visible}
       onCancel={() => {
         onClose()

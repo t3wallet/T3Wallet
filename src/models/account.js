@@ -161,22 +161,41 @@ export default {
       }
     },
     * setDelegation ({ payload }, { put, select, call }) {
+      let result
       try {
         const { fromAddress, toDelegation, fee } = payload
-        const { keys } = yield select(state => state.account)
-        const response = yield call(
-          setDelegation,
-          fromAddress,
-          keys,
-          toDelegation,
-          fee
-        )
-        yield put({ type: 'setDelegationSuccess', payload: response })
-      } catch (error) {
-        const { errors } = error
-        let errorMessage = errors[0].id
-        if (errorMessage === 'proto.alpha.gas_exhausted.operation') {
-          errorMessage = 'Fee quota exceeded for the operation'
+        const { keys, walletType, HDPath } = yield select(state => state.account)
+        if (walletType === 'ledger') {
+          const { opbytes, opOb } = yield call(genUnsignedTransaction, 'delegation', {
+            fromAddress, keys, toDelegation, fee,
+          })
+          yield put({ type: 'toggleLedgerSignModal', payload: { isShow: true } })
+          const { signature } = yield call(signOperation, HDPath, `03${opbytes}`)
+          yield put({ type: 'toggleLedgerSignModal', payload: { isShow: false } })
+          result = yield call(injectTransaction, opbytes, opOb, signature)
+        } else {
+          result = yield call(
+            setDelegation,
+            fromAddress,
+            keys,
+            toDelegation,
+            fee
+          )
+        }
+        yield put({ type: 'setDelegationSuccess', payload: result })
+      } catch (e) {
+        yield put({ type: 'toggleLedgerSignModal', payload: { isShow: false } })
+        const { errors } = e
+        let errorMessage = ''
+        if (errors && errors[0] && errors[0].id) {
+          errorMessage = errors[0].id
+          console.log(errorMessage)
+          if (errorMessage === 'proto.alpha.gas_exhausted.operation') {
+            errorMessage = 'Fee quota exceeded for the operation'
+          }
+        }
+        if (errorMessage === '') {
+          throw e
         }
         throw new Error(`Operation Failed! ${errorMessage}`)
       }

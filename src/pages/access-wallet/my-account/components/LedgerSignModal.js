@@ -28,7 +28,8 @@ const LedgerSignModal = ({ visible, onCancel, intl }) => {
           />
           {formatMessage(messages.title)}
         </span>
-)}
+      )}
+      centered
       visible={visible}
       wrapClassName="vertical-center-modal"
       footer={null}

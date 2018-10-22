@@ -42,7 +42,8 @@ const SendConfirmModal = ({
           <Icon type="question-circle-o" style={{ marginRight: '8px', color: 'orange' }} />
           <FormattedMessage {...messages.title} />
         </span>
-            )}
+      )}
+      centered
       visible={visible}
       onOk={() => { confirmSend({ payload: operation }) }}
       okText={formatMessage(messages.confirm)}

@@ -85,6 +85,19 @@ export const genUnsignedTransaction = async (kind, payload) => {
     } catch (err) {
       throw err
     }
+  } else if (kind === 'delegation') {
+    const {
+      fromAddress, keys: ks, toDelegation, fee,
+    } = payload
+    let keys = {}
+    typeof ks.sk !== 'undefined' ? (keys = { ...ks, sk: undefined }) : keys = ks
+    try {
+      res = await eztz.rpc.setDelegate(fromAddress, keys, toDelegation, fee)
+      if (!res.opbytes || !res.opOb) throw new Error('Operation Failed')
+      return res // { opbytes, opOb }
+    } catch (err) {
+      throw err
+    }
   }
   return res
 }

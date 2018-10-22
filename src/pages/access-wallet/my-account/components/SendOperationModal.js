@@ -36,6 +36,7 @@ const SendOperationModal = ({
           {formatMessage(messages.title)}
         </span>
       )}
+      centered
       visible={visible}
       onCancel={() => { onClose() }}
       wrapClassName="vertical-center-modal"
