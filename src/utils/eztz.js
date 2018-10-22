@@ -472,13 +472,13 @@ const rpc = {
   call (e, d) {
     return node.query(e, d)
   },
-  sendOperation (from, operation, keys) {
+  sendOperation: async (from, operation, keys) => {
     if (typeof keys === 'undefined') keys = false
     let counter
     let sopbytes
     let opOb
-    let errors = []
-    let opResponse = []
+    // let errors = []
+    // let opResponse = []
     let promises = []
     let requiresReveal = false
     let head
@@ -499,8 +499,8 @@ const rpc = {
         break
       }
     }
-
-    return Promise.all(promises).then(([header, headCounter, manager]) => {
+    try {
+      const [header, headCounter, manager] = await Promise.all(promises)
       head = header
       if (requiresReveal && keys && typeof manager.key === 'undefined') {
         ops.unshift({
@@ -531,67 +531,62 @@ const rpc = {
         branch: head.hash,
         contents: ops,
       }
-      return node.query(`/chains/${head.chain_id}/blocks/${head.hash}/helpers/forge/operations`, opOb)
-    })
-      .then((f) => {
-        let opbytes = f
-        opOb.protocol = head.protocol
-        if (!keys) {
-          sopbytes = `${opbytes}00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000`
-          opOb.signature = 'edsigtXomBKi5CTRf5cjATJWSyaRvhfYNHqSUGrn4SdbYRcGwQrUGjzEfQDTuqHhuA8b2d8NarZjz8TRf65WkpQmo423BtomS8Q'
-        } else {
-          let signed = crypto.sign(opbytes, keys.sk, watermark.generic)
-          sopbytes = signed.sbytes
-          opOb.signature = signed.edsig
-        }
-        return node.query('/chains/main/blocks/head/helpers/preapply/operations', [opOb])
-      })
 
-      .then((f) => {
-        if (!Array.isArray(f)) {
-          throw new Error({ error: 'RPC Fail', errors: [] })
-        }
-        for (let i = 0; i < f.length; i++) {
-          for (let j = 0; j < f[i].contents.length; j++) {
-            opResponse.push(f[i].contents[j])
-            if (typeof f[i].contents[j].metadata.operation_result !== 'undefined' && f[i].contents[j].metadata.operation_result.status === 'failed') {
-              errors = errors.concat(f[i].contents[j].metadata.operation_result.errors)
-            }
-          }
-        }
-        if (errors.length) throw new Error({ error: 'Operation Failed', errors })
-        return node.query('/injection/operation', sopbytes)
-      })
-      .then((f) => {
-        return {
-          hash: f,
-          operations: opResponse,
-        }
-      })
-      .catch((error) => {
-        console.log(error)
-        throw error
-      })
+      const opbytes = await node.query(`/chains/${head.chain_id}/blocks/${head.hash}/helpers/forge/operations`, opOb)
+      opOb.protocol = head.protocol
+      if (!keys) {
+        sopbytes = `${opbytes}00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000`
+        opOb.signature = 'edsigtXomBKi5CTRf5cjATJWSyaRvhfYNHqSUGrn4SdbYRcGwQrUGjzEfQDTuqHhuA8b2d8NarZjz8TRf65WkpQmo423BtomS8Q'
+      } else {
+        let signed = crypto.sign(opbytes, keys.sk, watermark.generic)
+        sopbytes = signed.sbytes
+        opOb.signature = signed.edsig
+      }
+
+      const { hash, operations } = await rpc.inject(opOb, sopbytes)
+      return { hash, operations }
+    } catch (err) {
+      throw new Error(err)
+    }
   },
-  inject (opOb, sopbytes) {
+  inject: async (opOb, sopbytes) => {
     let opResponse = []
     let errors = []
-    return node
-      .query('/chains/main/blocks/head/helpers/preapply/operations', [opOb])
-      .then((f) => {
-        if (!Array.isArray(f)) throw new Error({ error: 'RPC Fail', errors: [] })
-        for (let i = 0; i < f.length; i++) {
-          for (let j = 0; j < f[i].contents.length; j++) {
-            opResponse.push(f[i].contents[j])
-            if (typeof f[i].contents[j].metadata.operation_result !== 'undefined' && f[i].contents[j].metadata.operation_result.status === 'failed') { errors = errors.concat(f[i].contents[j].metadata.operation_result.errors) }
+    try {
+      const f = await node.query('/chains/main/blocks/head/helpers/preapply/operations', [opOb])
+      if (!Array.isArray(f)) throw new Error({ error: 'RPC Fail', errors: [] })
+      for (let i = 0; i < f.length; i++) {
+        for (let j = 0; j < f[i].contents.length; j++) {
+          opResponse.push(f[i].contents[j])
+          if (typeof f[i].contents[j].metadata.operation_result !== 'undefined' && f[i].contents[j].metadata.operation_result.status === 'failed') {
+            errors = errors.concat(f[i].contents[j].metadata.operation_result.errors)
           }
         }
-        if (errors.length) throw new Error({ error: 'Operation Failed', errors })
-        return node.query('/injection/operation', sopbytes)
-      })
-      .then((e) => {
-        return { hash: e, operations: opResponse }
-      })
+      }
+      if (errors.length) throw new Error({ error: 'Operation Failed', errors })
+      const hash = await node.query('/injection/operation', sopbytes)
+      return { hash, operations: opResponse }
+    } catch (err) {
+      throw err
+    }
+    // return node
+    //   .query('/chains/main/blocks/head/helpers/preapply/operations', [opOb])
+    //   .then((f) => {
+    //     if (!Array.isArray(f)) throw new Error({ error: 'RPC Fail', errors: [] })
+    //     for (let i = 0; i < f.length; i++) {
+    //       for (let j = 0; j < f[i].contents.length; j++) {
+    //         opResponse.push(f[i].contents[j])
+    //         if (typeof f[i].contents[j].metadata.operation_result !== 'undefined' && f[i].contents[j].metadata.operation_result.status === 'failed') {
+    //           errors = errors.concat(f[i].contents[j].metadata.operation_result.errors)
+    //         }
+    //       }
+    //     }
+    //     if (errors.length) throw new Error({ error: 'Operation Failed', errors })
+    //     return node.query('/injection/operation', sopbytes)
+    //   })
+    //   .then((e) => {
+    //     return { hash: e, operations: opResponse }
+    //   })
   },
   transfer: (from, keys, to, amount, fee, parameter, gasLimit, storageLimit) => {
     if (typeof gasLimit === 'undefined') gasLimit = '200'
