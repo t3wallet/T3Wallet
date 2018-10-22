@@ -1,12 +1,18 @@
 import { message } from 'antd'
 import { unionBy, isArray } from 'lodash'
 import {
-  loadAccountInfo, loadKTAccounts, sendToken, originateAccount, setDelegation,
-} from '../services/account'
+  loadAccountInfo,
+  loadKTAccounts,
+  sendToken,
+  originateAccount,
+  setDelegation,
+} from '../services/operations'
 
 export default {
   namespace: 'account',
   state: {
+    walletType: '',
+
     accounts: [],
     keys: {},
     activeAccountIndex: '',
@@ -52,16 +58,35 @@ export default {
         })
         yield put({ type: 'refreshAccounts' })
       } catch (e) {
-        throw new Error('Load KT Acccount Failed, Check your internet connection.')
+        throw new Error(
+          'Load KT Acccount Failed, Check your internet connection.'
+        )
       }
     },
     * sendToken ({ payload }, { call, put, select }) {
       const {
-        fromAddress, toAddress, amountToSend, fee, gasLimit, data,
+        fromAddress,
+        toAddress,
+        amountToSend,
+        fee,
+        gasLimit,
+        data,
       } = payload
       try {
-        const { keys } = yield select(state => state.account)
-        const response = yield call(sendToken, toAddress, fromAddress, keys, amountToSend, fee, gasLimit, data)
+        let keys
+        const { keys: ks, walletType } = yield select(state => state.account)
+        walletType === 'ledger' ? (keys.sk = undefined) : (keys = ks)
+        const response = yield call(
+          sendToken,
+          toAddress,
+          fromAddress,
+          keys,
+          amountToSend,
+          fee,
+          gasLimit,
+          data,
+          walletType
+        )
         yield put({ type: 'sendSuccess', payload: response })
         message.success('Send Operation Success!')
       } catch (error) {
@@ -76,7 +101,9 @@ export default {
     * originateAccount (action, { put, select, call }) {
       yield put({ type: 'originating' })
       try {
-        const { accounts, activeAccountIndex } = yield select(state => state.account)
+        const { accounts, activeAccountIndex } = yield select(
+          state => state.account
+        )
         const curAccount = accounts[activeAccountIndex]
         const { keys } = curAccount
         const result = yield call(originateAccount, keys)
@@ -97,7 +124,13 @@ export default {
       try {
         const { fromAddress, toDelegation, fee } = payload
         const { keys } = yield select(state => state.account)
-        const response = yield call(setDelegation, fromAddress, keys, toDelegation, fee)
+        const response = yield call(
+          setDelegation,
+          fromAddress,
+          keys,
+          toDelegation,
+          fee
+        )
         yield put({ type: 'setDelegationSuccess', payload: response })
       } catch (error) {
         const { errors } = error
@@ -110,17 +143,21 @@ export default {
     },
   },
   reducers: {
-    setIdentity (draft, { payload: identity }) {
+    setIdentity (draft, { payload }) {
+      const { identity, walletType, path } = payload
       const { keys } = identity
       draft.accounts = [identity]
       draft.activeAccountIndex = '0'
       draft.keys = keys
+      draft.walletType = walletType
+      if (path) draft.path = path
     },
     updateAccountData (draft, { payload }) {
-      const {
-        activeAccountIndex, data,
-      } = payload
-      draft.accounts[activeAccountIndex] = { ...draft.accounts[activeAccountIndex], ...data }
+      const { activeAccountIndex, data } = payload
+      draft.accounts[activeAccountIndex] = {
+        ...draft.accounts[activeAccountIndex],
+        ...data,
+      }
     },
     importOriginationAccounts (draft, { payload }) {
       const { accounts } = payload

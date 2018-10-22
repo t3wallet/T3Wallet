@@ -1,29 +1,31 @@
-import React from "react";
-import { Modal, Button, Form, Icon, Input, message } from "antd";
+import React from 'react'
+import {
+  Modal, Button, Form, Icon, Input, message,
+} from 'antd'
 import {
   intlShape,
   injectIntl,
   defineMessages,
-  FormattedMessage
-} from "react-intl";
-import PropTypes from "prop-types";
+  FormattedMessage,
+} from 'react-intl'
+import PropTypes from 'prop-types'
 
 const messages = defineMessages({
   title: {
-    id: "accessWallet.selectHDPath",
-    defaultMessage: "Select HD Wallet Derivation Path"
+    id: 'accessWallet.selectHDPath',
+    defaultMessage: 'Select HD Wallet Derivation Path',
   },
   confirm: {
-    id: "accessWallet.confirm",
-    defaultMessage: "Confirm"
+    id: 'accessWallet.confirm',
+    defaultMessage: 'Confirm',
   },
   cancel: {
-    id: "accessWallet.cancel",
-    defaultMessage: "Cancel"
-  }
-});
+    id: 'accessWallet.cancel',
+    defaultMessage: 'Cancel',
+  },
+})
 
-const FormItem = Form.Item;
+const FormItem = Form.Item
 
 const LedgerPathSelectionModal = ({
   visible,
@@ -31,27 +33,27 @@ const LedgerPathSelectionModal = ({
   intl,
   onClose,
   onConfirm,
-  form
+  form,
 }) => {
-  const { formatMessage } = intl;
-  const { getFieldDecorator, validateFieldsAndScroll } = form;
+  const { formatMessage } = intl
+  const { getFieldDecorator, validateFieldsAndScroll } = form
   const handleSubmit = () => {
     validateFieldsAndScroll((errors, { path }) => {
       if (errors) {
-        message.error("Please check you input.");
-        return;
+        message.error('Please check you input.')
+        return
       }
-      onConfirm({ path });
-    });
-  };
-  let asciiArt;
+      onConfirm({ path })
+    })
+  }
+  let asciiArt
   if (asciiArtVisible) {
     asciiArt = (
       <pre
         style={{
-          fontSize: "3px",
-          margin: " 0 auto",
-          fontFamily: "Courier New, Monospace"
+          fontSize: '3px',
+          margin: ' 0 auto',
+          fontFamily: 'Courier New, Monospace',
         }}
       >
         {`
@@ -92,24 +94,24 @@ const LedgerPathSelectionModal = ({
                                                                                                                                                                                                                         
               `}
       </pre>
-    );
+    )
   } else {
-    asciiArt = <div />;
+    asciiArt = <div />
   }
   return (
     <Modal
-      title={
+      title={(
         <span>
           <Icon
             type="check-circle-o"
-            style={{ marginRight: "8px", color: "green" }}
+            style={{ marginRight: '8px', color: 'green' }}
           />
           {formatMessage(messages.title)}
         </span>
-      }
+)}
       visible={visible}
       onCancel={() => {
-        onClose();
+        onClose()
       }}
       wrapClassName="vertical-center-modal"
       footer={[
@@ -118,19 +120,19 @@ const LedgerPathSelectionModal = ({
         </Button>,
         <Button key="confirm" type="primary" onClick={handleSubmit}>
           <FormattedMessage {...messages.confirm} />
-        </Button>
+        </Button>,
       ]}
     >
       <div>
         <Form onSubmit={onConfirm}>
           <FormItem>
-            {getFieldDecorator("path", {
-              rules: [{ required: true, message: "Path Required" }],
-              initialValue: "44'/1729'/0'/0'"
+            {getFieldDecorator('path', {
+              rules: [{ required: true, message: 'Path Required' }],
+              initialValue: "44'/1729'/0'/0'",
             })(
               <Input
                 prefix={
-                  <Icon type="wallet" style={{ color: "rgba(0,0,0,.25)" }} />
+                  <Icon type="wallet" style={{ color: 'rgba(0,0,0,.25)' }} />
                 }
                 placeholder="44'/1729'/0'/0'"
               />
@@ -140,8 +142,8 @@ const LedgerPathSelectionModal = ({
         </Form>
       </div>
     </Modal>
-  );
-};
+  )
+}
 
 LedgerPathSelectionModal.propTypes = {
   form: PropTypes.object,
@@ -149,7 +151,7 @@ LedgerPathSelectionModal.propTypes = {
   asciiArtVisible: PropTypes.bool,
   intl: intlShape.isRequired,
   onConfirm: PropTypes.func,
-  onClose: PropTypes.func
-};
+  onClose: PropTypes.func,
+}
 
-export default Form.create()(injectIntl(LedgerPathSelectionModal));
+export default Form.create()(injectIntl(LedgerPathSelectionModal))
