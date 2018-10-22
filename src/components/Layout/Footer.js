@@ -50,9 +50,9 @@ const Footer = () => {
           <a style={{ color: '#fff' }}>
             <Icon type="wechat" style={{ fontSize: 40 }} onClick={() => { showModal() }} />
           </a>
-          <a href="https://join.slack.com/t/t3wallet/shared_invite/enQtNDA2MzQ5OTUwNzUzLWE2MTM4MGYzODU2M2Q0MDNhN2U4OGY3NTMwMjQzODFkZWI5MjM1MmE2YTI2ZjU4YWU3MTg4ZjRkYTgxNGM2ZWU" style={{ color: '#fff' }} rel="noopener noreferrer" target="_blank">
+          {/* <a href="https://join.slack.com/t/t3wallet/shared_invite/enQtNDA2MzQ5OTUwNzUzLWE2MTM4MGYzODU2M2Q0MDNhN2U4OGY3NTMwMjQzODFkZWI5MjM1MmE2YTI2ZjU4YWU3MTg4ZjRkYTgxNGM2ZWU" style={{ color: '#fff' }} rel="noopener noreferrer" target="_blank">
             <Icon type="slack" style={{ fontSize: 40 }} />
-          </a>
+          </a> */}
         </Col>
 
         <Col sm={24} md={8}>
