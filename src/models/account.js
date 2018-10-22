@@ -8,6 +8,7 @@ import {
   setDelegation,
   genUnsignedTransaction,
   injectTransaction,
+  genAddress,
 } from '../services/operations'
 import { signOperation } from '../services/ledger'
 
@@ -133,6 +134,9 @@ export default {
           if (result.error) {
             throw new Error('Origination Failed')
           }
+          const { hash, operations } = result
+          const address = yield call(genAddress, hash)
+          result = { hash, operations, address }
         } else {
           result = yield call(originateAccount, keys)
         }

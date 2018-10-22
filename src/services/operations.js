@@ -53,11 +53,6 @@ export const loadKTAccounts = async (pkh) => {
  *    if kind === 'origination'
  *          { keys }
  * ]
- * @param {*} keys
- * @param {*} amount
- * @param {*} fee
- * @param {*} gasLimit
- * @param {*} data
  */
 
 export const genUnsignedTransaction = async (kind, payload) => {
@@ -135,6 +130,11 @@ export const originateAccount = async (keys) => {
     console.log('[Origination Error]', error)
     throw error
   }
+}
+
+export const genAddress = async (hash) => {
+  const address = await eztz.contract.hash(hash, 0)
+  return address
 }
 
 export const setDelegation = async (fromAddress, keys, toDelegation, fee) => {
