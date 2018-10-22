@@ -37,8 +37,9 @@ export const signOperation = async (path, opBytes) => {
     const transport = await Transport.create()
     const xtz = new App(transport)
     const result = await xtz.signOperation(path, opBytes)
-    return result.signature
+    return result
   } catch (err) {
+    console.log(err)
     throw err
   }
 }
@@ -49,18 +50,6 @@ export const getVersion = async () => {
     const xtz = new App(transport)
     const versionInfo = await xtz.getVersion()
     return versionInfo
-  } catch (err) {
-    throw err
-  }
-}
-
-export const signTransaction = async (opbytes, opOb, HDPath) => {
-  try {
-    const signature = await signOperation(HDPath, `03${opbytes}`)
-    opOb.signature = await eztz.utility.b58cencode(eztz.utility.hex2buf(signature), eztz.prefix.edsig)
-    const res = await eztz.rpc.inject(opOb, opbytes + signature)
-    const { hash, operations } = res
-    return { hash, operations }
   } catch (err) {
     throw err
   }

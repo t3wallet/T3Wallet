@@ -1,7 +1,7 @@
 import React from 'react'
-import { Modal, Button, Icon } from 'antd'
+import { Modal, Icon } from 'antd'
 import {
-  intlShape, injectIntl, defineMessages, FormattedMessage,
+  intlShape, injectIntl, defineMessages,
 } from 'react-intl'
 import PropTypes from 'prop-types'
 
@@ -16,33 +16,32 @@ const messages = defineMessages({
   },
 })
 
-const LedgerSignModal = ({
-  visible, onClose, intl,
-}) => {
+const LedgerSignModal = ({ visible, onCancel, intl }) => {
   const { formatMessage } = intl
   return (
-    <Modal title={(
-      <span>
-        <Icon type="check-circle-o" style={{ marginRight: '8px', color: 'green' }} />
-        {formatMessage(messages.title)}
-      </span>
-    )}
+    <Modal
+      title={(
+        <span>
+          <Icon
+            type="check-circle-o"
+            style={{ marginRight: '8px', color: 'green' }}
+          />
+          {formatMessage(messages.title)}
+        </span>
+)}
       visible={visible}
-      onCancel={() => {
-        onClose()
-      }}
       wrapClassName="vertical-center-modal"
-      footer={[<Button key="submit"
-        type="primary"
-        onClick={() => {
-          onClose()
-        }}
-      >
-        <FormattedMessage {...messages.cancel} />
-      </Button>]}
+      footer={null}
+      onCancel={onCancel}
     >
       <div>
-        <pre style={{ fontSize: '3px', margin: ' 0 auto', fontFamily: 'Courier New, Monospace' }}>
+        <pre
+          style={{
+            fontSize: '3px',
+            margin: ' 0 auto',
+            fontFamily: 'Courier New, Monospace',
+          }}
+        >
           {`
                                                                                                                                                                                       ██╗               ██████╗ ██╗   ██╗███████╗██╗  ██╗
                                                                                                                                                                                      ██╔╝               ██╔══██╗██║   ██║██╔════╝██║  ██║
@@ -88,10 +87,8 @@ const LedgerSignModal = ({
 
 LedgerSignModal.propTypes = {
   visible: PropTypes.bool,
-  opHash: PropTypes.string,
   intl: intlShape.isRequired,
-  onClose: PropTypes.func,
-  opType: PropTypes.string,
+  onCancel: PropTypes.func,
 }
 
 

@@ -32,7 +32,7 @@ const SendConfirmModal = ({
   visible, confirmSend, onClose, operation, intl,
 }) => {
   const {
-    amountToSend, fromAddress, toAddress, fee,
+    amount, fromAddress, toAddress, fee,
   } = operation
   const { formatMessage } = intl
   return (
@@ -53,7 +53,7 @@ const SendConfirmModal = ({
         <FormattedMessage {...messages.detail}
           values={{
             value: <b>
-              {amountToSend}
+              {amount}
             </b>,
             fee: <b>
               {fee}

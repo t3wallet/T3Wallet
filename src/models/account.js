@@ -7,8 +7,9 @@ import {
   originateAccount,
   setDelegation,
   genUnsignedTransaction,
+  injectTransaction,
 } from '../services/operations'
-import { signTransaction } from '../services/ledger'
+import { signOperation } from '../services/ledger'
 
 export default {
   namespace: 'account',
@@ -69,22 +70,29 @@ export default {
     },
     * sendToken ({ payload }, { call, put, select }) {
       const {
-        fromAddress, toAddress, amountToSend, fee, gasLimit, data,
+        fromAddress, toAddress, amount, fee, gasLimit, data,
       } = payload
       try {
         let res
         const { keys, walletType, HDPath } = yield select(state => state.account)
         if (walletType === 'ledger') {
           const { opbytes, opOb } = yield call(genUnsignedTransaction, 'transaction', { ...payload, keys })
+
           yield put({ type: 'toggleLedgerSignModal', payload: { isShow: true } })
-          res = yield call(signTransaction, opbytes, opOb, HDPath)
+          const { signature } = yield call(signOperation, HDPath, `03${opbytes}`)
+          yield put({ type: 'toggleLedgerSignModal', payload: { isShow: false } })
+          res = yield call(injectTransaction, opbytes, opOb, signature)
+
+          if (res.error) {
+            throw new Error('Transaction Failed')
+          }
         } else {
           res = yield call(
             sendToken,
             toAddress,
             fromAddress,
             keys,
-            amountToSend,
+            amount,
             fee,
             gasLimit,
             data,
@@ -94,11 +102,21 @@ export default {
         }
         yield put({ type: 'sendSuccess', payload: res })
         message.success('Send Operation Success!')
-      } catch (error) {
-        const { errors } = error
-        let errorMessage = errors[0].id
-        if (errorMessage === 'proto.alpha.gas_exhausted.operation') {
-          errorMessage = 'Fee quota exceeded for the operation'
+      } catch (e) {
+        console.log(e)
+
+        yield put({ type: 'toggleLedgerSignModal', payload: { isShow: false } })
+        const { errors } = e
+
+        let errorMessage = ''
+        if (errors && errors[0] && errors[0].id) {
+          errorMessage = errors[0].id
+          if (errorMessage === 'proto.alpha.gas_exhausted.operation') {
+            errorMessage = 'Fee quota exceeded for the operation'
+          }
+        }
+        if (errorMessage === '') {
+          throw e
         }
         throw new Error(`Operation Failed! ${errorMessage}`)
       }

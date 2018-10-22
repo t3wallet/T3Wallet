@@ -556,7 +556,7 @@ const rpc = {
     let errors = []
     try {
       const f = await node.query('/chains/main/blocks/head/helpers/preapply/operations', [opOb])
-      if (!Array.isArray(f)) throw new Error({ error: 'RPC Fail', errors: [] })
+      if (!Array.isArray(f)) throw new Error(JSON.stringify({ error: 'RPC Fail', errors: [] }))
       for (let i = 0; i < f.length; i++) {
         for (let j = 0; j < f[i].contents.length; j++) {
           opResponse.push(f[i].contents[j])
@@ -565,7 +565,7 @@ const rpc = {
           }
         }
       }
-      if (errors.length) throw new Error({ error: 'Operation Failed', errors })
+      if (errors.length) throw new Error(JSON.stringify({ error: 'Operation Failed', errors }))
       const hash = await node.query('/injection/operation', sopbytes)
       return { hash, operations: opResponse }
     } catch (err) {
@@ -693,6 +693,14 @@ const contract = {
     if (typeof gasLimit === 'undefined') gasLimit = '10000'
     if (typeof storageLimit === 'undefined') storageLimit = '10000'
     return rpc.originate(keys, amount, code, init, spendable, delegatable, delegate, fee, gasLimit, storageLimit)
+  },
+  send (toAddress, from, keys, amount, parameter, fee, gasLimit, storageLimit) {
+    if (typeof gasLimit === 'undefined') gasLimit = '2000'
+    if (typeof storageLimit === 'undefined') storageLimit = '0'
+    return rpc.transfer(from, keys, toAddress, amount, fee, parameter, gasLimit, storageLimit)
+  },
+  balance (address) {
+    return rpc.getBalance(address)
   },
   storage (contractArg) {
     return new Promise(((resolve, reject) => {

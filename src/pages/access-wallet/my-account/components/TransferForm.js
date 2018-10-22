@@ -101,7 +101,7 @@ const TransferForm = ({
         })(<Input size="large" />)}
       </FormItem>
       <FormItem label={formatMessage(messages.amountToSend)}>
-        {getFieldDecorator('amountToSend', {
+        {getFieldDecorator('amount', {
           rules: [{ required: true, type: 'number', message: formatMessage(messages.incorrectValue, { value: formatMessage(messages.amountToSend) }) }],
         })(<InputNumber size="large"
           min={0}

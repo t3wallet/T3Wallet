@@ -1,7 +1,6 @@
 import eztz from 'utils/eztz'
 import axios from 'axios'
 import { flatten } from 'lodash'
-import { signOperation } from './ledger'
 
 const apiPoint = 'https://api5.tzscan.io/v2/'
 
@@ -62,24 +61,39 @@ export const loadKTAccounts = async (pkh) => {
  */
 
 export const genUnsignedTransaction = async (kind, payload) => {
+  let res
   if (kind === 'transaction') {
     const {
       toAddress, fromAddress, keys: ks, amount, fee, gasLimit, data,
     } = payload
-    let keys = ks
-    if (ks.sk) keys = { ...keys, sk: undefined }
+    let keys = {}
+    typeof ks.sk !== 'undefined' ? keys = { ...ks, sk: undefined } : keys = ks
     try {
-      let res
       if (data) {
         res = await eztz.contract.send(toAddress, fromAddress, keys, amount, data, fee)
       } else {
         res = await eztz.rpc.transfer(fromAddress, keys, toAddress, amount, fee, data, gasLimit)
       }
-      if (!res.opbytes || !res.opOb) throw new Error({ error: 'Operation Failed' })
+      if (!res.opbytes || !res.opOb) throw new Error('Operation Failed')
       return res // { opbytes, opOb }
     } catch (err) {
       throw err
     }
+  }
+  return res
+}
+
+export const injectTransaction = async (opbytes, opOb, signature) => {
+  try {
+    opOb.signature = eztz.utility.b58cencode(
+      eztz.utility.hex2buf(signature),
+      eztz.prefix.edsig
+    )
+    const res = await eztz.rpc.inject(opOb, opbytes + signature)
+    const { hash, operations } = res
+    return { hash, operations }
+  } catch (err) {
+    return { error: true, ...err.statusCode }
   }
 }
 
@@ -91,15 +105,6 @@ export const sendToken = async (toAddress, fromAddress, keys, amount, fee, gasLi
     } else {
       response = await eztz.rpc.transfer(fromAddress, keys, toAddress, amount, fee, data, gasLimit)
     }
-
-    // if (walletType === 'ledger') {
-    //   const { opbytes, opOb } = response
-    //   const signature = await signOperation(HDPath, `03${opbytes}`)
-    //   opOb.signature = await eztz.utility.b58cencode(eztz.utility.hex2buf(signature), eztz.prefix.edsig)
-    //   const res = await eztz.rpc.inject(opOb, opbytes + signature)
-    //   const { hash, operations } = res
-    //   return { hash, operations }
-    // }
     const { hash, operations } = response
     return { hash, operations }
   } catch (err) {
