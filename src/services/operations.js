@@ -43,22 +43,20 @@ export const loadKTAccounts = async (pkh) => {
   }
 }
 
-export const sendToken = async (toAddress, fromAddress, keys, amount, fee, gasLimit, data = undefined, walletType) => {
+export const sendToken = async (toAddress, fromAddress, keys, amount, fee, gasLimit, data = undefined, walletType, HDPath) => {
   let response
   try {
     if (data) {
-      console.log('[called with data]')
       response = await eztz.contract.send(toAddress, fromAddress, keys, amount, data, fee)
     } else {
-      console.log('[called without data]')
       response = await eztz.rpc.transfer(fromAddress, keys, toAddress, amount, fee, data, gasLimit)
     }
+
     if (walletType === 'ledger') {
-      console.log(response)
-      const sig = await signOperation("44'/1729'/0'/0'", `03${response.opbytes}`)
-      response.opOb.signature = eztz.utility.b58cencode(eztz.utility.hex2buf(sig.signature), eztz.prefix.edsig)
-      const res = await eztz.rpc.inject(response.opOb, response.opbytes + sig.signature)
-      console.log(res)
+      const { opbytes, opOb } = response
+      const signature = await signOperation(HDPath, opbytes)
+      opOb.signature = await eztz.utility.b58cencode(eztz.utility.hex2buf(signature), eztz.prefix.edsig)
+      const res = await eztz.rpc.inject(opOb, opbytes + signature)
       const { hash, operations } = res
       return { hash, operations }
     }
@@ -67,14 +65,6 @@ export const sendToken = async (toAddress, fromAddress, keys, amount, fee, gasLi
   } catch (err) {
     throw err
   }
-  // else {
-  //   try {
-  //   const { hash, operations } = response
-  //   return { hash, operations }
-  //   } catch (error) {
-  //     throw error
-  //   }
-  // }
 }
 
 export const originateAccount = async (keys) => {

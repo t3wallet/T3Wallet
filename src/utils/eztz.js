@@ -511,7 +511,6 @@ const rpc = {
         })
       }
       counter = parseInt(headCounter, 10) + 1
-
       for (let i = 0; i < ops.length; i++) {
         if (['proposals', 'ballot', 'transaction', 'origination', 'delegation'].indexOf(ops[i].kind) >= 0) {
           if (typeof ops[i].source === 'undefined') ops[i].source = from
@@ -534,6 +533,9 @@ const rpc = {
 
       const opbytes = await node.query(`/chains/${head.chain_id}/blocks/${head.hash}/helpers/forge/operations`, opOb)
       opOb.protocol = head.protocol
+
+      if (keys && !keys.sk) return { opbytes, opOb }
+
       if (!keys) {
         sopbytes = `${opbytes}00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000`
         opOb.signature = 'edsigtXomBKi5CTRf5cjATJWSyaRvhfYNHqSUGrn4SdbYRcGwQrUGjzEfQDTuqHhuA8b2d8NarZjz8TRf65WkpQmo423BtomS8Q'
@@ -569,24 +571,6 @@ const rpc = {
     } catch (err) {
       throw err
     }
-    // return node
-    //   .query('/chains/main/blocks/head/helpers/preapply/operations', [opOb])
-    //   .then((f) => {
-    //     if (!Array.isArray(f)) throw new Error({ error: 'RPC Fail', errors: [] })
-    //     for (let i = 0; i < f.length; i++) {
-    //       for (let j = 0; j < f[i].contents.length; j++) {
-    //         opResponse.push(f[i].contents[j])
-    //         if (typeof f[i].contents[j].metadata.operation_result !== 'undefined' && f[i].contents[j].metadata.operation_result.status === 'failed') {
-    //           errors = errors.concat(f[i].contents[j].metadata.operation_result.errors)
-    //         }
-    //       }
-    //     }
-    //     if (errors.length) throw new Error({ error: 'Operation Failed', errors })
-    //     return node.query('/injection/operation', sopbytes)
-    //   })
-    //   .then((e) => {
-    //     return { hash: e, operations: opResponse }
-    //   })
   },
   transfer: (from, keys, to, amount, fee, parameter, gasLimit, storageLimit) => {
     if (typeof gasLimit === 'undefined') gasLimit = '200'

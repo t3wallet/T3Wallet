@@ -12,6 +12,7 @@ export default {
   namespace: 'account',
   state: {
     walletType: '',
+    HDPath: "44'/1729'/0'/0'",
 
     accounts: [],
     keys: {},
@@ -73,9 +74,9 @@ export default {
         data,
       } = payload
       try {
-        let keys
-        const { keys: ks, walletType } = yield select(state => state.account)
-        walletType === 'ledger' ? (keys.sk = undefined) : (keys = ks)
+        const { keys: ks, walletType, HDPath } = yield select(state => state.account)
+        let keys = {}
+        walletType === 'ledger' ? keys = { ...ks, sk: undefined } : keys = ks
         const response = yield call(
           sendToken,
           toAddress,
@@ -85,7 +86,8 @@ export default {
           fee,
           gasLimit,
           data,
-          walletType
+          walletType,
+          HDPath
         )
         yield put({ type: 'sendSuccess', payload: response })
         message.success('Send Operation Success!')
@@ -150,7 +152,7 @@ export default {
       draft.activeAccountIndex = '0'
       draft.keys = keys
       draft.walletType = walletType
-      if (path) draft.path = path
+      if (path) draft.HDPath = path
     },
     updateAccountData (draft, { payload }) {
       const { activeAccountIndex, data } = payload
