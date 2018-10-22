@@ -14,11 +14,18 @@ const accessWallet = {
   'accessWallet.codeWarning': '기존에 지갑을 활성화한 경우 입력하지 마십시요.',
   // Private Key
   'accessWallet.privateKey': '프라이빗 키',
+  'accessWallet.privateKeyTip': " 프라이빗 키는 'edsk'로 시작해야 합니다.",
+
+  // Ledger
+  'accessWallet.ledgerWallet': 'Ledger Wallet',
+  'accessWallet.ledgerHardwareWallet': 'Ledger Hardware Wallet',
+  'accessWallet.connectToLedger': 'Ledger 지갑에 연결하기',
+  'accessWallet.selectHDPath': 'HD derivation 경로 선택',
+
+  // common
   'accessWallet.unlockWallet': '지갑 열기',
-  'accessWallet.privateKeyTip': ' 프라이빗 키는 \'edsk\'로 시작해야 합니다.',
 
   // unlock error message
   'accessWallet.errorMessage': '입력한 정보를 확인하세요.',
-
 }
 export default accessWallet

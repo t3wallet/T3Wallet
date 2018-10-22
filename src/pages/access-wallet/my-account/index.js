@@ -5,21 +5,34 @@ import {
 } from 'react-intl'
 import router from 'umi/router'
 import {
-  Row, Col, Tooltip, Icon, Modal,
+  Row, Col, Tooltip, Icon, Modal, Spin,
 } from 'antd'
 import { connect } from 'dva'
 import PropTypes from 'prop-types'
 import ReactTimeout from 'react-timeout'
 
 import {
-  AccountOperationPanel, AccountCollapse, SendOperationModal, SendConfirmModal,
+  AccountOperationPanel,
+  AccountCollapse,
+  SendOperationModal,
+  SendConfirmModal,
+  LedgerSignModal,
 } from './components'
 import styles from './index.less'
 
 const messages = defineMessages({
+  title: {
+    id: 'myAccount.title',
+    defaultMessage: 'Send Token & Delegation',
+  },
   toolTip: {
     id: 'myAccount.originateAccountToolTip',
-    defaultMessage: 'You need to create an delegatable which address starts with "KT" to delegate your baking right to a delegation service',
+    defaultMessage:
+      'You need to create an delegatable which address starts with "KT" to delegate your baking right to a delegation service',
+  },
+  originateAccount: {
+    id: 'myAccount.originateAccount',
+    defaultMessage: '+ New Delegatable Account',
   },
   originationModalTitle: {
     id: 'myAccount.originateModalTitle',
@@ -27,20 +40,21 @@ const messages = defineMessages({
   },
   originationModalContent: {
     id: 'myAccount.originateModalContent',
-    defaultMessage: 'This operation need to spend ~0.25ꜩ. If you need to access delegation option and delegate your tokens, this step is necessary.',
+    defaultMessage:
+      'This operation need to spend ~0.25ꜩ. If you need to access delegation option and delegate your tokens, this step is necessary.',
   },
 })
 
 class myAccountIndex extends React.Component {
   constructor (props) {
     super(props)
-    this.state = ({
+    this.state = {
       sendConfirmModalVisible: false,
       sendConfirmModalContent: {},
-    })
+    }
   }
 
-  componentWillMount () {
+  UNSAFE_componentWillMount () {
     const { account } = this.props
     const { accounts } = account
     if (!accounts.length) {
@@ -65,14 +79,14 @@ class myAccountIndex extends React.Component {
       type: 'account/loadKTAccounts',
     })
     setInterval(this.refreshAccounts, 40000)
-  }
+  };
 
   refreshAccounts = () => {
     const { dispatch } = this.props
     dispatch({
       type: 'account/refreshAccounts',
     })
-  }
+  };
 
   confirmOriginateAcountModal = () => {
     const { dispatch, intl } = this.props
@@ -86,19 +100,27 @@ class myAccountIndex extends React.Component {
         })
       },
     })
-  }
+  };
 
   closeOriginateAccountModal = () => {
     const { dispatch } = this.props
     dispatch({
       type: 'account/closeOriginateAccountModal',
     })
-  }
+  };
 
   closeSendOperationModal = () => {
     const { dispatch } = this.props
     dispatch({
       type: 'account/closeSendOperationModal',
+    })
+  };
+
+  closeLedgerSignModal = () => {
+    const { dispatch } = this.props
+    dispatch({
+      type: 'account/toggleLedgerSignModal',
+      payload: { isShow: false },
     })
   }
 
@@ -107,14 +129,14 @@ class myAccountIndex extends React.Component {
       sendConfirmModalContent: payload,
       sendConfirmModalVisible: true,
     })
-  }
+  };
 
-  closeSendConfirmModal =() => {
+  closeSendConfirmModal = () => {
     this.setState({
       sendConfirmModalVisible: false,
       sendConfirmModalContent: {},
     })
-  }
+  };
 
   logout = () => {
     const { dispatch } = this.props
@@ -122,7 +144,7 @@ class myAccountIndex extends React.Component {
       type: 'account/logout',
     })
     router.push('/access-wallet')
-  }
+  };
 
   onAccountChange = (activeAccountIndex) => {
     const { dispatch } = this.props
@@ -130,7 +152,7 @@ class myAccountIndex extends React.Component {
       type: 'account/changeActiveAccount',
       payload: { activeAccountIndex },
     })
-  }
+  };
 
   onSend = ({ payload }) => {
     this.setState({
@@ -143,7 +165,7 @@ class myAccountIndex extends React.Component {
       type: 'account/sendToken',
       payload: sendOperation,
     })
-  }
+  };
 
   onSetDelegateClick = (payload) => {
     const { dispatch } = this.props
@@ -151,20 +173,26 @@ class myAccountIndex extends React.Component {
       type: 'account/setDelegation',
       payload,
     })
-  }
+  };
 
   render () {
     const { account, loading, intl } = this.props
     const { sendConfirmModalContent, sendConfirmModalVisible } = this.state
     const {
-      accounts, activeAccountIndex, showNewAccountModal, sendOperationModalVisible, lastOpHash,
+      accounts,
+      activeAccountIndex,
+      showNewAccountModal,
+      sendOperationModalVisible,
+      ledgerSignModalVisible,
+      lastOpHash,
+      opType,
     } = account
     const { formatMessage } = intl
 
     return (
       <Page loading={loading.global} className={styles.container}>
         <h1>
-          <FormattedMessage id="myAccount.title" defaultMessage="Send Token & Delegation" />
+          <FormattedMessage {...messages.title} />
         </h1>
         <Row gutter={32}>
           <Col md={15}>
@@ -186,28 +214,31 @@ class myAccountIndex extends React.Component {
             />
             <Row type="flex" align="space-between" className={styles.buttonGroup}>
               <div>
-                <a onClick={() => { this.confirmOriginateAcountModal() }}>
-                  <FormattedMessage id="myAccount.originateAccount" defaultMessage="+ New Delegatable Account" />
+                <Spin spinning={loading.effects['account/originateAccount'] === true} />
+                <a onClick={() => {
+                  this.confirmOriginateAcountModal()
+                }}
+                >
+                  <FormattedMessage {...messages.originateAccount} />
                 </a>
                 <Tooltip placement="topLeft" title={formatMessage(messages.toolTip)} className={styles.toolTip}>
                   <Icon type="question-circle-o" />
                 </Tooltip>
               </div>
 
-              <a onClick={() => { this.logout() }}>
+              <a onClick={() => {
+                this.logout()
+              }}
+              >
                 <FormattedMessage id="myAccount.logout" defaultMessage="Log out" />
               </a>
             </Row>
           </Col>
         </Row>
 
-        <SendOperationModal visible={sendOperationModalVisible} opHash={lastOpHash} onClose={this.closeSendOperationModal} />
-        <SendConfirmModal
-          visible={sendConfirmModalVisible}
-          operation={sendConfirmModalContent}
-          confirmSend={this.onSend}
-          onClose={this.closeSendConfirmModal}
-        />
+        <SendOperationModal visible={sendOperationModalVisible} opHash={lastOpHash} opType={opType} onClose={this.closeSendOperationModal} />
+        <SendConfirmModal visible={sendConfirmModalVisible} operation={sendConfirmModalContent} confirmSend={this.onSend} onClose={this.closeSendConfirmModal} />
+        <LedgerSignModal visible={ledgerSignModalVisible} onCancel={this.closeLedgerSignModal} />
       </Page>
     )
   }

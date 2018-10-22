@@ -3,7 +3,6 @@ const createWallet = {
   'createWallet.optionalPassword': '비밀번호 (선택사항)',
   'createWallet.nextStep': '다음 단계',
   'createWallet.prevStep': '이전 단계',
-  'createWallet.confirm': '확인',
   'createWallet.generateMnemonic': 'Mnemonic 생성',
   'createWallet.backup': '백업',
   'createWallet.writeDownTip': 'Mnemonic 문구를 종이에 적어두는게 가장 좋은 방법입니다. 지갑에 접근할때 필요합니다.',

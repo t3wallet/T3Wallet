@@ -47,7 +47,6 @@ const DelegateForm = ({
   },
   onSetDelegateClick,
   disabled,
-  curAccount,
   accounts,
   delegating,
 }) => {
@@ -133,7 +132,6 @@ DelegateForm.propTypes = {
   intl: intlShape.isRequired,
   onSetDelegateClick: PropTypes.func,
   disabled: PropTypes.bool,
-  curAccount: PropTypes.object,
   accounts: PropTypes.array,
   delegating: PropTypes.bool,
 }

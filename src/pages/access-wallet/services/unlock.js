@@ -1,6 +1,7 @@
 import eztz from 'utils/eztz'
+import { getAddress } from '../../../services/ledger'
 
-const generateIdentity = (keys) => {
+export const generateIdentity = (keys) => {
   const { pkh } = keys
   let kind
   const prefix = (pkh.slice(0, 2))
@@ -15,16 +16,16 @@ const generateIdentity = (keys) => {
   return identity
 }
 
-export const unlockWallet = async (type, payload) => {
+export const unlockWallet = async (walletType, payload) => {
   try {
-    console.log('[Unlock Wallet Type]', type)
+    console.log('[Unlock Wallet Type]', walletType)
     let identity
-    if (type === 'mnemonic') {
+    if (walletType === 'mnemonic') {
       const { mnemonic, password } = payload
       const keys = await eztz.crypto.generateKeys(mnemonic, password)
       identity = generateIdentity(keys)
       return identity
-    } if (type === 'ico') {
+    } if (walletType === 'ico') {
       const {
         seed, email, password, address, code,
       } = payload
@@ -35,13 +36,18 @@ export const unlockWallet = async (type, payload) => {
       }
       identity = generateIdentity(keys)
       return identity
-    } if (type === 'privateKey') {
+    } if (walletType === 'privateKey') {
       const { privateKey } = payload
       const keys = eztz.crypto.extractKeys(privateKey)
       if (!keys) {
         throw new Error('Please enter private key starts with \'edsk\' ')
       }
       identity = generateIdentity(keys)
+      return identity
+    } if (walletType === 'ledger') {
+      const { path } = payload
+      const { pk, pkh } = await getAddress(path)
+      identity = generateIdentity({ pk, pkh, sk: path })
       return identity
     }
     throw new Error('Wallet type not defined')

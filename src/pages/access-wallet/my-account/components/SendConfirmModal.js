@@ -32,7 +32,7 @@ const SendConfirmModal = ({
   visible, confirmSend, onClose, operation, intl,
 }) => {
   const {
-    amountToSend, fromAddress, toAddress, fee,
+    amount, fromAddress, toAddress, fee,
   } = operation
   const { formatMessage } = intl
   return (
@@ -42,7 +42,8 @@ const SendConfirmModal = ({
           <Icon type="question-circle-o" style={{ marginRight: '8px', color: 'orange' }} />
           <FormattedMessage {...messages.title} />
         </span>
-            )}
+      )}
+      centered
       visible={visible}
       onOk={() => { confirmSend({ payload: operation }) }}
       okText={formatMessage(messages.confirm)}
@@ -53,7 +54,7 @@ const SendConfirmModal = ({
         <FormattedMessage {...messages.detail}
           values={{
             value: <b>
-              {amountToSend}
+              {amount}
             </b>,
             fee: <b>
               {fee}

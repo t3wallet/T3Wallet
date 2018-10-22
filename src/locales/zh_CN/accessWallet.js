@@ -14,8 +14,16 @@ const accessWallet = {
   'accessWallet.codeWarning': '如果你已经激活你的钱包，请不要输入激活码！',
   // Private Key
   'accessWallet.privateKey': '私钥',
+  'accessWallet.privateKeyTip': "您的私钥格式应该是一个以'edsk'开头的字符串",
+
+  // Ledger
+  'accessWallet.ledgerWallet': 'Ledger钱包',
+  'accessWallet.ledgerHardwareWallet': 'Ledger硬件钱包',
+  'accessWallet.connectToLedger': '连接到Ledger硬件钱包',
+  'accessWallet.selectHDPath': '选择HD钱包创建地址',
+
+  // common
   'accessWallet.unlockWallet': '解锁您的钱包',
-  'accessWallet.privateKeyTip': '您的私钥格式应该是一个以\'edsk\'开头的字符串',
 
   // unlock error message
   'accessWallet.errorMessage': '输入信息有误，请检查您的输入信息。',

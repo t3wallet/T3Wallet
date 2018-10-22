@@ -14,11 +14,18 @@ const accessWallet = {
   'accessWallet.codeWarning': 'DO NOT enter activation code if you have already activated your wallet!',
   // Private Key
   'accessWallet.privateKey': 'Private Key',
+  'accessWallet.privateKeyTip': "Your private key should start with 'edsk'",
+
+  // Ledger
+  'accessWallet.ledgerWallet': 'Ledger Wallet',
+  'accessWallet.ledgerHardwareWallet': 'Ledger Hardware Wallet',
+  'accessWallet.connectToLedger': 'Connect to Ledger Wallet',
+  'accessWallet.selectHDPath': 'Select HD Wallet Derivation Path',
+
+  // common
   'accessWallet.unlockWallet': 'Unlock Your Wallet',
-  'accessWallet.privateKeyTip': 'Your private key should start with \'edsk\'',
 
   // unlock error message
   'accessWallet.errorMessage': 'Please check your input.',
-
 }
 export default accessWallet

@@ -1,4 +1,6 @@
-if (typeof require === 'undefined') require = require('buffer/').Buffer
+// if (typeof Buffer === 'undefined') Buffer = require('buffer/').Buffer
+// if (typeof XMLHttpRequest === 'undefined') XMLHttpRequest = require('xhr2')
+const BN = require('bignumber.js')
 // const
 // CLI below
 const defaultProvider = 'https://rpc.tezrpc.me/'
@@ -14,7 +16,6 @@ const prefix = {
   tz3: new Uint8Array([6, 161, 164]),
   KT: new Uint8Array([2, 90, 121]),
 
-
   edpk: new Uint8Array([13, 15, 37, 217]),
   edsk2: new Uint8Array([13, 15, 58, 7]),
   spsk: new Uint8Array([17, 162, 224, 201]),
@@ -22,6 +23,8 @@ const prefix = {
 
   sppk: new Uint8Array([3, 254, 226, 86]),
   p2pk: new Uint8Array([3, 178, 139, 127]),
+
+  edesk: new Uint8Array([7, 90, 60, 179, 41]),
 
   edsk: new Uint8Array([43, 246, 78, 7]),
   edsig: new Uint8Array([9, 245, 205, 134, 18]),
@@ -47,9 +50,7 @@ const watermark = {
 const utility = {
   totez: m => parseInt(m, 10) / 1000000,
   mutez (tz) {
-    let r = tz.toFixed(6) * 1000000
-    if (r > 4294967296) r = r.toString()
-    return r
+    return new BN(new BN(tz).toFixed(6)).multipliedBy(1000000).toString()
   },
   b58cencode: (payload, prefixArg) => {
     const n = new Uint8Array(prefixArg.length + payload.length)
@@ -63,20 +64,22 @@ const utility = {
     const hexParts = []
     for (let i = 0; i < byteArray.length; i++) {
       let hex = byteArray[i].toString(16)
-      let paddedHex = (`00${hex}`).slice(-2)
+      let paddedHex = `00${hex}`.slice(-2)
       hexParts.push(paddedHex)
     }
     return hexParts.join('')
   },
   hex2buf (hex) {
-    return new Uint8Array(hex.match(/[\da-f]{2}/gi).map((h) => {
-      return parseInt(h, 16)
-    }))
+    return new Uint8Array(
+      hex.match(/[\da-f]{2}/gi).map((h) => {
+        return parseInt(h, 16)
+      })
+    )
   },
   hexNonce (length) {
     let chars = '0123456789abcedf'
     let hex = ''
-    while (length--) hex += chars[(Math.random() * 16) | 0]
+    while (length--) hex += chars[(Math.random() * 16) | 0] // eslint-disable-line no-bitwise
     return hex
   },
   mergebuf (b1, b2) {
@@ -86,7 +89,8 @@ const utility = {
     return r
   },
   sexp2mic: function me (mi) {
-    mi = mi.replace(/(?:@[a-z_]+)|(?:#.*$)/mg, '')
+    mi = mi
+      .replace(/(?:@[a-z_]+)|(?:#.*$)/gm, '')
       .replace(/\s+/g, ' ')
       .trim()
     if (mi.charAt(0) === '(') mi = mi.slice(1, -1)
@@ -103,8 +107,11 @@ const utility = {
         val += mi[i]
         escaped = false
         continue
-      } else if ((i === (mi.length - 1) && sopen === false) || (mi[i] === ' ' && pl === 0 && sopen === false)) {
-        if (i === (mi.length - 1)) val += mi[i]
+      } else if (
+        (i === mi.length - 1 && sopen === false)
+        || (mi[i] === ' ' && pl === 0 && sopen === false)
+      ) {
+        if (i === mi.length - 1) val += mi[i]
         if (val) {
           if (val === parseInt(val, 10).toString()) {
             if (!ret.prim) return { int: val }
@@ -138,7 +145,7 @@ const utility = {
   },
   mic2arr: function me2 (s) {
     let ret = []
-    if (s.hasOwnProperty('prim')) {
+    if (Object.prototype.hasOwnProperty.call(s, 'prim')) {
       if (s.prim === 'Pair') {
         ret.push(me2(s.args[0]))
         ret = ret.concat(me2(s.args[1]))
@@ -169,9 +176,9 @@ const utility = {
           ret.push(n)
         }
       }
-    } else if (s.hasOwnProperty('string')) {
+    } else if (Object.prototype.hasOwnProperty.call(s, 'string')) {
       ret = s.string
-    } else if (s.hasOwnProperty('int')) {
+    } else if (Object.prototype.hasOwnProperty.call(s, 'init')) {
       ret = parseInt(s.int, 10)
     } else {
       ret = s
@@ -217,8 +224,11 @@ const utility = {
         val += mi[i]
         escaped = false
         continue
-      } else if ((i === (mi.length - 1) && sopen === false) || (mi[i] === ';' && pl === 0 && sopen == false)) {
-        if (i === (mi.length - 1)) val += mi[i]
+      } else if (
+        (i === mi.length - 1 && sopen === false)
+        || (mi[i] === ';' && pl === 0 && sopen === false)
+      ) {
+        if (i === mi.length - 1) val += mi[i]
         if (val.trim() === '' || val.trim() === '}' || val.trim() === ';') {
           val = ''
           continue
@@ -236,18 +246,60 @@ const utility = {
     return ret
   },
   formatMoney: (n, c, d, t) => {
-    const cc = isNaN(c = Math.abs(c)) ? 2 : c; // eslint-disable-line
+    const cc = isNaN((c = Math.abs(c))) ? 2 : c; // eslint-disable-line
     const dd = d === undefined ? '.' : d
     const tt = t === undefined ? ',' : t
     const s = n < 0 ? '-' : ''
-    const i = String(parseInt(n = Math.abs(Number(n) || 0).toFixed(cc), 10))
+    const i = String(parseInt((n = Math.abs(Number(n) || 0).toFixed(cc)), 10))
     const j = i.length > 3 ? i.length % 3 : 0
-    return s + (j ? i.substr(0, j) + tt : '') + i.substr(j).replace(/(\d{3})(?=\d)/g, `$1${tt}`) + (cc ? dd + Math.abs(n - i).toFixed(c).slice(2) : '')
+    return (
+      s
+      + (j ? i.substr(0, j) + tt : '')
+      + i.substr(j).replace(/(\d{3})(?=\d)/g, `$1${tt}`)
+      + (cc
+        ? dd
+          + Math.abs(n - i)
+            .toFixed(c)
+            .slice(2)
+        : '')
+    )
   },
 }
 // TODO: Add p256 and secp256k1 cryptographay
 const crypto = {
-  extractKeys (sk) {
+  extractEncryptedKeys (esk, password) {
+    if (typeof esk === 'undefined') return false
+    if (typeof password === 'undefined') return false
+    if (typeof window.crypto.subtle === 'undefined') return false
+
+    const esb = utility.b58cdecode(esk, prefix.edesk)
+    const salt = esb.slice(0, 8)
+    const esm = esb.slice(8)
+
+    return window.crypto.subtle.importKey('raw', new TextEncoder('utf-8').encode(password), { name: 'PBKDF2' }, false, ['deriveBits']).then((key) => {
+      console.log(key)
+      return window.crypto.subtle.deriveBits(
+        {
+          name: 'PBKDF2',
+          salt,
+          iterations: 32768,
+          hash: { name: 'SHA-512' },
+        },
+        key,
+        256
+      )
+    }).then((key) => {
+      console.log(key)
+      console.log(library.sodium.crypto_secretbox_open_easy(esm, new Uint8Array(24), new Uint8Array(key)))
+      const kp = library.sodium.crypto_sign_seed_keypair(library.sodium.crypto_secretbox_open_easy(esm, new Uint8Array(24), new Uint8Array(key)))
+      return {
+        sk: utility.b58cencode(kp.privateKey, prefix.edsk),
+        pk: utility.b58cencode(kp.publicKey, prefix.edpk),
+        pkh: utility.b58cencode(library.sodium.crypto_generichash(20, kp.publicKey), prefix.tz1),
+      }
+    })
+  },
+  extractKeys: (sk) => {
     const pref = sk.substr(0, 4)
     switch (pref) {
       case 'edsk':
@@ -270,6 +322,7 @@ const crypto = {
       default:
         return false
     }
+    return false
   },
   generateMnemonic: () => library.bip39.generateMnemonic(256),
   checkAddress (a) {
@@ -300,7 +353,7 @@ const crypto = {
     }
   },
   generateKeysFromSeedMulti (m, p, n) {
-    n /= (256 ^ 2)
+    n /= (256 ^ 2) // eslint-disable-line no-bitwise
     const s = library.bip39.mnemonicToSeed(m, library.pbkdf2.pbkdf2Sync(p, n.toString(36).slice(2), 0, 32, 'sha512').toString()).slice(0, 32)
     const kp = library.sodium.crypto_sign_seed_keypair(s)
     return {
@@ -419,13 +472,13 @@ const rpc = {
   call (e, d) {
     return node.query(e, d)
   },
-  sendOperation (from, operation, keys) {
+  sendOperation: async (from, operation, keys) => {
     if (typeof keys === 'undefined') keys = false
     let counter
     let sopbytes
     let opOb
-    let errors = []
-    let opResponse = []
+    // let errors = []
+    // let opResponse = []
     let promises = []
     let requiresReveal = false
     let head
@@ -446,8 +499,8 @@ const rpc = {
         break
       }
     }
-
-    return Promise.all(promises).then(([header, headCounter, manager]) => {
+    try {
+      const [header, headCounter, manager] = await Promise.all(promises)
       head = header
       if (requiresReveal && keys && typeof manager.key === 'undefined') {
         ops.unshift({
@@ -458,7 +511,6 @@ const rpc = {
         })
       }
       counter = parseInt(headCounter, 10) + 1
-
       for (let i = 0; i < ops.length; i++) {
         if (['proposals', 'ballot', 'transaction', 'origination', 'delegation'].indexOf(ops[i].kind) >= 0) {
           if (typeof ops[i].source === 'undefined') ops[i].source = from
@@ -478,41 +530,49 @@ const rpc = {
         branch: head.hash,
         contents: ops,
       }
-      return node.query(`/chains/${head.chain_id}/blocks/${head.hash}/helpers/forge/operations`, opOb)
-    })
-      .then((f) => {
-        const opbytes = f
-        const signed = crypto.sign(opbytes, keys.sk, watermark.generic)
+
+      const opbytes = await node.query(`/chains/${head.chain_id}/blocks/${head.hash}/helpers/forge/operations`, opOb)
+      opOb.protocol = head.protocol
+
+      if (keys && !keys.sk) return { opbytes, opOb }
+
+      if (!keys) {
+        sopbytes = `${opbytes}00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000`
+        opOb.signature = 'edsigtXomBKi5CTRf5cjATJWSyaRvhfYNHqSUGrn4SdbYRcGwQrUGjzEfQDTuqHhuA8b2d8NarZjz8TRf65WkpQmo423BtomS8Q'
+      } else {
+        let signed = crypto.sign(opbytes, keys.sk, watermark.generic)
         sopbytes = signed.sbytes
-        opOb.protocol = head.protocol
         opOb.signature = signed.edsig
-        return node.query('/chains/main/blocks/head/helpers/preapply/operations', [opOb])
-      })
-      .then((f) => {
-        if (!Array.isArray(f)) {
-          throw { error: 'RPC Fail', errors: [] }
-        }
-        for (let i = 0; i < f.length; i++) {
-          for (let j = 0; j < f[i].contents.length; j++) {
-            opResponse.push(f[i].contents[j])
-            if (typeof f[i].contents[j].metadata.operation_result !== 'undefined' && f[i].contents[j].metadata.operation_result.status == 'failed') { errors = errors.concat(f[i].contents[j].metadata.operation_result.errors) }
+      }
+
+      const { hash, operations } = await rpc.inject(opOb, sopbytes)
+      return { hash, operations }
+    } catch (err) {
+      throw new Error(err)
+    }
+  },
+  inject: async (opOb, sopbytes) => {
+    let opResponse = []
+    let errors = []
+    try {
+      const f = await node.query('/chains/main/blocks/head/helpers/preapply/operations', [opOb])
+      if (!Array.isArray(f)) throw new Error(JSON.stringify({ error: 'RPC Fail', errors: [] }))
+      for (let i = 0; i < f.length; i++) {
+        for (let j = 0; j < f[i].contents.length; j++) {
+          opResponse.push(f[i].contents[j])
+          if (typeof f[i].contents[j].metadata.operation_result !== 'undefined' && f[i].contents[j].metadata.operation_result.status === 'failed') {
+            errors = errors.concat(f[i].contents[j].metadata.operation_result.errors)
           }
         }
-        if (errors.length) throw { error: 'Operation Failed', errors }
-        return node.query('/injection/operation', sopbytes)
-      })
-      .then((f) => {
-        return {
-          hash: f,
-          operations: opResponse,
-        }
-      })
-      .catch((error) => {
-        console.log(error)
-        throw error
-      })
+      }
+      if (errors.length) throw new Error(JSON.stringify({ error: 'Operation Failed', errors }))
+      const hash = await node.query('/injection/operation', sopbytes)
+      return { hash, operations: opResponse }
+    } catch (err) {
+      throw err
+    }
   },
-  transfer (from, keys, to, amount, fee, parameter, gasLimit, storageLimit) {
+  transfer: (from, keys, to, amount, fee, parameter, gasLimit, storageLimit) => {
     if (typeof gasLimit === 'undefined') gasLimit = '200'
     if (typeof storageLimit === 'undefined') storageLimit = '0'
     let operation = {
@@ -529,7 +589,7 @@ const rpc = {
     }
     return rpc.sendOperation(from, operation, keys)
   },
-  activate (pkh, secret) {
+  activate: (pkh, secret) => {
     let operation = {
       kind: 'activate_account',
       pkh,
@@ -622,10 +682,10 @@ const contract = {
       tt.push(ob[i])
     }
     tt = tt.concat([
-      (ind & 0xff000000) >> 24,
-      (ind & 0x00ff0000) >> 16,
-      (ind & 0x0000ff00) >> 8,
-      (ind & 0x000000ff),
+      (ind & 0xff000000) >> 24, // eslint-disable-line no-bitwise
+      (ind & 0x00ff0000) >> 16, // eslint-disable-line no-bitwise
+      (ind & 0x0000ff00) >> 8, // eslint-disable-line no-bitwise
+      ind & 0x000000ff, // eslint-disable-line no-bitwise
     ])
     return utility.b58cencode(library.sodium.crypto_generichash(20, new Uint8Array(tt)), prefix.KT)
   },
@@ -633,6 +693,14 @@ const contract = {
     if (typeof gasLimit === 'undefined') gasLimit = '10000'
     if (typeof storageLimit === 'undefined') storageLimit = '10000'
     return rpc.originate(keys, amount, code, init, spendable, delegatable, delegate, fee, gasLimit, storageLimit)
+  },
+  send (toAddress, from, keys, amount, parameter, fee, gasLimit, storageLimit) {
+    if (typeof gasLimit === 'undefined') gasLimit = '2000'
+    if (typeof storageLimit === 'undefined') storageLimit = '0'
+    return rpc.transfer(from, keys, toAddress, amount, fee, parameter, gasLimit, storageLimit)
+  },
+  balance (address) {
+    return rpc.getBalance(address)
   },
   storage (contractArg) {
     return new Promise(((resolve, reject) => {

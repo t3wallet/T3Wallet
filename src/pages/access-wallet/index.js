@@ -3,11 +3,14 @@ import { connect } from 'dva'
 import { Card, Tabs } from 'antd'
 import { Page } from 'components'
 import {
-  intlShape, injectIntl, defineMessages, FormattedMessage,
+  intlShape,
+  injectIntl,
+  defineMessages,
+  FormattedMessage,
 } from 'react-intl'
 import PropTypes from 'prop-types'
 import {
-  Mnemonic, Fundraiser, PrivateKey,
+  Mnemonic, Ledger, Fundraiser, PrivateKey,
 } from './components'
 import styles from './index.less'
 
@@ -15,6 +18,10 @@ const messages = defineMessages({
   title: {
     id: 'accessWallet.title',
     defaultMessage: 'How do you want to access your wallet',
+  },
+  ledger: {
+    id: 'accessWallet.ledgerWallet',
+    defaultMessage: 'Ledger Wallet',
   },
   mnemonic: {
     id: 'accessWallet.mnemonic',
@@ -45,8 +52,7 @@ class AccessWallet extends React.Component {
 
   componentWillUnmount = () => {
     window.removeEventListener('resize', this.updateDimensions)
-  }
-
+  };
 
   updateDimensions = () => {
     if (window.innerWidth < 768) {
@@ -54,14 +60,13 @@ class AccessWallet extends React.Component {
     } else {
       this.setState({ tabPosition: 'left' })
     }
-  }
+  };
 
   render () {
-    const {
-      intl, loading,
-    } = this.props
+    const { intl, loading, accessWallet } = this.props
     const { formatMessage } = intl
     const { tabPosition } = this.state
+    const { ledgerModalVisible, ledgerModalAsciiArtVisible } = accessWallet
     return (
       <Page loading={loading}>
         <h1>
@@ -73,6 +78,16 @@ class AccessWallet extends React.Component {
           </div>
           <div>
             <Tabs tabPosition={tabPosition} size="large" defaultActiveKey={null}>
+              <Tabs.TabPane tab={formatMessage(messages.ledger)} key="1">
+                <Ledger
+                  intl={intl}
+                  openModal={this._openLedgerModal}
+                  closeModal={this._closeLedgerModal}
+                  modalVisible={ledgerModalVisible}
+                  onUnlock={this._onLedgerConnect}
+                  asciiArtVisible={ledgerModalAsciiArtVisible}
+                />
+              </Tabs.TabPane>
               <Tabs.TabPane tab={formatMessage(messages.mnemonic)} key="2">
                 <Mnemonic onUnlock={this._onUnlockClick} />
               </Tabs.TabPane>
@@ -89,13 +104,31 @@ class AccessWallet extends React.Component {
     )
   }
 
+  _openLedgerModal = () => {
+    const { dispatch } = this.props
+    dispatch({
+      type: 'accessWallet/openLedgerModal',
+    })
+  };
+
+  _closeLedgerModal = () => {
+    const { dispatch } = this.props
+    dispatch({ type: 'accessWallet/toggleLedgerModal', payload: false })
+  };
+
   _onUnlockClick = (payload) => {
     const { dispatch } = this.props
     dispatch({
       type: 'accessWallet/unlockWallet',
       payload, // {walletType: '', payload: {} }
     })
-  }
+  };
+
+  _onLedgerConnect = (payload) => {
+    const { dispatch } = this.props
+    const { path } = payload
+    dispatch({ type: 'accessWallet/unlockWallet', payload: { walletType: 'ledger', payload: { path } } })
+  };
 }
 
 AccessWallet.propTypes = {

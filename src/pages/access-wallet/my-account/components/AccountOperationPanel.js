@@ -30,7 +30,6 @@ const AccountOperationPanel = ({
           <DelegateForm
             onSetDelegateClick={onSetDelegateClick}
             delegating={delegating}
-            curAccount={curAccount}
             disabled={typeof curAccount === 'undefined' || curAccount && curAccount.kind !== 'origination'}
             accounts={accounts}
           />

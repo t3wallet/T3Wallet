@@ -25,7 +25,7 @@ const messages = defineMessages({
 })
 
 const SendOperationModal = ({
-  visible, opHash, intl, onClose,
+  visible, opHash, intl, onClose, opType,
 }) => {
   const { formatMessage } = intl
   return (
@@ -36,6 +36,7 @@ const SendOperationModal = ({
           {formatMessage(messages.title)}
         </span>
       )}
+      centered
       visible={visible}
       onCancel={() => { onClose() }}
       wrapClassName="vertical-center-modal"
@@ -49,7 +50,7 @@ const SendOperationModal = ({
         <FormattedMessage {...messages.checkOperationHash} />
       </p>
       <p>
-        <a href={`https://tzscan.io/${opHash}`} rel="noopener noreferrer" target="_blank">
+        <a href={`https://tzscan.io/${opHash}${opType ? `?default=${opType}` : ''}`} rel="noopener noreferrer" target="_blank">
           <Icon type="link" />
           <span>
             {opHash}
@@ -68,6 +69,7 @@ SendOperationModal.propTypes = {
   opHash: PropTypes.string,
   intl: intlShape.isRequired,
   onClose: PropTypes.func,
+  opType: PropTypes.string,
 }
 
 
