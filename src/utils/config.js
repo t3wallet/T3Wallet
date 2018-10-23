@@ -5,8 +5,12 @@ import languages from '../locales/languagesList'
 */
 
 const env = process.env.NODE_ENV
-let localhost = { name: 'localhost:8732', url: 'http://localhost:8732', type: 'betanet' }
-let tezrpc = { name: 'Tezos Betenet Network (tezrpc.me)', url: 'https://rpc.tezrpc.me', type: 'betanet' }
+let localhost = { name: 'localhost:8732', url: 'http://localhost:8732', type: 'mainnet' }
+let tezrpc = {
+  name: 'Tezos Mainnet(tezrpc.me)',
+  url: 'https://rpc.tezrpc.me',
+  type: 'mainnet',
+}
 let networkProviders
 if (env === 'production') {
   networkProviders = [tezrpc]

@@ -24,6 +24,7 @@ const accessWallet = {
 
   // common
   'accessWallet.unlockWallet': '지갑 열기',
+  'accessWallet.recommendedWay': 'Tezos 블록 체인과 상호 작용하는 데 권장되는 방법',
 
   // unlock error message
   'accessWallet.errorMessage': '입력한 정보를 확인하세요.',
