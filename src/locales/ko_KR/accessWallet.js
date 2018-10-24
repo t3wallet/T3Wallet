@@ -21,6 +21,7 @@ const accessWallet = {
   'accessWallet.ledgerHardwareWallet': 'Ledger Hardware Wallet',
   'accessWallet.connectToLedger': 'Ledger 지갑에 연결하기',
   'accessWallet.selectHDPath': 'HD derivation 경로 선택',
+  'accessWallet.ledgerConfirmText': 'Ledger에서 확인하십시오.',
 
   // common
   'accessWallet.unlockWallet': '지갑 열기',

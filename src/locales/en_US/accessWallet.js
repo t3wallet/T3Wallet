@@ -21,6 +21,7 @@ const accessWallet = {
   'accessWallet.ledgerHardwareWallet': 'Ledger Hardware Wallet',
   'accessWallet.connectToLedger': 'Connect to Ledger Wallet',
   'accessWallet.selectHDPath': 'Select HD Wallet Derivation Path',
+  'accessWallet.ledgerConfirmText': 'Please press confirm button on your Ledger device',
 
   // common
   'accessWallet.unlockWallet': 'Unlock Your Wallet',
