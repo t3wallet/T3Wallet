@@ -24,6 +24,7 @@ const accessWallet = {
 
   // common
   'accessWallet.unlockWallet': 'Unlock Your Wallet',
+  'accessWallet.recommendedWay': 'Recommended way to interact with Tezos blockchain',
 
   // unlock error message
   'accessWallet.errorMessage': 'Please check your input.',

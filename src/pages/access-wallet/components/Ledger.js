@@ -1,5 +1,7 @@
 import React from 'react'
-import { Button } from 'antd'
+import {
+  Button, Icon, Row, Col,
+} from 'antd'
 import {
   intlShape,
   injectIntl,
@@ -19,6 +21,10 @@ const messages = defineMessages({
     id: 'accessWallet.connectToLedger',
     defaultMessage: 'Connect to Ledger Wallet',
   },
+  recommendedWay: {
+    id: 'accessWallet.recommendedWay',
+    defineMessages: 'Recommended way to interact with Tezos blockchain',
+  },
   errorMessage: {
     id: 'accessWallet.errorMessage',
     defaultMessage: 'Place check your input',
@@ -33,6 +39,12 @@ const Ledger = ({
       <h2 className={styles.title}>
         <FormattedMessage {...messages.ledgerHardwareWallet} />
       </h2>
+      <Col className={styles.body} type="flex">
+        <Row type="flex" style={{ alignItems: 'center' }}>
+          <Icon type="safety" theme="outlined" style={{ color: 'green', marginRight: '5px' }} />
+          <span><FormattedMessage {...messages.recommendedWay} /></span>
+        </Row>
+      </Col>
       <Button
         type="primary"
         size="large"

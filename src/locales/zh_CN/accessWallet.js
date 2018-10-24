@@ -24,6 +24,7 @@ const accessWallet = {
 
   // common
   'accessWallet.unlockWallet': '解锁您的钱包',
+  'accessWallet.recommendedWay': '推荐的钱包使用方式',
 
   // unlock error message
   'accessWallet.errorMessage': '输入信息有误，请检查您的输入信息。',

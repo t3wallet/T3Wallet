@@ -54,7 +54,6 @@ export const loadKTAccounts = async (pkh) => {
  *          { keys }
  * ]
  */
-
 export const genUnsignedTransaction = async (kind, payload) => {
   let res
   if (kind === 'transaction') {
