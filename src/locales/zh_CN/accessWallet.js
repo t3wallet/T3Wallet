@@ -21,6 +21,7 @@ const accessWallet = {
   'accessWallet.ledgerHardwareWallet': 'Ledger硬件钱包',
   'accessWallet.connectToLedger': '连接到Ledger硬件钱包',
   'accessWallet.selectHDPath': '选择HD钱包创建地址',
+  'accessWallet.ledgerConfirmText': '请在您的Ledger硬件钱包上确认',
 
   // common
   'accessWallet.unlockWallet': '解锁您的钱包',

@@ -32,7 +32,7 @@ const messages = defineMessages({
 })
 
 const Ledger = ({
-  intl, openModal, closeModal, modalVisible, asciiArtVisible, onUnlock,
+  intl, openModal, closeModal, modalVisible, signRequiredTextVisible, onUnlock,
 }) => {
   return (
     <div>
@@ -55,7 +55,7 @@ const Ledger = ({
       </Button>
       <LedgerPathSelectionModal
         visible={modalVisible}
-        asciiArtVisible={asciiArtVisible}
+        signRequiredTextVisible={signRequiredTextVisible}
         intl={intl}
         onConfirm={onUnlock}
         onClose={closeModal}
@@ -69,7 +69,7 @@ Ledger.propTypes = {
   openModal: PropTypes.func,
   closeModal: PropTypes.func,
   modalVisible: PropTypes.bool,
-  asciiArtVisible: PropTypes.bool,
+  signRequiredTextVisible: PropTypes.bool,
   onUnlock: PropTypes.func,
 }
 

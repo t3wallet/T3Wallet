@@ -7,13 +7,13 @@ export default {
   state: {
     error: '',
     ledgerModalVisible: false,
-    ledgerModalAsciiArtVisible: false,
+    ledgerModalSignRequiredTextVisible: false,
   },
   effects: {
     * unlockWallet ({ payload }, { call, put }) {
       yield put({ type: 'updateError', payload: '' })
       const { walletType, payload: walletPayload } = payload
-      if (walletType === 'ledger') yield put({ type: 'promoteAsciiArt' })
+      if (walletType === 'ledger') yield put({ type: 'showSignRequiredText' })
       try {
         // identity = { prefix: 'tz', type: 'manager', keys: {}, address: 'tz1XXX' }
         const identity = yield call(unlockWallet, walletType, walletPayload)
@@ -45,13 +45,13 @@ export default {
     updateError (draft, { payload: error }) {
       draft.error = error
     },
-    promoteAsciiArt (draft) {
-      draft.ledgerModalAsciiArtVisible = true
+    showSignRequiredText (draft) {
+      draft.ledgerModalSignRequiredTextVisible = true
     },
     toggleLedgerModal (draft, { payload: isVisible }) {
       draft.ledgerModalVisible = isVisible
       if (!isVisible) {
-        draft.ledgerModalAsciiArtVisible = false
+        draft.ledgerModalSignRequiredTextVisible = false
       }
     },
   },

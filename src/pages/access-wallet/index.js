@@ -66,7 +66,7 @@ class AccessWallet extends React.Component {
     const { intl, loading, accessWallet } = this.props
     const { formatMessage } = intl
     const { tabPosition } = this.state
-    const { ledgerModalVisible, ledgerModalAsciiArtVisible } = accessWallet
+    const { ledgerModalVisible, ledgerModalSignRequiredTextVisible } = accessWallet
     return (
       <Page loading={loading}>
         <h1>
@@ -85,7 +85,7 @@ class AccessWallet extends React.Component {
                   closeModal={this._closeLedgerModal}
                   modalVisible={ledgerModalVisible}
                   onUnlock={this._onLedgerConnect}
-                  asciiArtVisible={ledgerModalAsciiArtVisible}
+                  signRequiredTextVisible={ledgerModalSignRequiredTextVisible}
                 />
               </Tabs.TabPane>
               <Tabs.TabPane tab={formatMessage(messages.mnemonic)} key="2">
